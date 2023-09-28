@@ -1,5 +1,6 @@
 import NextAuth, { type DefaultSession } from 'next-auth'
 import GitHub from 'next-auth/providers/github'
+import GoogleProvider from 'next-auth/providers/google'
 
 declare module 'next-auth' {
   interface Session {
@@ -15,7 +16,13 @@ export const {
   auth,
   CSRF_experimental // will be removed in future
 } = NextAuth({
-  providers: [GitHub],
+  providers: [
+    GitHub,
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET
+    })
+  ],
   callbacks: {
     jwt({ token, profile }) {
       if (profile) {
@@ -23,6 +30,18 @@ export const {
         token.image = profile.avatar_url || profile.picture
       }
       return token
+    },
+    async signIn({ user, account, profile }) {
+      if (account.provider === 'google') {
+        user.id = profile.id
+        user.image = profile.picture
+      }
+      return true
+    },
+    async session({ session, user, token }) {
+      session.user.id = user.id
+      session.user.image = user.image
+      return session
     },
     authorized({ auth }) {
       return !!auth?.user // this ensures there is a logged in user for -every- request
