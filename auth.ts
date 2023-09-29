@@ -24,24 +24,13 @@ export const {
     })
   ],
   callbacks: {
-    jwt({ token, profile }) {
+    async jwt({ token, user, account, profile }) {
       if (profile) {
-        token.id = profile.id
+        console.log("jwt", token, user, account, profile)
+        token.id = user.id
         token.image = profile.avatar_url || profile.picture
       }
       return token
-    },
-    async signIn({ user, account, profile }) {
-      if (account.provider === 'google') {
-        user.id = profile.id
-        user.image = profile.picture
-      }
-      return true
-    },
-    async session({ session, user, token }) {
-      session.user.id = user.id
-      session.user.image = user.image
-      return session
     },
     authorized({ auth }) {
       return !!auth?.user // this ensures there is a logged in user for -every- request
