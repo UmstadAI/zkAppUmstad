@@ -1,5 +1,4 @@
 import React from 'react'
-import { Flex, Text, Heading } from '@radix-ui/themes';
 
 export function Landing() {
   return (
