@@ -11,10 +11,12 @@ export default async function SignInPage() {
     redirect('/')
   }
   return (
-    <div className="grid h-[calc(40vh-theme(spacing.32))] items-center justify-center py-10">
+    <div>
       <Landing />
-      <LoginButton />
-      <GoogleLoginButton />
+      <div className="grid h-[calc(40vh-theme(spacing.32))] items-center justify-center gap-2 px-4 py-8">
+        <LoginButton />
+        <GoogleLoginButton />
+      </div>
     </div>
   )
 }
