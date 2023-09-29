@@ -5,16 +5,16 @@ import { signIn } from 'next-auth/react'
 
 import { cn } from '@/lib/utils'
 import { Button, type ButtonProps } from '@/components/ui/button'
-import { IconSpinner } from '@/components/ui/icons'
+import { IconSpinner, IconGoogle } from '@/components/ui/icons'
 
 interface LoginButtonProps extends ButtonProps {
-  showGithubIcon?: boolean
+  showGoogleIcon?: boolean
   text?: string
 }
 
 export function GoogleLoginButton({
   text = 'Login with Google',
-  showGithubIcon = false,
+  showGoogleIcon = true,
   className,
   ...props
 }: LoginButtonProps) {
@@ -31,6 +31,11 @@ export function GoogleLoginButton({
       className={cn(className)}
       {...props}
     >
+      {isLoading ? (
+        <IconSpinner className="mr-2 animate-spin" />
+      ) : showGoogleIcon ? (
+        <IconGoogle className="mr-2" />
+      ) : null}
       {text}
     </Button>
   )
