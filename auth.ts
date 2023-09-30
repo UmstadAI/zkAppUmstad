@@ -2,6 +2,11 @@ import NextAuth, { type DefaultSession } from 'next-auth'
 import GitHub from 'next-auth/providers/github'
 import GoogleProvider from 'next-auth/providers/google'
 
+function reduceUserId(userId: string) {
+  const hash = userId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  return Math.abs(hash) % 9007199254740992; // Ensure the result is within Redis range
+}
+
 declare module 'next-auth' {
   interface Session {
     user: {
@@ -26,7 +31,7 @@ export const {
   callbacks: {
     async jwt({ token, user, account, profile }) {
       if (profile) {
-        token.id = user.id
+        token.id = reduceUserId(user.id)
         token.image = profile.avatar_url || profile.picture
       }
       return token
