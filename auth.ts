@@ -2,9 +2,15 @@ import NextAuth, { type DefaultSession } from 'next-auth'
 import GitHub from 'next-auth/providers/github'
 import GoogleProvider from 'next-auth/providers/google'
 
+import sha256 from 'crypto-js/sha256'
+import Hex from 'crypto-js/enc-hex'
+
 function reduceUserId(userId: string) {
-  const hash = userId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-  return Math.abs(hash) % 9007199254740992; // Ensure the result is within Redis range
+  const hash = BigInt('0x' + Hex.stringify(sha256(userId)));
+  console.log(hash)
+  const stringHash = (hash % BigInt('9007199254740992')).toString()
+  console.log(stringHash)
+  return stringHash
 }
 
 declare module 'next-auth' {
