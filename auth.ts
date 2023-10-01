@@ -40,6 +40,7 @@ export const {
         token.id = reduceUserId(user.id)
         token.image = profile.avatar_url || profile.picture
       }
+      console.log(token)
       return token
     },
     authorized({ auth }) {
@@ -47,6 +48,7 @@ export const {
     }
   },
   pages: {
-    signIn: '/sign-in' // overrides the next-auth default signin page https://authjs.dev/guides/basics/pages
+    signIn: '/sign-in', // overrides the next-auth default signin page https://authjs.dev/guides/basics/pages
+    error: '/login'
   }
 })
