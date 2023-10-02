@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import { IconExternalLink } from '@/components/ui/icons'
+import { IconExternalLink, IconLogout, IconSettings } from '@/components/ui/icons'
 
 export interface UserMenuProps {
   user: Session['user']
@@ -50,6 +50,11 @@ export function UserMenu({ user }: UserMenuProps) {
             <div className="text-xs text-zinc-500">{user?.email}</div>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
+          <DropdownMenuItem>
+            <IconSettings className='mr-1'/>
+            <div className="text-xs font-medium"> Settings </div>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
           <DropdownMenuItem
             onClick={() =>
               signOut({
@@ -58,6 +63,7 @@ export function UserMenu({ user }: UserMenuProps) {
             }
             className="text-xs"
           >
+            <IconLogout className='ml-1'/>
             Log Out
           </DropdownMenuItem>
         </DropdownMenuContent>

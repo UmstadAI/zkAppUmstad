@@ -121,6 +121,23 @@ function IconVercel({ className, ...props }: React.ComponentProps<'svg'>) {
   )
 }
 
+function IconSettings({ className, ...props }: React.ComponentProps<'svg'>) {
+  return(
+    <svg
+      role="img"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="currentColor"
+      className={cn('h-4 w-4', className)}
+      {...props}
+    >
+      <title>Settings</title>
+      <path d="M 9.6679688 2 L 9.1757812 4.5234375 C 8.3550224 4.8338012 7.5961042 5.2674041 6.9296875 5.8144531 L 4.5058594 4.9785156 L 2.1738281 9.0214844 L 4.1132812 10.707031 C 4.0445153 11.128986 4 11.558619 4 12 C 4 12.441381 4.0445153 12.871014 4.1132812 13.292969 L 2.1738281 14.978516 L 4.5058594 19.021484 L 6.9296875 18.185547 C 7.5961042 18.732596 8.3550224 19.166199 9.1757812 19.476562 L 9.6679688 22 L 14.332031 22 L 14.824219 19.476562 C 15.644978 19.166199 16.403896 18.732596 17.070312 18.185547 L 19.494141 19.021484 L 21.826172 14.978516 L 19.886719 13.292969 C 19.955485 12.871014 20 12.441381 20 12 C 20 11.558619 19.955485 11.128986 19.886719 10.707031 L 21.826172 9.0214844 L 19.494141 4.9785156 L 17.070312 5.8144531 C 16.403896 5.2674041 15.644978 4.8338012 14.824219 4.5234375 L 14.332031 2 L 9.6679688 2 z M 12 8 C 14.209 8 16 9.791 16 12 C 16 14.209 14.209 16 12 16 C 9.791 16 8 14.209 8 12 C 8 9.791 9.791 8 12 8 z"></path>
+    </svg>
+
+  )
+}
+
 function IconGitHub({ className, ...props }: React.ComponentProps<'svg'>) {
   return (
     <svg
@@ -475,6 +492,32 @@ function IconExternalLink({
   )
 }
 
+function IconLogout({ 
+  className, 
+  ...props
+}: React.ComponentProps<'svg'>) {
+  return (
+    <svg 
+      xmlns="http://www.w3.org/2000/svg" 
+      fill="currentColor"
+      className={cn('mt-2 h-4 w-4', className)}
+      viewBox="0 0 720 720"
+      {...props} 
+    >
+      <g>
+	      <g>
+        <path d="M227.619,444.2h-122.9c-33.4,0-60.5-27.2-60.5-60.5V87.5c0-33.4,27.2-60.5,60.5-60.5h124.9c7.5,0,13.5-6,13.5-13.5
+        s-6-13.5-13.5-13.5h-124.9c-48.3,0-87.5,39.3-87.5,87.5v296.2c0,48.3,39.3,87.5,87.5,87.5h122.9c7.5,0,13.5-6,13.5-13.5
+        S235.019,444.2,227.619,444.2z"/>
+        <path d="M450.019,226.1l-85.8-85.8c-5.3-5.3-13.8-5.3-19.1,0c-5.3,5.3-5.3,13.8,0,19.1l62.8,62.8h-273.9c-7.5,0-13.5,6-13.5,13.5
+        s6,13.5,13.5,13.5h273.9l-62.8,62.8c-5.3,5.3-5.3,13.8,0,19.1c2.6,2.6,6.1,4,9.5,4s6.9-1.3,9.5-4l85.8-85.8
+        C455.319,239.9,455.319,231.3,450.019,226.1z"/>
+        </g>
+      </g>
+    </svg>
+  )
+}
+
 function IconChevronUpDown({
   className,
   ...props
@@ -506,6 +549,7 @@ export {
   IconPlus,
   IconArrowElbow,
   IconSpinner,
+  IconSettings,
   IconMessage,
   IconTrash,
   IconRefresh,
@@ -520,5 +564,6 @@ export {
   IconShare,
   IconUsers,
   IconExternalLink,
+  IconLogout,
   IconChevronUpDown
 }
