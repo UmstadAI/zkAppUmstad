@@ -7,9 +7,7 @@ import Hex from 'crypto-js/enc-hex'
 
 function reduceUserId(userId: string) {
   const hash = BigInt('0x' + Hex.stringify(sha256(userId)));
-  console.log(hash)
   const stringHash = (hash % BigInt('9007199254740992')).toString()
-  console.log(stringHash)
   return stringHash
 }
 
