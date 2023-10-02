@@ -37,11 +37,9 @@ export const {
   callbacks: {
     async jwt({ token, user, account, profile }) {
       if (profile) {
-        console.log(user.id)
         token.id = reduceUserId(user.id)
         token.image = profile.avatar_url || profile.picture
       }
-      console.log(token)
       return token
     },
     authorized({ auth }) {
@@ -50,6 +48,5 @@ export const {
   },
   pages: {
     signIn: '/sign-in', // overrides the next-auth default signin page https://authjs.dev/guides/basics/pages
-    error: '/login'
   }
 })
