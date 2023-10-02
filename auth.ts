@@ -37,6 +37,7 @@ export const {
   callbacks: {
     async jwt({ token, user, account, profile }) {
       if (profile) {
+        console.log(user.id)
         token.id = reduceUserId(user.id)
         token.image = profile.avatar_url || profile.picture
       }
