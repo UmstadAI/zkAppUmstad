@@ -33,7 +33,7 @@ export const {
     })
   ],
   callbacks: {
-    async jwt({ token, user, account, profile }) {
+    async jwt({ token, user, profile }) {
       if (profile) {
         token.id = reduceUserId(user.id)
         token.image = profile.avatar_url || profile.picture
