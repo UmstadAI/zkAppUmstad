@@ -33,7 +33,7 @@ export async function getChats(userId?: string | null) {
 export async function getChat(id: string, userId: string) {
   const chat = await kv.hgetall<Chat>(`chat:${id}`)
 
-  if (!chat || (userId && chat.userId !== userId)) {
+  if (!chat || (userId && chat.userId.toString() !== userId)) {
     return null
   }
 
@@ -51,7 +51,7 @@ export async function removeChat({ id, path }: { id: string; path: string }) {
 
   const uid = await kv.hget<string>(`chat:${id}`, 'userId')
 
-  if (uid !== session?.user?.id) {
+  if (uid?.toString() !== session?.user?.id) {
     return {
       error: 'Unauthorized'
     }
@@ -103,7 +103,7 @@ export async function getSharedChat(id: string) {
 export async function shareChat(chat: Chat) {
   const session = await auth()
 
-  if (!session?.user?.id || session.user.id !== chat.userId) {
+  if (!session?.user?.id || session.user.id !== chat.userId.toString()) {
     return {
       error: 'Unauthorized'
     }

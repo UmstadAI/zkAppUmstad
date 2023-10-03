@@ -13,5 +13,6 @@ module.exports = {
         pathname: '**',
       },
     ],
+    domains: ['lh3.googleusercontent.com'],
   },
 };
