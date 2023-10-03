@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import { type Session } from 'next-auth'
 import { signOut } from 'next-auth/react'
+import Link from 'next/link'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -12,7 +13,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import { IconExternalLink, IconLogout, IconSettings } from '@/components/ui/icons'
+import { IconLogout, IconSettings } from '@/components/ui/icons'
+import { redirect } from 'next/navigation'
 
 export interface UserMenuProps {
   user: Session['user']
@@ -50,10 +52,12 @@ export function UserMenu({ user }: UserMenuProps) {
             <div className="text-xs text-zinc-500">{user?.email}</div>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <IconSettings className='mr-1'/>
-            <div className="text-xs font-medium"> Settings </div>
-          </DropdownMenuItem>
+          <Link href="/settings">
+            <DropdownMenuItem className="text-xs font-medium">
+              <IconSettings className='mr-1'/>
+                Settings 
+            </DropdownMenuItem>
+          </Link>
           <DropdownMenuSeparator />
           <DropdownMenuItem
             onClick={() =>
