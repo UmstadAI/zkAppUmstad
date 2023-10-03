@@ -63,7 +63,7 @@ export function UserMenu({ user }: UserMenuProps) {
             }
             className="text-xs font-medium"
           >
-            <IconLogout className='ml-1 mt-1'/>
+            <IconLogout className='mt-1'/>
             Log Out
           </DropdownMenuItem>
         </DropdownMenuContent>
