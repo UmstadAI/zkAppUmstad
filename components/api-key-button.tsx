@@ -5,6 +5,7 @@ import * as React from 'react'
 import { Button, type ButtonProps } from '@/components/ui/button'
 import { IconSpinner } from '@/components/ui/icons'
 import { cn } from '@/lib/utils'
+import { useLocalStorage } from '@/lib/hooks/use-local-storage'
 
 interface ApiKeyButtonProps extends ButtonProps {
     text?: string,
@@ -19,7 +20,9 @@ export function ApiKeyButton({
 }: ApiKeyButtonProps) {
     const [isLoading, setIsLoading] = React.useState(false)
     function embedApiKey(key: string) {
-        console.log(key)
+        localStorage.setItem('openAIApiKey', key)
+        const apiKey = localStorage.getItem('openAIApiKey')
+        return apiKey
     }
     return (
         <>
