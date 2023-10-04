@@ -17,7 +17,7 @@ export function DeleteApiKeyButton({
 }: DeleteApiKeyButtonProps) {
     const [isLoading, setIsLoading] = React.useState(false)
     function deleteApiKey(key: string) {
-        console.log(key)
+        localStorage.removeItem('ai-token')
     }
     return (
         <>
