@@ -7,8 +7,6 @@ import { nanoid } from '@/lib/utils'
 
 export const runtime = 'edge'
 
-
-
 export async function POST(req: Request) {
   const json = await req.json()
   const { messages, previewToken } = json
