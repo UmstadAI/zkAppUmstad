@@ -7,15 +7,12 @@ import { nanoid } from '@/lib/utils'
 
 export const runtime = 'edge'
 
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY
-})
 
-const openai = new OpenAIApi(configuration)
 
 export async function POST(req: Request) {
   const json = await req.json()
   const { messages, previewToken } = json
+  console.log(messages)
   const userId = (await auth())?.user.id
 
   if (!userId) {
@@ -23,6 +20,12 @@ export async function POST(req: Request) {
       status: 401
     })
   }
+
+  const configuration = new Configuration({
+    apiKey: previewToken
+  })
+  
+  const openai = new OpenAIApi(configuration)
 
   if (previewToken) {
     configuration.apiKey = previewToken

@@ -20,7 +20,7 @@ export function ApiKeyButton({
 }: ApiKeyButtonProps) {
     const [isLoading, setIsLoading] = React.useState(false)
     function embedApiKey(key: string) {
-        localStorage.setItem('openAIApiKey', key)
+        localStorage.setItem('ai-token', key)
         const apiKey = localStorage.getItem('openAIApiKey')
         return apiKey
     }
