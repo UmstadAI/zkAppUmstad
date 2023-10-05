@@ -14,7 +14,7 @@ interface ApiKeyButtonProps extends ButtonProps {
   }
 
 export function ApiKeyButton({ 
-    text = 'Embed OPEN AI API KEY',
+    text = 'EMBED OPEN AI API KEY',
     apiKey,
     className,
     ...props
