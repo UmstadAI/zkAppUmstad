@@ -5,6 +5,7 @@ import * as React from 'react'
 import { Button, type ButtonProps } from '@/components/ui/button'
 import { IconSpinner } from '@/components/ui/icons'
 import { cn } from '@/lib/utils'
+import Swal from 'sweetalert2'
 
 interface DeleteApiKeyButtonProps extends ButtonProps {
     text?: string,
@@ -18,6 +19,11 @@ export function DeleteApiKeyButton({
     const [isLoading, setIsLoading] = React.useState(false)
     function deleteApiKey(key: string) {
         localStorage.removeItem('ai-token')
+        Swal.fire(
+            'Done!',
+            'You deleted your API Key from local storage',
+            'success'
+          )
     }
     return (
         <>

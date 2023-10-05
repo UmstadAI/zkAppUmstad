@@ -94,6 +94,9 @@ dependencies:
   remark-math:
     specifier: ^5.1.1
     version: 5.1.1
+  sweetalert2:
+    specifier: ^11.7.31
+    version: 11.7.31
 
 devDependencies:
   '@tailwindcss/typography':
@@ -4610,6 +4613,10 @@ packages:
       locate-character: 3.0.0
       magic-string: 0.30.4
       periscopic: 3.1.0
+    dev: false
+
+  /sweetalert2@11.7.31:
+    resolution: {integrity: sha512-AVNODg41LqhC241UHTanW2ZQdh0ziiw+Gc3Dmy1EuCFP+g09P3mBEhvauU88J3JLEX6UpTfhp7iok9t8uhEdQQ==}
     dev: false
 
   /swr@2.1.5(react@18.2.0):

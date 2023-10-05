@@ -6,6 +6,7 @@ import { Button, type ButtonProps } from '@/components/ui/button'
 import { IconSpinner } from '@/components/ui/icons'
 import { cn } from '@/lib/utils'
 import Link from "next/link";
+import Swal from 'sweetalert2'
 
 interface ApiKeyButtonProps extends ButtonProps {
     text?: string,
@@ -22,6 +23,11 @@ export function ApiKeyButton({
     function embedApiKey(key: string) {
         localStorage.setItem('ai-token', key)
         const apiKey = localStorage.getItem('openAIApiKey')
+        Swal.fire(
+            'Done!',
+            'Open AI API Key Successfully Embedded!',
+            'success'
+          )
         return apiKey
     }
     return (
