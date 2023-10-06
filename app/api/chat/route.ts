@@ -2,6 +2,8 @@ import { kv } from '@vercel/kv'
 import { OpenAIStream, StreamingTextResponse } from 'ai'
 import { Configuration, OpenAIApi } from 'openai-edge'
 
+import { validateApiKey } from '@/lib/utils'
+
 import { auth } from '@/auth'
 import { nanoid } from '@/lib/utils'
 
@@ -18,14 +20,20 @@ export async function POST(req: Request) {
     })
   }
 
-  const configuration = new Configuration({
-    apiKey: previewToken
-  })
-  
-  const openai = new OpenAIApi(configuration)
+  let openai
 
-  if (previewToken) {
-    configuration.apiKey = previewToken
+  if (validateApiKey(previewToken)) {
+    const configuration = new Configuration({
+      apiKey: previewToken
+    })
+    
+    openai = new OpenAIApi(configuration)
+  } else {
+    const configuration = new Configuration({
+      apiKey: process.env.OPENAI_API_KEY
+    })
+    
+    openai = new OpenAIApi(configuration)
   }
 
   const res = await openai.createChatCompletion({

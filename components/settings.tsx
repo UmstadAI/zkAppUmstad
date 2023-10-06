@@ -5,6 +5,7 @@ import * as React from 'react'
 import { ApiKeyButton } from "./api-key-button";
 import { ApiKeyInput } from "./api-key-input";
 import { DeleteApiKeyButton } from './delete-api-key-button';
+import { ReturnChatButton } from './return-chat-button';
 
 
 export function Settings() {
@@ -18,10 +19,12 @@ export function Settings() {
             <p className="mb-1 text-sm font-normal">
                 We will store your API KEY on only Local Storage. 
                 When you want to delete it from Local Storage please click Delete Button below.
+                If you are using a shared computer, please ensure to delete your API key after its use.
             </p>
             <ApiKeyInput className="my-4" onChange={e => setApiKey(e.target.value)} />
             <ApiKeyButton className="mx-auto mb-4 items-center" apiKey={apiKey} />
-            <DeleteApiKeyButton className='mx-auto items-center'/>
+            <DeleteApiKeyButton className='mx-auto mb-4 items-center'/>
+            <ReturnChatButton className='mx-auto mb-4 items-center'/>
         </div>
     )
 }

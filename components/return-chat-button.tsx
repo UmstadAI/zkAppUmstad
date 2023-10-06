@@ -4,43 +4,21 @@ import * as React from 'react'
 
 import { Button, type ButtonProps } from '@/components/ui/button'
 import { IconSpinner } from '@/components/ui/icons'
-import { cn, validateApiKey } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 import Link from "next/link";
 import Swal from 'sweetalert2'
 
-interface ApiKeyButtonProps extends ButtonProps {
-    text?: string,
-    apiKey: string
+interface ReturnChatButtonProps extends ButtonProps {
+    text?: string
   }
 
-export function ApiKeyButton({ 
-    text = 'EMBED OPEN AI API KEY',
-    apiKey,
+export function ReturnChatButton({ 
+    text = 'RETURN BACK TO CHAT',
     className,
     ...props
-}: ApiKeyButtonProps) {
+}: ReturnChatButtonProps) {
     const [isLoading, setIsLoading] = React.useState(false)
-    function embedApiKey(key: string) {
-        if (validateApiKey(key)) {
-            localStorage.setItem('ai-token', key)
-            const apiKey = localStorage.getItem('ai-token')
-            Swal.fire(
-                'Done!',
-                'Open AI API Key Successfully Embedded!',
-                'success'
-              )
-              
-            return apiKey
-        } else {
-            Swal.fire(
-                'Invalid API KEY',
-                'Please provide a valid OPEN AI API KEY!',
-                'error'
-            )
-            
-            return null
-        }
-    }
+    
     return (
         <>
             <Link href="/">
@@ -48,7 +26,6 @@ export function ApiKeyButton({
                     variant="outline"
                     onClick={() => {
                         setIsLoading(true)
-                        embedApiKey(apiKey)  
                         setIsLoading(false)
                     }}
                     disabled={isLoading}
