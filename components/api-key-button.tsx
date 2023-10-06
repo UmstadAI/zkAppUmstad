@@ -11,7 +11,7 @@ import Swal from 'sweetalert2'
 interface ApiKeyButtonProps extends ButtonProps {
     text?: string,
     apiKey: string
-  }
+}
 
 export function ApiKeyButton({ 
     text = 'EMBED OPEN AI API KEY',
