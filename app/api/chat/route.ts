@@ -26,7 +26,7 @@ export async function POST(req: Request) {
     const configuration = new Configuration({
       apiKey: previewToken
     })
-    
+
     openai = new OpenAIApi(configuration)
   } else {
     const configuration = new Configuration({
