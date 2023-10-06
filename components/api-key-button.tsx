@@ -37,13 +37,38 @@ export function ApiKeyButton({
                 'Please provide a valid OPEN AI API KEY!',
                 'error'
             )
-            
+
             return null
         }
     }
+
+    const isValidApiKey = validateApiKey(apiKey);
+
     return (
         <>
-            <Link href="/">
+            {isValidApiKey ? (
+                <Link href="/">
+                    <Button
+                        variant="outline"
+                        onClick={() => {
+                            setIsLoading(true)
+                            embedApiKey(apiKey)  
+                            setIsLoading(false)
+                        }}
+                        disabled={isLoading}
+                        className={cn(
+                            'flex',
+                            className
+                        )}
+                        {...props}
+                    >
+                        {isLoading ? (
+                            <IconSpinner className="mr-2 animate-spin" />
+                        ) : null}
+                        {text}
+                    </Button>
+                </Link>
+            ) : (
                 <Button
                     variant="outline"
                     onClick={() => {
@@ -57,14 +82,13 @@ export function ApiKeyButton({
                         className
                     )}
                     {...props}
-                    >
+                >
                     {isLoading ? (
                         <IconSpinner className="mr-2 animate-spin" />
-                    ) : 
-                    null}
+                    ) : null}
                     {text}
                 </Button>
-            </Link>
+            )}
         </>
     )
 }
