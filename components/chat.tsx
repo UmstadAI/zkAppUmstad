@@ -7,18 +7,6 @@ import { ChatList } from '@/components/chat-list'
 import { ChatPanel } from '@/components/chat-panel'
 import { EmptyScreen } from '@/components/empty-screen'
 import { ChatScrollAnchor } from '@/components/chat-scroll-anchor'
-import { useLocalStorage } from '@/lib/hooks/use-local-storage'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle
-} from '@/components/ui/dialog'
-import { useState } from 'react'
-import { Button } from './ui/button'
-import { Input } from './ui/input'
 import { toast } from 'react-hot-toast'
 
 export interface ChatProps extends React.ComponentProps<'div'> {
@@ -27,7 +15,14 @@ export interface ChatProps extends React.ComponentProps<'div'> {
 }
 
 export function Chat({ id, initialMessages, className }: ChatProps) {
-  const previewToken = localStorage.getItem('ai-token')
+  let previewToken
+
+  if (typeof window !== 'undefined') {
+    previewToken = window.localStorage.getItem('previewToken')
+  } else {
+    previewToken = null
+  }
+
   const { messages, append, reload, stop, isLoading, input, setInput } =
     useChat({
       initialMessages,
