@@ -18,7 +18,7 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
   let previewToken
 
   if (typeof window !== 'undefined') {
-    previewToken = window.localStorage.getItem('previewToken')
+    previewToken = window.localStorage.getItem('ai-token')
   } else {
     previewToken = null
   }

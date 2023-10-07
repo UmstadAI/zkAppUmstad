@@ -29,7 +29,7 @@ export function ApiKeyButton({
                 'Open AI API Key Successfully Embedded!',
                 'success'
               )
-              
+            
             return apiKey
         } else {
             Swal.fire(
