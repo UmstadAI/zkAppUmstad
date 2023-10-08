@@ -43,7 +43,7 @@ export async function Header() {
           </Link>
         )}
         <div className="flex items-center">
-          <IconSeparator className="w-6 h-6 text-muted-foreground/50" />
+          <IconSeparator className="h-6 w-6 text-muted-foreground/50" />
           {session?.user ? (
             <UserMenu user={session.user} />
           ) : (
@@ -57,10 +57,10 @@ export async function Header() {
         <div className="hidden items-center justify-center space-x-2 sm:flex">
           <Link href="/" target="_blank" rel="nofollow" className='flex'>
             <Image src={Logo} alt='zkApp Umstad' className='h-16 w-16'/>
-            <h5 className='ml-2 mt-5 hidden md:flex'>zkAppUmstad</h5>
+            <h5 className='mt-5 hidden md:flex'>zkAppUmstad</h5>
           </Link>
         </div>
-      ) : ('')}
+      ) : ('') }
       
       <div className="flex items-center justify-end space-x-2">
         <a
