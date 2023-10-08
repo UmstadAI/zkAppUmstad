@@ -1,6 +1,7 @@
 import * as React from 'react'
 import Link from 'next/link'
 import Image from 'next/image';
+import { Zen_Tokyo_Zoo } from 'next/font/google';
 
 import { cn } from '@/lib/utils'
 import { auth } from '@/auth'
@@ -20,6 +21,11 @@ import { ClearHistory } from '@/components/clear-history'
 import { UserMenu } from '@/components/user-menu'
 import { LoginButton } from '@/components/login-button'
 import Logo from '@/assets/logo/logo.svg'
+
+const zen_tokyo_zoo = Zen_Tokyo_Zoo({
+  subsets: ['latin'],
+  weight: '400',
+})
 
 export async function Header() {
   const session = await auth()
@@ -57,7 +63,9 @@ export async function Header() {
         <div className="hidden items-center justify-center space-x-2 sm:flex">
           <Link href="/" target="_blank" rel="nofollow" className='flex'>
             <Image src={Logo} alt='zkApp Umstad' className='h-16 w-16'/>
-            <h5 className='mt-5 hidden md:flex'>zkAppUmstad</h5>
+            <div className={zen_tokyo_zoo.className}>
+              <h5 className='mt-5 hidden text-xl text-[#fbb43f] md:flex'>ZKAPP UMSTAD</h5>
+            </div>
           </Link>
         </div>
       ) : ('') }
