@@ -28,7 +28,7 @@ export function DeleteApiKeyButton({
     return (
         <>
             <Button
-                variant="outline"
+                variant="secondary"
                 onClick={() => {
                     setIsLoading(true)
                     deleteApiKey('')  

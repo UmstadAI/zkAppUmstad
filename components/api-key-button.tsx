@@ -49,7 +49,7 @@ export function ApiKeyButton({
             {isValidApiKey ? (
                 <Link href="/">
                     <Button
-                        variant="outline"
+                        variant="secondary"
                         onClick={() => {
                             setIsLoading(true)
                             embedApiKey(apiKey)  
@@ -70,7 +70,7 @@ export function ApiKeyButton({
                 </Link>
             ) : (
                 <Button
-                    variant="outline"
+                    variant="secondary"
                     onClick={() => {
                         setIsLoading(true)
                         embedApiKey(apiKey)  

@@ -23,7 +23,7 @@ export function ReturnChatButton({
         <>
             <Link href="/">
                 <Button
-                    variant="outline"
+                    variant="secondary"
                     onClick={() => {
                         setIsLoading(true)
                         setIsLoading(false)
