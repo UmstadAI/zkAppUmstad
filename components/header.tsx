@@ -59,16 +59,18 @@ export async function Header() {
           )}
         </div>
       </div>
-      { session?.user ? (
-        <div className="hidden items-center justify-center space-x-2 sm:flex">
-          <Link href="/" target="_blank" rel="nofollow" className='flex'>
-            <Image src={Logo} alt='zkApp Umstad' className='h-16 w-16'/>
-            <div className={zen_tokyo_zoo.className}>
-              <h5 className='mt-5 hidden text-xl text-[#fbb43f] md:flex'>ZKAPP UMSTAD</h5>
-            </div>
-          </Link>
-        </div>
-      ) : ('') }
+      <div>
+        { session?.user ? (
+          <div className="hidden items-center justify-center space-x-2 sm:flex">
+            <Link href="/" target="_blank" rel="nofollow" className='flex'>
+              <Image src={Logo} alt='zkApp Umstad' className='h-16 w-16'/>
+              <div className={zen_tokyo_zoo.className}>
+                <h5 className='mt-5 hidden text-xl text-[#fbb43f] md:flex'>ZKAPP UMSTAD</h5>
+              </div>
+            </Link>
+          </div>
+        ) : ('') }
+      </div>
       
       <div className="flex items-center justify-end space-x-2">
         <a
