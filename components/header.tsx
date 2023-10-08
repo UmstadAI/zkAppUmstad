@@ -1,5 +1,6 @@
 import * as React from 'react'
 import Link from 'next/link'
+import Image from 'next/image';
 
 import { cn } from '@/lib/utils'
 import { auth } from '@/auth'
@@ -18,6 +19,7 @@ import { ThemeToggle } from '@/components/theme-toggle'
 import { ClearHistory } from '@/components/clear-history'
 import { UserMenu } from '@/components/user-menu'
 import { LoginButton } from '@/components/login-button'
+import Logo from '@/assets/logo/logo.svg'
 
 export async function Header() {
   const session = await auth()
@@ -37,8 +39,7 @@ export async function Header() {
           </Sidebar>
         ) : (
           <Link href="/" target="_blank" rel="nofollow">
-            <IconNextChat className="w-6 h-6 mr-2 dark:hidden" inverted />
-            <IconNextChat className="hidden w-6 h-6 mr-2 dark:block" />
+            <Image src={Logo} alt='zkApp Umstad' className='h-16 w-16'/>
           </Link>
         )}
         <div className="flex items-center">
