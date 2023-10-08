@@ -53,6 +53,15 @@ export async function Header() {
           )}
         </div>
       </div>
+      { session?.user ? (
+        <div className="hidden items-center justify-center space-x-2 sm:flex">
+          <Link href="/" target="_blank" rel="nofollow" className='flex'>
+            <Image src={Logo} alt='zkApp Umstad' className='h-16 w-16'/>
+            <h5 className='ml-2 mt-5 hidden md:flex'>zkAppUmstad</h5>
+          </Link>
+        </div>
+      ) : ('')}
+      
       <div className="flex items-center justify-end space-x-2">
         <a
           target="_blank"
@@ -69,7 +78,6 @@ export async function Header() {
           className={cn(buttonVariants())}
         >
           <span className="hidden sm:block">Report a Bug</span>
-          <span className="sm:hidden">Report a Bug</span>
         </a>
       </div>
     </header>
