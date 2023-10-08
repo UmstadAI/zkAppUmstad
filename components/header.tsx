@@ -70,7 +70,7 @@ export async function Header() {
           className={cn(buttonVariants({ variant: 'outline' }))}
         >
           <IconGitHub />
-          <span className="hidden ml-2 md:flex">GitHub</span>
+          <span className="ml-2 hidden md:flex">GitHub</span>
         </a>
         <a
           href="https://github.com/UmstadAI/zkAppUmstad/issues"
