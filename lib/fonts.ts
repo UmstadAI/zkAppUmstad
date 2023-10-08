@@ -1,4 +1,4 @@
-import { Roboto_Mono as FontMono, Space_Grotesk as FontSans} from 'next/font/google'
+import { Roboto_Mono as FontMono, Roboto as FontSans} from 'next/font/google'
 
 export const fontSans = FontSans({
   subsets: ['latin'],
