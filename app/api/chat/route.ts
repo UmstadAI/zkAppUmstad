@@ -21,6 +21,7 @@ export async function POST(req: Request) {
   }
 
   let openai
+  let model
 
   if (validateApiKey(previewToken)) {
     const configuration = new Configuration({
@@ -28,16 +29,18 @@ export async function POST(req: Request) {
     })
 
     openai = new OpenAIApi(configuration)
+    model = 'gpt-4'
   } else {
     const configuration = new Configuration({
       apiKey: process.env.OPENAI_API_KEY
     })
     
     openai = new OpenAIApi(configuration)
+    model = 'gpt-3.5-turbo'
   }
 
   const res = await openai.createChatCompletion({
-    model: 'gpt-3.5-turbo',
+    model: model,
     messages,
     temperature: 0.7,
     stream: true

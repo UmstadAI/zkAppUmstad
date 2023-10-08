@@ -17,6 +17,16 @@ export function Settings() {
                 Enter Your OPEN AI API KEY to use GPT-4. 
             </h1>
             <p className="mb-1 text-sm font-normal">
+                In order to use GPT-4, you need to deposit some credit. For detailed information, 
+                please visit 
+                <b>
+                    <a href="https://platform.openai.com/docs/guides/gpt" target="_blank" rel="noopener noreferrer"> Open AI Documentation
+                    </a>
+                </b>.
+
+                <br/>
+                <br/>
+
                 We will store your API KEY on only Local Storage. 
                 When you want to delete it from Local Storage please click Delete Button below.
                 If you are using a shared computer, please ensure to delete your API key after its use.
