@@ -11,7 +11,7 @@ import { Header } from '@/components/header'
 
 export const metadata: Metadata = {
   title: {
-    default: 'zkApp Umstad',
+    default: 'zkApp Umstad - AI Agent',
     template: `%s - Next.js AI Chatbot`
   },
   description: 'An AI-powered chatbot for zkApp builders.',
