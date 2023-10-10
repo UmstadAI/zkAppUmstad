@@ -11,7 +11,7 @@ import { Header } from '@/components/header'
 
 export const metadata: Metadata = {
   title: {
-    default: 'zkApp Umstad',
+    default: 'zkApp Umstad - AI Agent',
     template: `%s - Next.js AI Chatbot`
   },
   description: 'An AI-powered chatbot for zkApp builders.',
@@ -43,10 +43,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
       >
         <Toaster />
         <Providers attribute="class" defaultTheme="system" enableSystem>
-          <div className="flex flex-col min-h-screen">
+          <div className="flex min-h-screen flex-col">
             {/* @ts-ignore */}
             <Header />
-            <main className="flex flex-col flex-1 bg-muted/50">{children}</main>
+            <main className="flex flex-1 flex-col bg-muted">{children}</main>
           </div>
           <TailwindIndicator />
         </Providers>

@@ -1,5 +1,7 @@
 import * as React from 'react'
 import Link from 'next/link'
+import Image from 'next/image';
+import { Zen_Tokyo_Zoo } from 'next/font/google';
 
 import { cn } from '@/lib/utils'
 import { auth } from '@/auth'
@@ -18,6 +20,12 @@ import { ThemeToggle } from '@/components/theme-toggle'
 import { ClearHistory } from '@/components/clear-history'
 import { UserMenu } from '@/components/user-menu'
 import { LoginButton } from '@/components/login-button'
+import Logo from '@/assets/logo/logo.svg'
+
+const zen_tokyo_zoo = Zen_Tokyo_Zoo({
+  subsets: ['latin'],
+  weight: '400',
+})
 
 export async function Header() {
   const session = await auth()
@@ -37,12 +45,11 @@ export async function Header() {
           </Sidebar>
         ) : (
           <Link href="/" target="_blank" rel="nofollow">
-            <IconNextChat className="w-6 h-6 mr-2 dark:hidden" inverted />
-            <IconNextChat className="hidden w-6 h-6 mr-2 dark:block" />
+            <Image src={Logo} alt='zkApp Umstad' className='h-16 w-16'/>
           </Link>
         )}
         <div className="flex items-center">
-          <IconSeparator className="w-6 h-6 text-muted-foreground/50" />
+          <IconSeparator className="h-6 w-6 text-muted-foreground/50" />
           {session?.user ? (
             <UserMenu user={session.user} />
           ) : (
@@ -52,6 +59,19 @@ export async function Header() {
           )}
         </div>
       </div>
+      <div>
+        { session?.user ? (
+          <div className="hidden items-center justify-center space-x-2 sm:flex">
+            <Link href="/" target="_blank" rel="nofollow" className='flex'>
+              <Image src={Logo} alt='zkApp Umstad' className='h-16 w-16'/>
+              <div className={zen_tokyo_zoo.className}>
+                <h5 className='mt-5 hidden text-xl text-[#fbb43f] md:flex'>ZKAPP UMSTAD</h5>
+              </div>
+            </Link>
+          </div>
+        ) : ('') }
+      </div>
+      
       <div className="flex items-center justify-end space-x-2">
         <a
           target="_blank"
@@ -60,7 +80,7 @@ export async function Header() {
           className={cn(buttonVariants({ variant: 'outline' }))}
         >
           <IconGitHub />
-          <span className="hidden ml-2 md:flex">GitHub</span>
+          <span className="ml-2 hidden md:flex">GitHub</span>
         </a>
         <a
           href="https://github.com/UmstadAI/zkAppUmstad/issues"
@@ -68,7 +88,6 @@ export async function Header() {
           className={cn(buttonVariants())}
         >
           <span className="hidden sm:block">Report a Bug</span>
-          <span className="sm:hidden">Report a Bug</span>
         </a>
       </div>
     </header>
