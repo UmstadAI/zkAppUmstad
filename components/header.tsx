@@ -1,7 +1,7 @@
 import * as React from 'react'
 import Link from 'next/link'
 import Image from 'next/image';
-import { Zen_Tokyo_Zoo } from 'next/font/google';
+import { Montserrat } from 'next/font/google';
 
 import { cn } from '@/lib/utils'
 import { auth } from '@/auth'
@@ -22,9 +22,9 @@ import { UserMenu } from '@/components/user-menu'
 import { LoginButton } from '@/components/login-button'
 import Logo from '@/assets/logo/logo.svg'
 
-const zen_tokyo_zoo = Zen_Tokyo_Zoo({
+const zen_tokyo_zoo = Montserrat({
   subsets: ['latin'],
-  weight: '400',
+  weight: '600',
 })
 
 export async function Header() {
