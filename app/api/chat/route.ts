@@ -29,7 +29,6 @@ export async function POST(req: Request) {
   });      
 
   const index = pinecone.Index("zkappumstad");
-  console.log(await index.describeIndexStats())
 
   let openai
   let model
