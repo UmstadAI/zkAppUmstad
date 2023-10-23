@@ -1,6 +1,7 @@
 import { kv } from '@vercel/kv'
 import { OpenAIStream, StreamingTextResponse } from 'ai'
 import { Configuration, OpenAIApi } from 'openai-edge'
+import { Pinecone } from "@pinecone-database/pinecone";      
 
 import { validateApiKey } from '@/lib/utils'
 
@@ -8,6 +9,8 @@ import { auth } from '@/auth'
 import { nanoid } from '@/lib/utils'
 
 export const runtime = 'edge'
+
+
 
 export async function POST(req: Request) {
   const json = await req.json()
@@ -19,6 +22,14 @@ export async function POST(req: Request) {
       status: 401
     })
   }
+
+  const pinecone = new Pinecone({
+    environment: process.env.PINECONE_ENVIRONMENT as string,     
+    apiKey: process.env.PINECONE_API_KEY as string,      
+  });      
+
+  const index = pinecone.Index("zkappumstad");
+  console.log(await index.describeIndexStats())
 
   let openai
   let model
