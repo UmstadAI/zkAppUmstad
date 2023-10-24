@@ -55,7 +55,6 @@ export async function POST(req: Request) {
   const embeddings = new OpenAIEmbeddings()
   const vectorStore = new PineconeStore(embeddings, {pineconeIndex: index})
   const retriever = vectorStore.asRetriever()
-  const prompt = questionPrompt
 
   const chain = RunnableSequence.from()
 
