@@ -1,7 +1,12 @@
 import { kv } from '@vercel/kv'
 import { OpenAIStream, StreamingTextResponse } from 'ai'
 import { Configuration, OpenAIApi } from 'openai-edge'
-import { Pinecone } from "@pinecone-database/pinecone";      
+import { Pinecone } from "@pinecone-database/pinecone";   
+import { PineconeStore } from "langchain/vectorstores/pinecone";
+import { OpenAIEmbeddings } from "langchain/embeddings/openai";
+import { PromptTemplate } from "langchain/prompts";
+import { RunnableSequence } from "langchain/schema/runnable";
+import { questionPrompt, questionPrompt } from './prompts';
 
 import { validateApiKey } from '@/lib/utils'
 
@@ -9,8 +14,6 @@ import { auth } from '@/auth'
 import { nanoid } from '@/lib/utils'
 
 export const runtime = 'edge'
-
-
 
 export async function POST(req: Request) {
   const json = await req.json()
@@ -22,13 +25,6 @@ export async function POST(req: Request) {
       status: 401
     })
   }
-
-  const pinecone = new Pinecone({
-    environment: process.env.PINECONE_ENVIRONMENT as string,     
-    apiKey: process.env.PINECONE_API_KEY as string,      
-  });      
-
-  const index = pinecone.Index("zkappumstad");
 
   let openai
   let model
@@ -48,6 +44,20 @@ export async function POST(req: Request) {
     openai = new OpenAIApi(configuration)
     model = 'gpt-3.5-turbo'
   }
+
+  const pinecone = new Pinecone({
+    environment: process.env.PINECONE_ENVIRONMENT as string,     
+    apiKey: process.env.PINECONE_API_KEY as string,      
+  });      
+
+  const index = pinecone.Index("zkappumstad");
+
+  const embeddings = new OpenAIEmbeddings()
+  const vectorStore = new PineconeStore(embeddings, {pineconeIndex: index})
+  const retriever = vectorStore.asRetriever()
+  const prompt = questionPrompt
+
+  const chain = RunnableSequence.from()
 
   const res = await openai.createChatCompletion({
     model: model,
