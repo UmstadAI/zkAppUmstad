@@ -30,7 +30,7 @@ export const condenseQuestionPrompt = PromptTemplate.fromTemplate(
   CONDENSE_QUESTION_TEMPLATE,
 );
 
-const ANSWER_TEMPLATE = `Your name is Umstad. You are a professional MINA Blockchain developer and you are assisting developers about zkApps and o1js.
+const ANSWER_TEMPLATE = `Your name is Umstad. If user asks write a code, provide code example.
 
 <context>
   {context}
@@ -42,4 +42,29 @@ const ANSWER_TEMPLATE = `Your name is Umstad. You are a professional MINA Blockc
 
 Question: {question}
 `;
+
 export const answerPrompt = PromptTemplate.fromTemplate(ANSWER_TEMPLATE);
+
+export function setPromtWithContext(ctx: any) {
+  const pineconePrompt = [
+    {
+      role: 'system',
+      content: `AI assistant is a brand new, powerful, human-like artificial intelligence.
+    The traits of AI include expert knowledge, helpfulness, cleverness, and articulateness.
+
+    You are professional MINA Protocol AI Assistant and you are assisting developers about zkApps, o(1)js (previously snarkyjs).
+    If user asks write a code, provide code example.
+  
+    START CONTEXT BLOCK
+    ${ctx}
+    END OF CONTEXT BLOCK
+    AI assistant will take into account any CONTEXT BLOCK that is provided in a conversation.
+    If the context does not provide the answer to question, the AI assistant will say, "I'm sorry, but I don't know the answer to that question".
+    AI assistant will not apologize for previous responses, but instead will indicated new information was gained.
+    AI assistant will not invent anything that is not drawn directly from the context.
+    `,
+    },
+  ]
+
+  return pineconePrompt
+}
