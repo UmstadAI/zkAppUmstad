@@ -1,6 +1,14 @@
 import { kv } from '@vercel/kv'
-import { OpenAIStream, StreamingTextResponse } from 'ai'
+import { Message, OpenAIStream, StreamingTextResponse } from 'ai'
 import { Configuration, OpenAIApi } from 'openai-edge'
+import { Pinecone } from "@pinecone-database/pinecone";   
+import { ChatOpenAI } from "langchain/chat_models/openai";
+import { PineconeStore } from "langchain/vectorstores/pinecone";
+import { OpenAIEmbeddings } from "langchain/embeddings/openai";
+import { getContext } from './utils/context'
+
+import { setPromtWithContext } from './prompts';
+import { formatVercelMessages } from './utils/utils';
 
 import { validateApiKey } from '@/lib/utils'
 
@@ -39,10 +47,25 @@ export async function POST(req: Request) {
     model = 'gpt-3.5-turbo'
   }
 
+  const pinecone = new Pinecone({
+    environment: process.env.PINECONE_ENVIRONMENT as string,     
+    apiKey: process.env.PINECONE_API_KEY as string,      
+  });      
+
+  const index = pinecone.Index("zkappumstad");
+
+  const embeddings = new OpenAIEmbeddings()
+  const vectorStore = new PineconeStore(embeddings, {pineconeIndex: index})
+  const retriever = vectorStore.asRetriever()
+
+  const lastMessage = messages[messages.length - 1]
+  const context = await getContext(lastMessage.content, '')
+  const promt = setPromtWithContext(context)
+
   const res = await openai.createChatCompletion({
     model: model,
-    messages,
-    temperature: 0.7,
+    messages: [...promt, ...messages.filter((message: Message) => message.role === 'user')],
+    temperature: 0.4,
     stream: true
   })
 
