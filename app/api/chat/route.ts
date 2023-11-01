@@ -96,7 +96,6 @@ export async function POST(req: Request) {
     question: lastMessage.content,
   });
 
-
   console.log(JSON.stringify(res, null, 2));
 
   const stream = OpenAIStream(res, {
