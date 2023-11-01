@@ -5,15 +5,17 @@ import { Pinecone } from "@pinecone-database/pinecone";
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import { PineconeStore } from "langchain/vectorstores/pinecone";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
-import { getContext } from './utils/context'
+import { RunnableSequence } from "langchain/schema/runnable";
+import { StringOutputParser } from "langchain/schema/output_parser";
 
-import { setPromtWithContext } from './prompts';
-import { formatVercelMessages } from './utils/utils';
+import { SYSTEM_TEMPLATE, setPromtWithContext } from './prompts';
+import { formatDocumentsAsString } from "langchain/util/document";
 
 import { validateApiKey } from '@/lib/utils'
 
 import { auth } from '@/auth'
 import { nanoid } from '@/lib/utils'
+import { ChatPromptTemplate, HumanMessagePromptTemplate, SystemMessagePromptTemplate } from 'langchain/prompts';
 
 export const runtime = 'edge'
 
@@ -54,20 +56,48 @@ export async function POST(req: Request) {
 
   const index = pinecone.Index("zkappumstad");
 
+  // Initialize the LLM to use to answer the question.
+  const chatModel = new ChatOpenAI({});
+
   const embeddings = new OpenAIEmbeddings()
   const vectorStore = new PineconeStore(embeddings, {pineconeIndex: index})
-  const retriever = vectorStore.asRetriever()
+  const vectorStoreRetriever = vectorStore.asRetriever()
 
   const lastMessage = messages[messages.length - 1]
-  const context = await getContext(lastMessage.content, '')
-  const promt = setPromtWithContext(context)
+  const formatMessages = [
+    SystemMessagePromptTemplate.fromTemplate(SYSTEM_TEMPLATE),
+    HumanMessagePromptTemplate.fromTemplate("{question}"),
+  ];
+  const prompt = ChatPromptTemplate.fromMessages(formatMessages);
 
-  const res = await openai.createChatCompletion({
-    model: model,
-    messages: [...promt, ...messages.filter((message: Message) => message.role === 'user')],
-    temperature: 0.4,
-    stream: true
-  })
+  const chain = RunnableSequence.from([
+    {
+      // Extract the "question" field from the input object and pass it to the retriever as a string
+      sourceDocuments: RunnableSequence.from([
+        (input) => input.question,
+        vectorStoreRetriever,
+      ]),
+      question: (input) => input.question,
+    },
+    {
+      // Pass the source documents through unchanged so that we can return them directly in the final result
+      sourceDocuments: (previousStepResult) => previousStepResult.sourceDocuments,
+      question: (previousStepResult) => previousStepResult.question,
+      context: (previousStepResult) =>
+        formatDocumentsAsString(previousStepResult.sourceDocuments),
+    },
+    {
+      result: prompt.pipe(chatModel).pipe(new StringOutputParser()),
+      sourceDocuments: (previousStepResult) => previousStepResult.sourceDocuments,
+    },
+  ]);
+
+  const res = await chain.invoke({
+    question: lastMessage.content,
+  });
+
+
+  console.log(JSON.stringify(res, null, 2));
 
   const stream = OpenAIStream(res, {
     async onCompletion(completion) {
