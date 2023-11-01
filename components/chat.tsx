@@ -1,13 +1,13 @@
 'use client'
 
 import { useChat, type Message } from 'ai/react'
-
 import { cn } from '@/lib/utils'
 import { ChatList } from '@/components/chat-list'
 import { ChatPanel } from '@/components/chat-panel'
 import { EmptyScreen } from '@/components/empty-screen'
 import { ChatScrollAnchor } from '@/components/chat-scroll-anchor'
 import { toast } from 'react-hot-toast'
+import { useState } from 'react'
 
 export interface ChatProps extends React.ComponentProps<'div'> {
   initialMessages?: Message[]
@@ -22,6 +22,8 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
   } else {
     previewToken = null
   }
+const showIntermediateSteps = true
+  const [intermediateStepsLoading, setIntermediateStepsLoading] = useState(false);
 
   const { messages, append, reload, stop, isLoading, input, setInput } =
     useChat({
