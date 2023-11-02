@@ -15,7 +15,7 @@ import { SupabaseVectorStore } from 'langchain/vectorstores/supabase'
 import { AIMessage, ChatMessage, HumanMessage } from 'langchain/schema'
 import { OpenAIEmbeddings } from 'langchain/embeddings/openai'
 import { ChatMessageHistory } from 'langchain/memory'
-import { setPromtWithContext } from './prompts'
+import { setPromtWithContext, TEMPLATE } from './prompts'
 import { formatVercelMessages } from './utils/utils'
 import { validateApiKey } from '@/lib/utils'
 import {
@@ -25,6 +25,7 @@ import {
 import { auth } from '@/auth'
 import { nanoid } from '@/lib/utils'
 import { initializeAgentExecutorWithOptions } from 'langchain/agents'
+
 export const runtime = 'edge'
 
 const convertVercelMessageToLangChainMessage = (message: VercelChatMessage) => {
@@ -36,9 +37,6 @@ const convertVercelMessageToLangChainMessage = (message: VercelChatMessage) => {
     return new ChatMessage(message.content, message.role)
   }
 }
-const TEMPLATE = `You are a robot called Umstad that has deep knowledge about Mina protocol, building Zero Knowledge app, and smart contracts. Any question about Mina, Blockchain, circuits and smart contracts will be answered by Umstad.
-Forget everything about ethereum and other protocols, just talk about Mina.
-If you don't know how to answer a question, use the available tools to look up relevant information. You should particularly do this for questions about Mina.`
 
 export async function POST(req: Request) {
   const json = await req.json()
@@ -81,15 +79,13 @@ export async function POST(req: Request) {
   const embeddings = new OpenAIEmbeddings()
   const vectorStore = new PineconeStore(embeddings, { pineconeIndex: index })
   const retriever = vectorStore.asRetriever()
+
   const tool = createRetrieverTool(retriever, {
     name: 'search_mina_knowledge',
     description:
       'If the query contains any question about Mina or Blockchain, circuits and smart contracts, it will return the most relevant answer.'
   })
 
-  // const lastMessage = messages[messages.length - 1]
-  // const context = await getContext(lastMessage.content, '')
-  // const promt = setPromtWithContext(context)
   const messages = (json.messages ?? []).filter(
     (message: VercelChatMessage) =>
       message.role === 'user' || message.role === 'assistant'
@@ -101,6 +97,7 @@ export async function POST(req: Request) {
   const chatHistory = new ChatMessageHistory(
     previousMessages.map(convertVercelMessageToLangChainMessage)
   )
+
   const memory = new OpenAIAgentTokenBufferMemory({
     llm: model,
     memoryKey: 'chat_history',
@@ -117,9 +114,11 @@ export async function POST(req: Request) {
       prefix: TEMPLATE
     }
   })
+
   const result = await executor.call({
     input: currentMessageContent
   })
+
   const title = json.messages[0].content.substring(0, 100)
   const id = json.id ?? nanoid()
   const createdAt = Date.now()
@@ -153,6 +152,7 @@ export async function POST(req: Request) {
     // Agent executors don't support streaming responses (yet!), so stream back the complete response one
     // character at a time to simluate it.
     const textEncoder = new TextEncoder()
+    
     const fakeStream = new ReadableStream({
       async start(controller) {
         for (const character of result.output) {
