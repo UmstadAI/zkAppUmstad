@@ -65,7 +65,7 @@ export async function POST(req: Request) {
   const res = await openai.createChatCompletion({
     model: model,
     messages: [...promt, ...messages.filter((message: Message) => message.role === 'user')],
-    temperature: 0.4,
+    temperature: 0.1,
     stream: true
   })
 
