@@ -36,3 +36,81 @@ yarn-error.log*
 .env
 .vercel
 .vscode
+
+
+# Byte-compiled / optimized files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+ENV/
+env/
+
+# IDE specific files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Logs and databases
+*.log
+*.sqlite3
+
+# Environment variables
+.env
+
+# Compiled source
+*.pyc
+
+# Backup and temporary files
+*~
+*.bak
+*.swp
+
+# Jupyter Notebook specific files
+.ipynb_checkpoints/
+
+# Distribution / packaging
+/dist/
+/build/
+*.egg-info/
+*.egg
+
+# Sphinx documentation
+docs/_build/
+
+# PyInstaller
+*.spec
+
+# mypy
+.mypy_cache/
+.dmypy.json
+
+# pytest
+__pycache__/
+.pytest_cache/
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# Celery
+celerybeat-schedule
+
+# dotenv
+.env
+
+# pyenv
+.python-version
+
+# profiling
+profiling/
+
+# etc
+*.DS_Store
+Thumbs.db
