@@ -6,6 +6,7 @@ import { ChatOpenAI } from "langchain/chat_models/openai";
 import { PineconeStore } from "langchain/vectorstores/pinecone";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { getContext } from './utils/context'
+import { getCodeContext } from './utils/codeContext';
 
 import { setPromtWithContext } from './prompts';
 import { formatVercelMessages } from './utils/utils';
@@ -53,14 +54,19 @@ export async function POST(req: Request) {
   });      
 
   const index = pinecone.Index("zkappumstad");
+  const codeIndex = pinecone.Index("zkappumstad-codebase");
 
   const embeddings = new OpenAIEmbeddings()
   const vectorStore = new PineconeStore(embeddings, {pineconeIndex: index})
+  const codeVectorStore = new PineconeStore(embeddings, {pineconeIndex: codeIndex})
+
   const retriever = vectorStore.asRetriever()
+  const codeRetriever = codeVectorStore.asRetriever()
 
   const lastMessage = messages[messages.length - 1]
   const context = await getContext(lastMessage.content, '')
-  const promt = setPromtWithContext(context)
+  const codeContext = await getCodeContext(lastMessage.content, '')
+  const promt = setPromtWithContext(codeContext, context)
 
   const res = await openai.createChatCompletion({
     model: model,

@@ -17,7 +17,7 @@ const getMatchesFromEmbeddings = async (embeddings: number[], topK: number, name
     }
   );
 
-  const indexName: string = process.env.PINECONE_INDEX || '';
+  const indexName: string = process.env.PINECONE_CODE_INDEX || '';
   if (indexName === '') {
     throw new Error('PINECONE_INDEX environment variable not set')
   }
