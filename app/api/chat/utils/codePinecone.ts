@@ -8,7 +8,7 @@ export type Metadata = {
 }
 
 // The function `getMatchesFromEmbeddings` is used to retrieve matches for the given embeddings
-const getMatchesFromEmbeddings = async (embeddings: number[], topK: number, namespace: string): Promise<ScoredPineconeRecord<Metadata>[]> => {
+const getCodeMatchesFromEmbeddings = async (embeddings: number[], topK: number, namespace: string): Promise<ScoredPineconeRecord<Metadata>[]> => {
   // Obtain a client for Pinecone
   const pinecone = new Pinecone(
     {
@@ -17,9 +17,9 @@ const getMatchesFromEmbeddings = async (embeddings: number[], topK: number, name
     }
   );
 
-  const indexName: string = process.env.PINECONE_INDEX || '';
+  const indexName: string = process.env.PINECONE_CODE_INDEX || '';
   if (indexName === '') {
-    throw new Error('PINECONE_INDEX environment variable not set')
+    throw new Error('PINECONE_CODE_INDEX environment variable not set')
   }
 
   // Retrieve the list of indexes to check if expected index exists
@@ -49,4 +49,4 @@ const getMatchesFromEmbeddings = async (embeddings: number[], topK: number, name
   }
 }
 
-export { getMatchesFromEmbeddings }
+export { getCodeMatchesFromEmbeddings }

@@ -1,5 +1,5 @@
 import { ScoredPineconeRecord } from "@pinecone-database/pinecone";
-import { getMatchesFromEmbeddings } from "./pinecone";
+import { getCodeMatchesFromEmbeddings } from "./codePinecone";
 import { getEmbeddings } from './embeddings'
 
 export type Metadata = {
@@ -15,7 +15,7 @@ export const getCodeContext = async (message: string, namespace: string, maxToke
   const embedding = await getEmbeddings(message);
 
   // Retrieve the matches for the embeddings from the specified namespace
-  const matches = await getMatchesFromEmbeddings(embedding, 7, namespace);
+  const matches = await getCodeMatchesFromEmbeddings(embedding, 3, "zkappumstad-codebase");
 
   // Filter out the matches that have a score lower than the minimum score
   const qualifyingDocs = matches.filter(m => m.score && m.score > minScore);
