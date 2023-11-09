@@ -15,6 +15,7 @@ import { validateApiKey } from '@/lib/utils'
 
 import { auth } from '@/auth'
 import { nanoid } from '@/lib/utils'
+import { getProjectContext } from './utils/projectContext';
 
 export const runtime = 'edge'
 
@@ -55,18 +56,15 @@ export async function POST(req: Request) {
 
   const index = pinecone.Index("zkappumstad");
   const codeIndex = pinecone.Index("zkappumstad-codebase");
+  const projectIndex = pinecone.Index("zkappumstad-projects");
 
   const embeddings = new OpenAIEmbeddings()
-  const vectorStore = new PineconeStore(embeddings, {pineconeIndex: index})
-  const codeVectorStore = new PineconeStore(embeddings, {pineconeIndex: codeIndex})
-
-  const retriever = vectorStore.asRetriever()
-  const codeRetriever = codeVectorStore.asRetriever()
 
   const lastMessage = messages[messages.length - 1]
   const context = await getContext(lastMessage.content, '')
   const codeContext = await getCodeContext(lastMessage.content, '')
-  const promt = setPromtWithContext(codeContext, context)
+  const projectContext = await getProjectContext(lastMessage.content, '')
+  const promt = setPromtWithContext(codeContext, context, projectContext)
 
   const res = await openai.createChatCompletion({
     model: model,

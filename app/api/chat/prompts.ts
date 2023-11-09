@@ -12,7 +12,7 @@ export const questionPrompt = PromptTemplate.fromTemplate(
     Helpful Answer:`
 );
 
-export function setPromtWithContext(codeCtx: any, ctx: any) {
+export function setPromtWithContext(codeCtx: any, ctx: any, projectCtx: any) {
   const pineconePrompt = [
     {
       role: 'system',
@@ -24,6 +24,11 @@ export function setPromtWithContext(codeCtx: any, ctx: any) {
     Carefully understand code examples within the CODE_CONTEXT.
     Do not forget to consider MINA zkApp smart contracts are actually circuits.
 
+    After that evaulate the PROJECT_CONTEXT Block for code and zkApp project examples
+    if they include snarkyjs library consider it is renamed with o1js. 
+    If you need some additional functionality take them from PROJECT_CONTEXT Block and apply to code examples.
+    However, PROJECT_CONTEXT Block can include outdated code examples. Consider smart contract structure from firstly CODE_CONTEXT.
+
     START CODE_CONTEXT BLOCK
     ${codeCtx}
     END CODE_CONTEXT BLOCK
@@ -31,8 +36,14 @@ export function setPromtWithContext(codeCtx: any, ctx: any) {
     START CONTEXT BLOCK
     ${ctx}
     END OF CONTEXT BLOCK
+
+    START PROJECT_CONTEXT BLOCK
+    ${projectCtx}
+    END OF PROJECT_CONTEXT BLOCK
     
     AI assistant will take into account any CONTEXT BLOCK that is provided in a conversation.
+    AI assistant will take into account CODE_CONTEXT BLOCK and PROJECT_CONTEXT BLOCK that is provided in a conversation for Code and zkApp Project Questions.
+
     If the context does not provide the answer to question, the AI assistant will say, "I'm sorry, but I don't know the answer to that question".
     AI assistant will not apologize for previous responses, but instead will indicated new information was gained.
     AI assistant will not invent anything that is not drawn directly from the context.
