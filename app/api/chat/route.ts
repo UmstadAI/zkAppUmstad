@@ -1,6 +1,8 @@
 import { kv } from '@vercel/kv'
 import { Message, OpenAIStream, StreamingTextResponse } from 'ai'
 import { Configuration, OpenAIApi } from 'openai-edge'
+import { Ratelimit } from '@upstash/ratelimit'
+
 import { Pinecone } from "@pinecone-database/pinecone";   
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import { PineconeStore } from "langchain/vectorstores/pinecone";
@@ -32,6 +34,14 @@ export async function POST(req: Request) {
 
   let openai
   let model
+  let rateLimit
+
+  const ip = req.headers.get('x-forwarded-for')
+  const ratelimit = new Ratelimit({
+    redis: kv,
+    // rate limit to 5 requests per 10 seconds
+    limiter: Ratelimit.slidingWindow(5, '10s')
+  })
 
   if (validateApiKey(previewToken)) {
     const configuration = new Configuration({
@@ -39,7 +49,7 @@ export async function POST(req: Request) {
     })
 
     openai = new OpenAIApi(configuration)
-    model = 'gpt-4'
+    model = 'gpt-4-1106-preview'
   } else {
     const configuration = new Configuration({
       apiKey: process.env.OPENAI_API_KEY
