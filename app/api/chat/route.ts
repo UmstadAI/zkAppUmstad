@@ -1,6 +1,8 @@
 import { kv } from '@vercel/kv'
 import { Message, OpenAIStream, StreamingTextResponse } from 'ai'
 import { Configuration, OpenAIApi } from 'openai-edge'
+import { Ratelimit } from '@upstash/ratelimit'
+
 import { Pinecone } from "@pinecone-database/pinecone";   
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import { PineconeStore } from "langchain/vectorstores/pinecone";
@@ -33,20 +35,63 @@ export async function POST(req: Request) {
   let openai
   let model
 
+  const ip = req.headers.get('x-forwarded-for')
+  
   if (validateApiKey(previewToken)) {
     const configuration = new Configuration({
       apiKey: previewToken
     })
 
+    const ratelimit = new Ratelimit({
+      redis: kv,
+      limiter: Ratelimit.slidingWindow(1500, '1d')
+    })
+
+    const { success, limit, reset, remaining } = await ratelimit.limit(
+      `ratelimit_${ip}`
+    )
+  
+    if (!success) {
+      return new Response('You have reached your request limit for the day.', {
+        status: 429,
+        headers: {
+          'X-RateLimit-Limit': limit.toString(),
+          'X-RateLimit-Remaining': remaining.toString(),
+          'X-RateLimit-Reset': reset.toString()
+        }
+      })
+    }
+
     openai = new OpenAIApi(configuration)
-    model = 'gpt-4'
+    model = 'gpt-4-1106-preview'
   } else {
     const configuration = new Configuration({
       apiKey: process.env.OPENAI_API_KEY
     })
+
+    const ratelimit = new Ratelimit({
+      redis: kv,
+      limiter: Ratelimit.slidingWindow(100, '1d')
+    })
+
+    const { success, limit, reset, remaining } = await ratelimit.limit(
+      `ratelimit_${ip}`
+    )
+  
+    // TODO: Add Pop Up for Rate Limit
+    if (!success) {
+      return new Response('You have reached your request limit for the day.', {
+        status: 429,
+        headers: {
+          'X-RateLimit-Limit': limit.toString(),
+          'X-RateLimit-Remaining': remaining.toString(),
+          'X-RateLimit-Reset': reset.toString()
+        }
+      })
+    }
     
     openai = new OpenAIApi(configuration)
-    model = 'gpt-3.5-turbo'
+    model = 'gpt-4-1106-preview'
   }
 
   const pinecone = new Pinecone({
