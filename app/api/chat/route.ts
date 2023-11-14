@@ -34,19 +34,33 @@ export async function POST(req: Request) {
 
   let openai
   let model
-  let rateLimit
 
   const ip = req.headers.get('x-forwarded-for')
-  const ratelimit = new Ratelimit({
-    redis: kv,
-    // rate limit to 5 requests per 10 seconds
-    limiter: Ratelimit.slidingWindow(5, '10s')
-  })
-
+  
   if (validateApiKey(previewToken)) {
     const configuration = new Configuration({
       apiKey: previewToken
     })
+
+    const ratelimit = new Ratelimit({
+      redis: kv,
+      limiter: Ratelimit.slidingWindow(1500, '1d')
+    })
+
+    const { success, limit, reset, remaining } = await ratelimit.limit(
+      `ratelimit_${ip}`
+    )
+  
+    if (!success) {
+      return new Response('You have reached your request limit for the day.', {
+        status: 429,
+        headers: {
+          'X-RateLimit-Limit': limit.toString(),
+          'X-RateLimit-Remaining': remaining.toString(),
+          'X-RateLimit-Reset': reset.toString()
+        }
+      })
+    }
 
     openai = new OpenAIApi(configuration)
     model = 'gpt-4-1106-preview'
@@ -54,6 +68,27 @@ export async function POST(req: Request) {
     const configuration = new Configuration({
       apiKey: process.env.OPENAI_API_KEY
     })
+
+    const ratelimit = new Ratelimit({
+      redis: kv,
+      limiter: Ratelimit.slidingWindow(100, '1d')
+    })
+
+    const { success, limit, reset, remaining } = await ratelimit.limit(
+      `ratelimit_${ip}`
+    )
+  
+    // TODO: Add Pop Up for Rate Limit
+    if (!success) {
+      return new Response('You have reached your request limit for the day.', {
+        status: 429,
+        headers: {
+          'X-RateLimit-Limit': limit.toString(),
+          'X-RateLimit-Remaining': remaining.toString(),
+          'X-RateLimit-Reset': reset.toString()
+        }
+      })
+    }
     
     openai = new OpenAIApi(configuration)
     model = 'gpt-4-1106-preview'
