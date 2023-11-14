@@ -94,11 +94,6 @@ export async function POST(req: Request) {
     model = 'gpt-4-1106-preview'
   }
 
-  const pinecone = new Pinecone({
-    environment: process.env.PINECONE_ENVIRONMENT as string,     
-    apiKey: process.env.PINECONE_API_KEY as string,      
-  });      
-
   const lastMessage = messages[messages.length - 1]
   const context = await getContext(lastMessage.content, '')
   const codeContext = await getCodeContext(lastMessage.content, '')
