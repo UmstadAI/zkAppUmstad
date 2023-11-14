@@ -99,12 +99,6 @@ export async function POST(req: Request) {
     apiKey: process.env.PINECONE_API_KEY as string,      
   });      
 
-  const index = pinecone.Index("zkappumstad");
-  const codeIndex = pinecone.Index("zkappumstad-codebase");
-  const projectIndex = pinecone.Index("zkappumstad-projects");
-
-  const embeddings = new OpenAIEmbeddings()
-
   const lastMessage = messages[messages.length - 1]
   const context = await getContext(lastMessage.content, '')
   const codeContext = await getCodeContext(lastMessage.content, '')
