@@ -46,7 +46,7 @@ export async function POST(req: Request) {
     })
     
     openai = new OpenAIApi(configuration)
-    model = 'gpt-3.5-turbo'
+    model = 'gpt-4'
   }
 
   const pinecone = new Pinecone({
@@ -101,5 +101,6 @@ export async function POST(req: Request) {
     }
   })
 
+  console.log(stream)
   return new StreamingTextResponse(stream)
 }
