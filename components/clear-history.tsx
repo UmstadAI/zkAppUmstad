@@ -50,7 +50,7 @@ export function ClearHistory({ clearChats }: ClearHistoryProps) {
             disabled={isPending}
             onClick={async event => {
               event.preventDefault();
-
+              
               try {
                 const result = await clearChats()
 
