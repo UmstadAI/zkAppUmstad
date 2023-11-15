@@ -141,24 +141,30 @@ export function SidebarActions({
             <Button
               disabled={isSharePending}
               onClick={() => {
-                startShareTransition(async () => {
+                startShareTransition(() => {
                   if (chat.sharePath) {
-                    await new Promise(resolve => setTimeout(resolve, 500))
-                    copyShareLink(chat)
-                    return
+                    setTimeout(async () => {
+                      await copyShareLink(chat);
+                    }, 500);
+                    return;
                   }
 
-                  const result = await shareChat(chat)
+                  shareChat(chat)
+                    .then(result => {
+                      if (result && 'error' in result) {
+                        toast.error(result.error);
+                        return;
+                      }
 
-                  if (result && 'error' in result) {
-                    toast.error(result.error)
-                    return
-                  }
-
-                  copyShareLink(result)
-                })
+                      copyShareLink(result);
+                    })
+                    .catch(error => {
+                      console.error('Error during share:', error);
+                    });
+                });
               }}
             >
+
               {isSharePending ? (
                 <>
                   <IconSpinner className="mr-2 animate-spin" />
@@ -186,26 +192,31 @@ export function SidebarActions({
             </AlertDialogCancel>
             <AlertDialogAction
               disabled={isRemovePending}
-              onClick={event => {
-                event.preventDefault()
-                startRemoveTransition(async () => {
+              onClick={async event => {
+                event.preventDefault();
+                
+                try {
                   const result = await removeChat({
                     id: chat.id,
                     path: chat.path
-                  })
+                  });
 
                   if (result && 'error' in result) {
-                    toast.error(result.error)
-                    return
+                    toast.error(result.error);
+                    return;
                   }
 
-                  setDeleteDialogOpen(false)
-                  router.refresh()
-                  router.push('/')
-                  toast.success('Chat deleted')
-                })
+                  setDeleteDialogOpen(false);
+                  router.refresh();
+                  router.push('/');
+                  toast.success('Chat deleted');
+                } catch (error) {
+                  console.error("An error occurred:", error);
+                  // Handle error as needed, e.g., show an error message
+                }
               }}
             >
+
               {isRemovePending && <IconSpinner className="mr-2 animate-spin" />}
               Delete
             </AlertDialogAction>
