@@ -212,7 +212,6 @@ export function SidebarActions({
                   toast.success('Chat deleted');
                 } catch (error) {
                   console.error("An error occurred:", error);
-                  // Handle error as needed, e.g., show an error message
                 }
               }}
             >
