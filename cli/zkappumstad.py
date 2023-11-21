@@ -1,4 +1,4 @@
-from zkappumstad.completion import create_completion
+from zkappumstad.runner import create_completion
 
 
 print("Welcome to Zkappumstad!")
@@ -17,4 +17,5 @@ while True:
 
     for part in completion.__stream__():
         print(part.choices[0].delta.content or "", end="")
+        print(part.choices[0].delta.function_call or "", end="")
     print()

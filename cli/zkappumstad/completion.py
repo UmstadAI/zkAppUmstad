@@ -2,6 +2,7 @@ from openai import OpenAI
 from zkappumstad.prompt import SYSTEM_PROMPT
 from dotenv import load_dotenv, find_dotenv
 
+
 print(find_dotenv(".env.local"))
 load_dotenv(find_dotenv(".env.local"))
 client = OpenAI()
@@ -15,7 +16,7 @@ def create_completion(history, message):
                 *history,
                 {"role": "user", "content": message},
             ],
-            model="gpt-3.5-turbo",
+            model="gpt-4-1106-preview",
             stream=True,
         )
         return chat_completion
