@@ -1,6 +1,7 @@
 import pinecone
 import os
 from openai import OpenAI
+from tools.tool import Tool
 
 pinecone_api_key = os.getenv("PINECONE_API_KEY") or "YOUR_API_KEY"
 pinecone_env = os.getenv("PINECONE_ENVIRONMENT") or "YOUR_ENV"
@@ -32,6 +33,14 @@ def run_tool(query=""):
         model="text-embedding-ada-002",
     )
     embeddings = embeddings["embedding"]
-    index = pinecone.Index(name="zkappumstad")
+    index = pinecone.Index("zkappumstad")
     query_results = index.query(queries=list(embeddings), top_k=1)
     return query_results.to_dict()["data"]
+
+
+doc_tool = Tool(
+    name="doc_tool",
+    description=function_description,
+    message=function_messages,
+    function=run_tool,
+)
