@@ -39,6 +39,9 @@ const getMatchesFromEmbeddings = async (embeddings: number[], topK: number, name
     const queryResult = await pineconeNamespace.query({
       vector: embeddings,
       topK,
+      filter: {
+        vector_type: process.env.DOCS_VECTOR_TYPE as string
+      },
       includeMetadata: true,
     })
     return queryResult.matches || []

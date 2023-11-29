@@ -15,7 +15,7 @@ export const getCodeContext = async (message: string, namespace: string, maxToke
   const embedding = await getEmbeddings(message);
 
   // Retrieve the matches for the embeddings from the specified namespace
-  const matches = await getCodeMatchesFromEmbeddings(embedding, 5, "zkappumstad-codebase");
+  const matches = await getCodeMatchesFromEmbeddings(embedding, 5, namespace);
 
   // Filter out the matches that have a score lower than the minimum score
   const qualifyingDocs = matches.filter(m => m.score && m.score > minScore);

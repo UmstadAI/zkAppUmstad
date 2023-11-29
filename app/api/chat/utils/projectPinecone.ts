@@ -17,7 +17,7 @@ const getProjectMatchesFromEmbeddings = async (embeddings: number[], topK: numbe
     }
   );
 
-  const indexName: string = process.env.PINECONE_PROJECTS_INDEX || '';
+  const indexName: string = process.env.PINECONE_INDEX || '';
   if (indexName === '') {
     throw new Error('PINECONE_PROJECTS_INDEX environment variable not set')
   }
@@ -39,6 +39,9 @@ const getProjectMatchesFromEmbeddings = async (embeddings: number[], topK: numbe
     const queryResult = await pineconeNamespace.query({
       vector: embeddings,
       topK,
+      filter: {
+        vector_type: process.env.PROJECT_VECTOR_TYPE as string
+      },
       includeMetadata: true,
     })
     return queryResult.matches || []

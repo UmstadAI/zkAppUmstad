@@ -17,7 +17,7 @@ const getCodeMatchesFromEmbeddings = async (embeddings: number[], topK: number, 
     }
   );
 
-  const indexName: string = process.env.PINECONE_CODE_INDEX || '';
+  const indexName: string = process.env.PINECONE_INDEX || '';
   if (indexName === '') {
     throw new Error('PINECONE_CODE_INDEX environment variable not set')
   }
@@ -39,6 +39,9 @@ const getCodeMatchesFromEmbeddings = async (embeddings: number[], topK: number, 
     const queryResult = await pineconeNamespace.query({
       vector: embeddings,
       topK,
+      filter: {
+        vector_type: process.env.CODE_VECTOR_TYPE as string
+      },
       includeMetadata: true,
     })
     return queryResult.matches || []
