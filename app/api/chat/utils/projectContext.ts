@@ -15,7 +15,7 @@ export const getProjectContext = async (message: string, namespace: string, maxT
   const embedding = await getEmbeddings(message);
 
   // Retrieve the matches for the embeddings from the specified namespace
-  const matches = await getProjectMatchesFromEmbeddings(embedding, 3, "zkappumstad-projects");
+  const matches = await getProjectMatchesFromEmbeddings(embedding, 3, namespace);
 
   // Filter out the matches that have a score lower than the minimum score
   const qualifyingDocs = matches.filter(m => m.score && m.score > minScore);
