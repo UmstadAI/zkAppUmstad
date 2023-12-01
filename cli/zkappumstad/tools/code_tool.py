@@ -9,14 +9,14 @@ load_dotenv(find_dotenv(".env.local"))
 
 pinecone_api_key = os.getenv("PINECONE_API_KEY") or "YOUR_API_KEY"
 pinecone_env = os.getenv("PINECONE_ENVIRONMENT") or "YOUR_ENV"
-vector_type = os.getenv("DOCS_VECTOR_TYPE") or "VECTOR_TYPE"
+vector_type = os.getenv("CODE_VECTOR_TYPE") or "VECTOR_TYPE"
 pinecone.init(api_key=pinecone_api_key, environment=pinecone_env)
 
 client = OpenAI()
 
 function_description = {
-    "name": "search_for_context",
-    "description": "Search for context about any topic from Mina documentations, use this tool to retrieve context about zkApps, o(1)js, zkSnarks, MINA smart contracts. You will need this tool almost everytime.",
+    "name": "search_for_code_context",
+    "description": "Search for context from code examples in the documentations, use this tool to retrieve context about code, when you need a reference code, Second most used tool.",
     "parameters": {
         "type": "object",
         "properties": {
@@ -29,7 +29,7 @@ function_description = {
     },
 }
 
-function_messages = "Fetching context about mina docs...\n"
+function_messages = "Fetching context about code snippets...\n"
 
 
 def run_tool(query=""):
@@ -61,8 +61,8 @@ def run_tool(query=""):
     return text
 
 
-doc_tool = Tool(
-    name="search_for_context",
+code_tool = Tool(
+    name="search_for_code_context",
     description=function_description,
     message=function_messages,
     function=run_tool,
