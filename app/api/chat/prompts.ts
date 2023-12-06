@@ -1,18 +1,6 @@
 import { PromptTemplate } from "langchain/prompts";
 
-export const questionPrompt = PromptTemplate.fromTemplate(
-    `Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer.
-    ----------------
-    CONTEXT: {context}
-    ----------------
-    CHAT HISTORY: {chatHistory}
-    ----------------
-    QUESTION: {question}
-    ----------------
-    Helpful Answer:`
-);
-
-export function setPromtWithContext(codeCtx: any, ctx: any, projectCtx: any) {
+export function setPromtWithContext(codeCtx: any, ctx: any, projectCtx: any, issueCtx: any) {
   const pineconePrompt = [
     {
       role: 'system',
@@ -20,9 +8,15 @@ export function setPromtWithContext(codeCtx: any, ctx: any, projectCtx: any) {
     The traits of AI include expert knowledge, helpfulness, cleverness, and articulateness.
     Forget about Solidity Smart Contracts
     AI Assistant is expert MINA Protocol AI Assistant and AI assistant is assisting developers about zkApps, o(1)js, zkSnarks, MINA smart contracts.
+
+    If user asks about some issue, error or problem get the context from ISSUE_CONTEXT Block. Understand the problem and the answer.
+    Then Reply to the user by considering the context and your knowledge.
+    
     Please provide a code example when the user requests code example by considering CODE_CONTEXT Block and use the information in CONTEXT Block use o1js for writing smart contracts.
     Carefully understand code examples within the CODE_CONTEXT BLOCK.
     Do not forget to consider MINA zkApp smart contracts are actually circuits.
+
+    
 
     After that evaulate the PROJECT_CONTEXT Block for code and zkApp project examples
     if they include snarkyjs library consider it is renamed with o1js. 
@@ -36,6 +30,10 @@ export function setPromtWithContext(codeCtx: any, ctx: any, projectCtx: any) {
     START CONTEXT BLOCK
     ${ctx}
     END OF CONTEXT BLOCK
+
+    START ISSUE_CONTEXT BLOCK
+    ${issueCtx}
+    END OF ISSUE_CONTEXT BLOCK
 
     START PROJECT_CONTEXT BLOCK
     ${projectCtx}

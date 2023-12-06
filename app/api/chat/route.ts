@@ -4,20 +4,16 @@ import { Configuration, OpenAIApi } from 'openai-edge'
 import { Ratelimit } from '@upstash/ratelimit'
 
 import { Pinecone } from "@pinecone-database/pinecone";   
-import { ChatOpenAI } from "langchain/chat_models/openai";
-import { PineconeStore } from "langchain/vectorstores/pinecone";
-import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { getContext } from './utils/context'
 import { getCodeContext } from './utils/codeContext';
+import { getProjectContext } from './utils/projectContext';
+import { getIssueContext } from './utils/issueContext'
 
 import { setPromtWithContext } from './prompts';
-import { formatVercelMessages } from './utils/utils';
-
 import { validateApiKey } from '@/lib/utils'
 
 import { auth } from '@/auth'
 import { nanoid } from '@/lib/utils'
-import { getProjectContext } from './utils/projectContext';
 
 export const runtime = 'edge'
 
@@ -103,7 +99,9 @@ export async function POST(req: Request) {
   const context = await getContext(lastMessage.content, '')
   const codeContext = await getCodeContext(lastMessage.content, '')
   const projectContext = await getProjectContext(lastMessage.content, '')
-  const promt = setPromtWithContext(codeContext, context, projectContext)
+  const issueContext = await getIssueContext(lastMessage.content, '')
+
+  const promt = setPromtWithContext(codeContext, context, projectContext, issueContext)
 
   const res = await openai.createChatCompletion({
     model: model,
