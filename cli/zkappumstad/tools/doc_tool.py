@@ -4,12 +4,12 @@ from openai import OpenAI
 from .tool import Tool
 from dotenv import load_dotenv, find_dotenv
 
-print(find_dotenv(".env.local"))
 load_dotenv(find_dotenv(".env.local"))
 
 pinecone_api_key = os.getenv("PINECONE_API_KEY") or "YOUR_API_KEY"
 pinecone_env = os.getenv("PINECONE_ENVIRONMENT") or "YOUR_ENV"
 vector_type = os.getenv("DOCS_VECTOR_TYPE") or "VECTOR_TYPE"
+
 pinecone.init(api_key=pinecone_api_key, environment=pinecone_env)
 
 client = OpenAI()
@@ -32,33 +32,50 @@ function_description = {
 function_messages = "Fetching context about mina docs...\n"
 
 
-def run_tool(query=""):
-    print("query", query)
-    embeddings = client.embeddings.create(
-        input=query,
-        model="text-embedding-ada-002",
-    )
-    embedding = embeddings.data[0].embedding
-    index = pinecone.Index("zkappumstad")
-    query_results = index.query(
-        vector=embedding,
-        top_k=3,
-        filter={"vector_type": vector_type},
-        include_metadata=True,
-    )
-    matches = query_results.to_dict()["matches"]
-    filtered_matches = [match for match in matches if match["score"] > 0.85]
-    metadatas = [match["metadata"] for match in filtered_matches]
-    titles = [metadata.get("title", "") for metadata in metadatas]
-    titles = [title + "\n" if title != "" else "" for title in titles]
-    texts = [metadata.get("text", "") for metadata in metadatas]
-    texts = [title + text for title, text in zip(titles, texts)]
-    texts = ["## Result " + str(i + 1) + ":\n" + text for i, text in enumerate(texts)]
-    text = "\n".join(texts)
-    # TODO verbosed for debugging, remove later
-    print("Query result is: \n", text)
-    print("Query result over.")
-    return text
+def get_text_embbeddings(query, model="text-embedding-ada-002"):
+    """Generate embeddings for a given query."""
+    try:
+        embeddings = client.embeddings.create(input=query, model=model)
+        return embeddings.data[0].embedding
+    except Exception as e:
+        print(f"Error generating embeddings: {e}")
+        return None
+
+def query_index(embedding, index_name="zkappumstad", top_k=3, vector_type=vector_type):
+    """Query the index using the generated embeddings."""
+    try:
+        index = pinecone.Index(index_name)
+        return index.query(
+            vector=embedding, top_k=top_k, filter={"vector_type": vector_type}, include_metadata=True
+        ).to_dict()["matches"]
+    except Exception as e:
+        print(f"Error querying index: {e}")
+        return []
+
+def format_results(matches):
+    """Format the results from the index query."""
+    results = []
+    for i, match in enumerate(matches):
+        if match["score"] > 0.85:
+            metadata = match["metadata"]
+            title = metadata.get("title", "")
+            text = metadata.get("text", "")
+            formatted_result = f"## Result {i + 1}:\n{title}\n{text}"
+            results.append(formatted_result)
+    return "\n".join(results)
+
+def run_tool(query="", vector_type=vector_type):
+    """Run the search tool with the provided query."""
+    embedding = get_text_embbeddings(query)
+    if embedding is None:
+        return "Failed to generate embeddings."
+
+    matches = query_index(embedding, vector_type=vector_type)
+    if not matches:
+        return "No matches found."
+
+    return format_results(matches)
+
 
 
 doc_tool = Tool(
