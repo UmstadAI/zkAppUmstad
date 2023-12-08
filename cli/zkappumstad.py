@@ -21,7 +21,7 @@ fade_in_text("Type 'quit' to exit.", "bold green")
 
 history = []
 while True:
-    message = input(Fore.BLUE + "You: " + Style.RESET_ALL)
+    message = input(Fore.BLUE + "\nYou: " + Style.RESET_ALL)
     if message == "quit":
         break
     completion = create_completion(history, message)
