@@ -7,8 +7,8 @@ from openai._streaming import Stream
 from zkappumstad.tools import Tool, doc_tool, code_tool
 from zkappumstad.prompt import SYSTEM_PROMPT
 
-print(find_dotenv(".env.local"))
 load_dotenv(find_dotenv(".env.local"))
+
 client = OpenAI()
 tools: dict[str, Tool] = {tool.name: tool for tool in [doc_tool, code_tool]}
 
@@ -27,12 +27,16 @@ def create_completion(history, message) -> Generator[str, None, None]:
                 functions=[tool.description for tool in tools.values()],
                 function_call="auto",
             )
+
             if not isinstance(chat_completion, Stream):
                 continue
+
             part = next(chat_completion)
+
             if part.choices[0].delta.function_call:
                 function_name = part.choices[0].delta.function_call.name
                 tool = tools[function_name]
+
                 yield tool.message
                 args = "".join(
                     list(
@@ -51,16 +55,21 @@ def create_completion(history, message) -> Generator[str, None, None]:
 
                 args = loads(args)
                 result = tool.function(**args)
+
                 history.append(
                     {"role": "function", "name": function_name, "content": result}
                 )
+
                 continue
+
             yield part.choices[0].delta.content
+
             i = 0
             for part in chat_completion:
                 yield part.choices[0].delta.content or ""
                 i += 1
             break
+
         except Exception as e:
             print(e)
             print(e.with_traceback())

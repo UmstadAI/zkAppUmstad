@@ -1,6 +1,5 @@
 from zkappumstad.runner import create_completion
 
-
 print("Welcome to Zkappumstad!")
 print("This is an AI assistant that helps you with Mina development.")
 print("Type 'quit' to exit.")
