@@ -32,7 +32,6 @@ function_description = {
 
 function_messages = "Fetching context about mina docs...\n"
 
-
 def get_text_embbeddings(query, model="text-embedding-ada-002"):
     """Generate embeddings for a given query."""
     try:

@@ -32,7 +32,6 @@ function_description = {
 
 function_messages = "Fetching context about code snippets...\n"
 
-
 def get_text_embeddings(query, model_name="text-embedding-ada-002"):
     """Create text embeddings for a given query."""
     try:
