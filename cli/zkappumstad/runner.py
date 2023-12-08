@@ -1,17 +1,18 @@
 from typing import Generator
 from json import loads
+
 from openai import OpenAI
 from dotenv import load_dotenv, find_dotenv
 from openai.types.chat import ChatCompletion
 from openai._streaming import Stream
-from zkappumstad.tools import Tool, doc_tool, code_tool
+
+from zkappumstad.tools import Tool, doc_tool, code_tool, project_tool, issue_tool
 from zkappumstad.prompt import SYSTEM_PROMPT
 
 load_dotenv(find_dotenv(".env.local"))
 
 client = OpenAI()
-tools: dict[str, Tool] = {tool.name: tool for tool in [doc_tool, code_tool]}
-
+tools: dict[str, Tool] = {tool.name: tool for tool in [doc_tool, code_tool, project_tool, issue_tool]}
 
 def create_completion(history, message) -> Generator[str, None, None]:
     while True:

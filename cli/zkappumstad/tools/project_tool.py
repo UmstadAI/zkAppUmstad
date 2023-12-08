@@ -10,15 +10,15 @@ load_dotenv(find_dotenv(".env.local"))
 
 pinecone_api_key = os.getenv("PINECONE_API_KEY") or "YOUR_API_KEY"
 pinecone_env = os.getenv("PINECONE_ENVIRONMENT") or "YOUR_ENV"
-vector_type = os.getenv("DOCS_VECTOR_TYPE") or "VECTOR_TYPE"
+vector_type = os.getenv("PROJECT_VECTOR_TYPE") or "VECTOR_TYPE"
 
 pinecone.init(api_key=pinecone_api_key, environment=pinecone_env)
 
 client = OpenAI()
 
 function_description = {
-    "name": "search_for_context",
-    "description": "Search for context about any topic from Mina, o1js, Auro Wallet documentations, use this tool to retrieve context about zkApps, o(1)js, wallets, ideas, MINA smart contracts. You will need this tool almost everytime.",
+    "name": "search_for_project_context",
+    "description": "Search for context for example zkApp projects or developer tools on MINA Protocol, use this tool to retrieve project code examples about zkApps, o(1)js, MINA smart contracts. You will need this tool when user asks smart contracts or zkApp projects.",
     "parameters": {
         "type": "object",
         "properties": {
@@ -31,7 +31,7 @@ function_description = {
     },
 }
 
-function_messages = "Fetching context about mina docs...\n"
+function_messages = "Fetching context about Projects...\n"
 
 def get_text_embbeddings(query, model="text-embedding-ada-002"):
     """Generate embeddings for a given query."""
@@ -78,8 +78,8 @@ def run_tool(query="", vector_type=vector_type):
     return format_results(matches)
 
 
-doc_tool = Tool(
-    name="search_for_context",
+project_tool = Tool(
+    name="search_for_project_context",
     description=function_description,
     message=function_messages,
     function=run_tool,

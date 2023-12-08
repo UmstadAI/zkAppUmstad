@@ -1,5 +1,6 @@
-import pinecone
 import os
+import pinecone
+
 from .tool import Tool
 
 from openai import OpenAI
@@ -80,7 +81,6 @@ def run_tool(query="", vector_type=vector_type):
 
     formatted_text = format_results(matches)
     return formatted_text
-
 
 
 code_tool = Tool(

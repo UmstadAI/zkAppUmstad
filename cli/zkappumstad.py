@@ -42,11 +42,6 @@ while True:
         print("[bold red]Sorry, I didn't understand that.[/bold red]")
         continue
 
-    with Progress("[progress.description]{task.description}", SpinnerColumn(), "[progress.percentage]{task.percentage:>3.0f}%") as progress:
-        task = progress.add_task("[green]Answering...", total=100)
-        while not progress.finished:
-            progress.update(task, advance=0.5)
-            time.sleep(0.01)
     for part in completion:
         print(part or "", end="")
     print()
