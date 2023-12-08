@@ -9,7 +9,7 @@ from openai._streaming import Stream
 from zkappumstad.tools import Tool, doc_tool, code_tool, project_tool, issue_tool
 from zkappumstad.prompt import SYSTEM_PROMPT
 
-load_dotenv(find_dotenv(".env.local"))
+load_dotenv(find_dotenv(".env.local"), override=True)
 
 client = OpenAI()
 tools: dict[str, Tool] = {tool.name: tool for tool in [doc_tool, code_tool, project_tool, issue_tool]}
