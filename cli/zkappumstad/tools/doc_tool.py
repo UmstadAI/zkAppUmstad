@@ -1,7 +1,8 @@
 import pinecone
 import os
-from openai import OpenAI
 from .tool import Tool
+
+from openai import OpenAI
 from dotenv import load_dotenv, find_dotenv
 
 load_dotenv(find_dotenv(".env.local"))
