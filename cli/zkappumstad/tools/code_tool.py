@@ -68,7 +68,7 @@ def format_results(matches):
         formatted_texts.append(formatted_text)
     return "\n".join(formatted_texts)
 
-def run_tool(query="", vector_type=None):
+def run_tool(query="", vector_type=vector_type):
     """Run the query tool with the given parameters."""
     embedding = get_text_embeddings(query)
     if embedding is None:
