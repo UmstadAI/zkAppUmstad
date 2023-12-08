@@ -5,6 +5,7 @@ from openai import OpenAI
 from dotenv import load_dotenv, find_dotenv
 from openai.types.chat import ChatCompletion
 from openai._streaming import Stream
+from zkappumstad.utils import fade_in_text
 
 from zkappumstad.tools import Tool, doc_tool, code_tool, project_tool, issue_tool
 from zkappumstad.prompt import SYSTEM_PROMPT
@@ -38,7 +39,7 @@ def create_completion(history, message) -> Generator[str, None, None]:
                 function_name = part.choices[0].delta.function_call.name
                 tool = tools[function_name]
 
-                yield tool.message
+                yield fade_in_text(tool.message, "bold blue")
                 args = "".join(
                     list(
                         part.choices[0].delta.function_call.arguments
