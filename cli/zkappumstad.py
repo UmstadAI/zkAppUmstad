@@ -21,7 +21,8 @@ print(Fore.GREEN + """"
 fade_in_text("Welcome to zkApp Umstad!", "bold green")
 fade_in_text("This is an AI assistant that helps you with Mina zkApps development.", "bold green")
 fade_in_text("Type 'save' to save your conversation", "bold blue")
-fade_in_text("Type 'quit' to exit.", "bold green")
+fade_in_text("Type 'reset' to reset conversation", "bold blue")
+fade_in_text("Type 'quit' to exit.", "bold red")
 
 
 history = []
@@ -59,8 +60,10 @@ while True:
         print("[bold red]Sorry, I didn't understand that.[/bold red]")
         continue
 
-    markdown_history.append(completion or "\n")
-    
+    response_text = "".join(part or "" for part in completion)
+    markdown_history.append("Umstad: \n" + response_text + "\n")
+
     for part in completion:
         print(part or "", end="")
+        
     print()
