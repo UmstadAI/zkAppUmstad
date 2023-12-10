@@ -60,10 +60,11 @@ while True:
         print("[bold red]Sorry, I didn't understand that.[/bold red]")
         continue
 
-    response_text = "".join(part or "" for part in completion)
-    markdown_history.append("Umstad: \n" + response_text + "\n")
-
+    response_text = ""
     for part in completion:
         print(part or "", end="")
-        
+        response_text += part or ""
+
     print()
+    markdown_history.append(f"**Umstad:** {response_text} \n")
+
