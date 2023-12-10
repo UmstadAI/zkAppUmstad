@@ -1,3 +1,7 @@
+import os
+import uuid
+import platform
+
 from colorama import Fore, Style
 from rich.console import Console
 from zkappumstad.utils import fade_in_text
@@ -16,19 +20,47 @@ print(Fore.GREEN + """"
 
 fade_in_text("Welcome to zkApp Umstad!", "bold green")
 fade_in_text("This is an AI assistant that helps you with Mina zkApps development.", "bold green")
+fade_in_text("Type 'save' to save your conversation", "bold blue")
 fade_in_text("Type 'quit' to exit.", "bold green")
 
 
 history = []
+markdown_history = []
+
+def clear_screen():
+    command = 'cls' if platform.system().lower()=="windows" else 'clear'
+    os.system(command)
+
+def save_conversation_to_markdown():
+    filename = f"conversation_{uuid.uuid4()}.md"
+
+    with open(filename, "w") as file:
+        for line in markdown_history:
+            file.write(line + "\n")
+    print(Fore.GREEN + "Conversation saved to " + filename + Style.RESET_ALL)
+
 while True:
-    message = input(Fore.BLUE + "\nYou: " + Style.RESET_ALL)
-    if message == "quit":
+    user_message = input(Fore.BLUE + "\nYou: " + Style.RESET_ALL)
+    markdown_history.append(f"**You**: {user_message}")
+
+    if user_message.lower() == "quit":
         break
-    completion = create_completion(history, message)
+    elif user_message.lower() == "save":
+        save_conversation_to_markdown()
+        continue
+    elif user_message.lower() == "reset":
+        history.clear()
+        markdown_history.clear()
+        clear_screen()
+        continue
+
+    completion = create_completion(history, user_message)
     if completion is None:
         print("[bold red]Sorry, I didn't understand that.[/bold red]")
         continue
 
+    markdown_history.append(completion or "\n")
+    
     for part in completion:
         print(part or "", end="")
     print()
