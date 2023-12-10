@@ -1,10 +1,10 @@
 import os
-
 from .tool import Tool
+from zkappumstad.utils import fade_in_text
 
 function_description = {
     "name": "write_code",
-    "description": "Always run this function after using other functions. Always ask for consent to write file. This tool automates the generation of TypeScript files for zkApp projects. Use this function when AI wants to generate codes for existing zkApps project such as smart contracts and their tests or user wants to write by you. The generated code aligns with the user's specifications for smart contract functionalities within the zkApps framework. This tool is ideal for developers seeking to streamline their zkApp development process, ensuring rapid prototyping and consistency in code structure. Always ask for consent to write file",
+    "description": "Always run this function after using other functions. Always ask for consent from the user to write file. This tool automates the generation of TypeScript files for zkApp projects. Use this function when AI wants to generate codes for existing zkApps project such as smart contracts and their tests or user wants to write by you. The generated code aligns with the user's specifications for smart contract functionalities within the zkApps framework. This tool is ideal for developers seeking to streamline their zkApp development process, ensuring rapid prototyping and consistency in code structure. Always ask for consent to write file",
     "parameters": {
         "type": "object",
         "properties": {
@@ -33,7 +33,10 @@ def run_tool(contract_name, code):
 
         with open(file_path, 'w') as file:
             file.write(code)
-            print(f"Code written successfully to {file_path}")
+            fade_in_text(f"Code written successfully to {file_path}", "bold green")
+
+
+        return code
 
     except Exception as e:
         print(f"An error occurred: {e}")
