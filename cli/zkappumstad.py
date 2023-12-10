@@ -70,4 +70,3 @@ while True:
 
     print()
     markdown_history.append(f"**Umstad:** {response_text} \n")
-
