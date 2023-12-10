@@ -1,7 +1,6 @@
 import os
 from .tool import Tool
 from colorama import Fore, Style
-from zkappumstad.utils import fade_in_text
 
 function_description = {
     "name": "read_code",
@@ -11,29 +10,38 @@ function_description = {
         "properties": {
             "directory": {
                 "type": "string",
-                "description": "The directory path from which to read TypeScript files.",         
+                "description": "The directory path from which to read TypeScript files.",
             }
         },
-    }
+    },
 }
 
 function_messages = "Reading code from files...\n"
 basedir = "initial_project/contracts/src/"
 
+
 def run_tool(directory=basedir):
     directory = basedir
     try:
         if not os.path.exists(directory):
-            return (f"The directory '{directory}' does not exist.")
+            return f"The directory '{directory}' does not exist."
 
-        ts_files = [f for f in os.listdir(directory) if f.endswith('.ts') or f.endswith('.test.ts')]
+        ts_files = [
+            f
+            for f in os.listdir(directory)
+            if f.endswith(".ts") or f.endswith(".test.ts")
+        ]
 
         code_content = ""
         for filename in ts_files:
             file_path = os.path.join(directory, filename)
-            with open(file_path, 'r') as file:
+            with open(file_path, "r") as file:
                 code_content += file.read()
-                print(Fore.GREEN + f"Contents of {file_path}:\n{code_content}\n" + Style.RESET_ALL)
+                print(
+                    Fore.GREEN
+                    + f"Contents of {file_path}:\n{code_content}\n"
+                    + Style.RESET_ALL
+                )
 
         return code_content
 
