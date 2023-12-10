@@ -21,7 +21,7 @@ function_description = {
                 "description": "true if the code is smart contract test false if it is not test code"
             } 
         },
-        "required": ["code"],
+        "required": ["code", "is_test"],
     },
 }
 

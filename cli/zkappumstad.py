@@ -9,21 +9,23 @@ from zkappumstad.runner import create_completion
 
 console = Console()
 
-print(Fore.GREEN + """"
-        __   ___                   __  __               __            __
- ____  / /__/   |  ____  ____     / / / /___ ___  _____/ /_____ _____/ /
-/_  / / //_/ /| | / __ \/ __ \   / / / / __ `__ \/ ___/ __/ __ `/ __  / 
- / /_/ ,< / ___ |/ /_/ / /_/ /  / /_/ / / / / / (__  ) /_/ /_/ / /_/ /  
-/___/_/|_/_/  |_/ .___/ .___/   \____/_/ /_/ /_/____/\__/\__,_/\__,_/   
-               /_/   /_/                                                                                                                                     
-      """ + Style.RESET_ALL)
+def startup():
+    print(Fore.GREEN + """"
+            __   ___                   __  __               __            __
+    ____  / /__/   |  ____  ____     / / / /___ ___  _____/ /_____ _____/ /
+    /_  / / //_/ /| | / __ \/ __ \   / / / / __ `__ \/ ___/ __/ __ `/ __  / 
+    / /_/ ,< / ___ |/ /_/ / /_/ /  / /_/ / / / / / (__  ) /_/ /_/ / /_/ /  
+    /___/_/|_/_/  |_/ .___/ .___/   \____/_/ /_/ /_/____/\__/\__,_/\__,_/   
+                /_/   /_/                                                                                                                                     
+        """ + Style.RESET_ALL)
 
-fade_in_text("Welcome to zkApp Umstad!", "bold green")
-fade_in_text("This is an AI assistant that helps you with Mina zkApps development.", "bold green")
-fade_in_text("Type 'save' to save your conversation", "bold blue")
-fade_in_text("Type 'reset' to reset conversation", "bold blue")
-fade_in_text("Type 'quit' to exit.", "bold red")
+    fade_in_text("Welcome to zkApp Umstad!", "bold green")
+    fade_in_text("This is an AI assistant that helps you with Mina zkApps development.", "bold green")
+    fade_in_text("Type 'save' to save your conversation", "bold blue")
+    fade_in_text("Type 'reset' to reset conversation", "bold blue")
+    fade_in_text("Type 'quit' to exit.", "bold red")
 
+startup()
 
 history = []
 markdown_history = []
@@ -53,6 +55,7 @@ while True:
         history.clear()
         markdown_history.clear()
         clear_screen()
+        startup()
         continue
 
     completion = create_completion(history, user_message)
