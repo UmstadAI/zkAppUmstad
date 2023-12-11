@@ -67,12 +67,14 @@ def query_index(
             }
         else:
             filter_query = {"vector_type": vector_type}
+
         return index.query(
             vector=embedding,
             top_k=top_k,
             filter=filter_query,
             include_metadata=True,
         ).to_dict()["matches"]
+    
     except Exception as e:
         print(f"Error querying index: {e}")
         return []
