@@ -18,7 +18,7 @@ client = OpenAI()
 
 function_description = {
     "name": "search_for_code_context",
-    "description": "Search for context from code examples in the documentations, use this tool to retrieve context about code, when you need a reference code, Second most used tool.",
+    "description": "Always firstly use this tool for any code related requests. Understand and benchmark the smart contract structure. Search for context from code examples in the documentations, use this tool to retrieve context about code, when you need a reference code, Second most used tool.",
     "parameters": {
         "type": "object",
         "properties": {
