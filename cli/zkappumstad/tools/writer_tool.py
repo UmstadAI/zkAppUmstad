@@ -4,7 +4,7 @@ from zkappumstad.utils import fade_in_text
 
 function_description = {
     "name": "write_code",
-    "description": "Always run this function after using other functions. Always ask for consent from the user to write file. This tool automates the generation of TypeScript files for zkApp projects and their tests. Use this function when AI wants to generate codes for existing zkApps project such as smart contracts and their tests or user wants to write by you. The generated code aligns with the user's specifications for smart contract functionalities within the zkApps framework. This tool is ideal for developers seeking to streamline their zkApp development process, ensuring rapid prototyping and consistency in code structure.",
+    "description": "Always run this function after using other functions. Always ask for consent to the user before write file. This tool automates the generation of TypeScript files for zkApp projects and their tests. Use this function when AI wants to generate codes for existing zkApps project such as smart contracts and their tests or user wants to write by you. The generated code aligns with the user's specifications for smart contract functionalities within the zkApps framework. This tool is ideal for developers seeking to streamline their zkApp development process, ensuring rapid prototyping and consistency in code structure.",
     "parameters": {
         "type": "object",
         "properties": {
