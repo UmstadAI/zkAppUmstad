@@ -33,6 +33,7 @@ function_description = {
 
 function_messages = "Fetching context about code snippets...\n"
 
+
 def get_text_embeddings(query, model_name="text-embedding-ada-002"):
     """Create text embeddings for a given query."""
     try:
@@ -42,6 +43,7 @@ def get_text_embeddings(query, model_name="text-embedding-ada-002"):
         print(f"Error in generating embeddings: {e}")
         return None
 
+
 def query_index(embedding, index_name, top_k=3, vector_type=vector_type):
     """Query the index with the given embedding."""
     try:
@@ -50,12 +52,13 @@ def query_index(embedding, index_name, top_k=3, vector_type=vector_type):
             vector=embedding,
             top_k=top_k,
             filter={"vector_type": vector_type},
-            include_metadata=True
+            include_metadata=True,
         )
         return query_results.to_dict()["matches"]
     except Exception as e:
         print(f"Error in querying index: {e}")
         return []
+
 
 def format_results(matches):
     """Format the query results for display."""
@@ -68,6 +71,7 @@ def format_results(matches):
         formatted_text = f"## Result {i + 1}:\n{title}\n{text}"
         formatted_texts.append(formatted_text)
     return "\n".join(formatted_texts)
+
 
 def run_tool(query="", vector_type=vector_type):
     """Run the query tool with the given parameters."""

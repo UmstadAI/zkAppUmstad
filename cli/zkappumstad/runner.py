@@ -7,23 +7,39 @@ from openai.types.chat import ChatCompletion
 from openai._streaming import Stream
 from zkappumstad.utils import fade_in_text
 
-from zkappumstad.tools import Tool, doc_tool, code_tool, project_tool, issue_tool, writer_tool, reader_tool
+from zkappumstad.tools import (
+    Tool,
+    doc_tool,
+    code_tool,
+    project_tool,
+    issue_tool,
+    writer_tool,
+    reader_tool,
+)
 from zkappumstad.prompt import SYSTEM_PROMPT
 
 load_dotenv(find_dotenv(".env.local"), override=True)
 
 client = OpenAI()
-tools: dict[str, Tool] = {tool.name: tool for tool in [doc_tool, code_tool, project_tool, issue_tool, writer_tool, reader_tool]}
+tools: dict[str, Tool] = {
+    tool.name: tool
+    for tool in [
+        doc_tool,
+        code_tool,
+        project_tool,
+        issue_tool,
+        writer_tool,
+        reader_tool,
+    ]
+}
+
 
 def create_completion(history, message) -> Generator[str, None, None]:
     while True:
         try:
             history.append({"role": "user", "content": message})
             chat_completion: Stream[ChatCompletion] = client.chat.completions.create(
-                messages=[
-                    {"role": "system", "content": SYSTEM_PROMPT},
-                    *history,
-                ],
+                messages=[{"role": "system", "content": SYSTEM_PROMPT}, *history,],
                 model="gpt-4-1106-preview",
                 stream=True,
                 functions=[tool.description for tool in tools.values()],

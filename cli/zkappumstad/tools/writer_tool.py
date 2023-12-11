@@ -10,7 +10,7 @@ function_description = {
         "properties": {
             "contract_name": {
                 "type": "string",
-                "description": "The name of the contract related the project",         
+                "description": "The name of the contract related the project",
             },
             "code": {
                 "type": "string",
@@ -18,8 +18,8 @@ function_description = {
             },
             "is_test": {
                 "type": "boolean",
-                "description": "true if the code is smart contract test false if it is not test code"
-            } 
+                "description": "true if the code is smart contract test false if it is not test code",
+            },
         },
         "required": ["code", "is_test"],
     },
@@ -28,6 +28,8 @@ function_description = {
 function_messages = "Writing code to file...\n"
 
 basedir = "initial_project/contracts/src"
+
+
 def run_tool(contract_name, code, is_test):
     try:
         if is_test:
@@ -38,7 +40,7 @@ def run_tool(contract_name, code, is_test):
 
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
 
-        with open(file_path, 'w') as file:
+        with open(file_path, "w") as file:
             file.write(code)
             fade_in_text(f"Code written successfully to {file_path}!", "bold green")
 
@@ -46,7 +48,7 @@ def run_tool(contract_name, code, is_test):
 
     except Exception as e:
         print(f"An error occurred: {e}")
-    
+
 
 writer_tool = Tool(
     name="write_code",

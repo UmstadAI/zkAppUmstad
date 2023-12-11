@@ -33,6 +33,7 @@ function_description = {
 
 function_messages = "Fetching context about mina docs...\n"
 
+
 def get_text_embbeddings(query, model="text-embedding-ada-002"):
     """Generate embeddings for a given query."""
     try:
@@ -42,16 +43,21 @@ def get_text_embbeddings(query, model="text-embedding-ada-002"):
         print(f"Error generating embeddings: {e}")
         return None
 
+
 def query_index(embedding, index_name="zkappumstad", top_k=3, vector_type=vector_type):
     """Query the index using the generated embeddings."""
     try:
         index = pinecone.Index(index_name)
         return index.query(
-            vector=embedding, top_k=top_k, filter={"vector_type": vector_type}, include_metadata=True
+            vector=embedding,
+            top_k=top_k,
+            filter={"vector_type": vector_type},
+            include_metadata=True,
         ).to_dict()["matches"]
     except Exception as e:
         print(f"Error querying index: {e}")
         return []
+
 
 def format_results(matches):
     """Format the results from the index query."""
@@ -64,6 +70,7 @@ def format_results(matches):
             formatted_result = f"## Result {i + 1}:\n{title}\n{text}"
             results.append(formatted_result)
     return "\n".join(results)
+
 
 def run_tool(query="", vector_type=vector_type):
     """Run the search tool with the provided query."""
