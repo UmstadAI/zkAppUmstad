@@ -24,7 +24,11 @@ function_description = {
         "properties": {
             "query": {
                 "type": "string",
-                "description": "The query to search for. 1-3 sentences are enough. English only.",
+                "description": "The query to search for. 1-3 sentences are enough. English only. Not a question, just a statement or description of the project.",
+            },
+            "project_name": {
+                "type": "string",
+                "description": "It is in the metadata of the index, you can use it to filter the results, optional value that can be used after finding projects.",
             },
         },
         "required": ["query"],
@@ -44,16 +48,33 @@ def get_text_embbeddings(query, model="text-embedding-ada-002"):
         return None
 
 
-def query_index(embedding, index_name="zkappumstad", top_k=3, vector_type=vector_type):
+def query_index(
+    embedding,
+    index_name="zkappumstad",
+    top_k=3,
+    vector_type=vector_type,
+    project_name=None,
+):
     """Query the index using the generated embeddings."""
     try:
         index = pinecone.Index(index_name)
+        if project_name:
+            filter_query = {
+                "vector_type": vector_type,
+                "project_name": {
+                    "$in": [f"Project Name: {project_name}", project_name]
+                },
+            }
+        else:
+            filter_query = {"vector_type": vector_type}
+
         return index.query(
             vector=embedding,
             top_k=top_k,
-            filter={"vector_type": vector_type},
+            filter=filter_query,
             include_metadata=True,
         ).to_dict()["matches"]
+
     except Exception as e:
         print(f"Error querying index: {e}")
         return []
@@ -62,23 +83,25 @@ def query_index(embedding, index_name="zkappumstad", top_k=3, vector_type=vector
 def format_results(matches):
     """Format the results from the index query."""
     results = []
+    print("there are", len(matches), "matches")
     for i, match in enumerate(matches):
-        if match["score"] > 0.85:
+        if match["score"] > 0.65:
             metadata = match["metadata"]
             title = metadata.get("title", "")
             text = metadata.get("text", "")
             formatted_result = f"## Result {i + 1}:\n{title}\n{text}"
             results.append(formatted_result)
+    print("there are", len(results), "results")
     return "\n".join(results)
 
 
-def run_tool(query="", vector_type=vector_type):
+def run_tool(query="", vector_type=vector_type, project_name=None):
     """Run the search tool with the provided query."""
     embedding = get_text_embbeddings(query)
     if embedding is None:
         return "Failed to generate embeddings."
 
-    matches = query_index(embedding, vector_type=vector_type)
+    matches = query_index(embedding, vector_type=vector_type, project_name=project_name)
     if not matches:
         return "No matches found."
 

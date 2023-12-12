@@ -44,7 +44,7 @@ def get_text_embeddings(query, model_name="text-embedding-ada-002"):
         return None
 
 
-def query_index(embedding, index_name, top_k=3, vector_type=vector_type):
+def query_index(embedding, index_name, top_k=5, vector_type=vector_type):
     """Query the index with the given embedding."""
     try:
         index = pinecone.Index(index_name)
@@ -62,7 +62,7 @@ def query_index(embedding, index_name, top_k=3, vector_type=vector_type):
 
 def format_results(matches):
     """Format the query results for display."""
-    filtered_matches = [match for match in matches if match["score"] > 0.85]
+    filtered_matches = [match for match in matches if match["score"] > 0.5]
     formatted_texts = []
     for i, match in enumerate(filtered_matches):
         metadata = match["metadata"]

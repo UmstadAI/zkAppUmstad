@@ -44,7 +44,7 @@ def get_text_embbeddings(query, model="text-embedding-ada-002"):
         return None
 
 
-def query_index(embedding, index_name="zkappumstad", top_k=3, vector_type=vector_type):
+def query_index(embedding, index_name="zkappumstad", top_k=7, vector_type=vector_type):
     """Query the index using the generated embeddings."""
     try:
         index = pinecone.Index(index_name)

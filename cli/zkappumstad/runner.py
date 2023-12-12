@@ -15,6 +15,7 @@ from zkappumstad.tools import (
     issue_tool,
     writer_tool,
     reader_tool,
+    read_reference_tool,
 )
 from zkappumstad.prompt import SYSTEM_PROMPT
 
@@ -30,6 +31,7 @@ tools: dict[str, Tool] = {
         issue_tool,
         writer_tool,
         reader_tool,
+        read_reference_tool,
     ]
 }
 
@@ -41,6 +43,7 @@ def create_completion(history, message) -> Generator[str, None, None]:
             chat_completion: Stream[ChatCompletion] = client.chat.completions.create(
                 messages=[{"role": "system", "content": SYSTEM_PROMPT}, *history,],
                 model="gpt-4-1106-preview",
+                temperature=0.2,
                 stream=True,
                 functions=[tool.description for tool in tools.values()],
                 function_call="auto",

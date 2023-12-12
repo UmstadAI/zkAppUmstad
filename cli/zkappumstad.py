@@ -9,30 +9,41 @@ from zkappumstad.runner import create_completion
 
 console = Console()
 
+
 def startup():
-    print(Fore.GREEN + """"
+    print(
+        Fore.GREEN
+        + """"
         __   ___                   __  __               __            __
  ____  / /__/   |  ____  ____     / / / /___ ___  _____/ /_____ _____/ /
 /_  / / //_/ /| | / __ \/ __ \   / / / / __ `__ \/ ___/ __/ __ `/ __  / 
  / /_/ ,< / ___ |/ /_/ / /_/ /  / /_/ / / / / / (__  ) /_/ /_/ / /_/ /  
 /___/_/|_/_/  |_/ .___/ .___/   \____/_/ /_/ /_/____/\__/\__,_/\__,_/   
                /_/   /_/                                                                                                                                                                                    
-        """ + Style.RESET_ALL)
+        """
+        + Style.RESET_ALL
+    )
 
     fade_in_text("Welcome to zkApp Umstad!", "bold green")
-    fade_in_text("This is an AI assistant that helps you with Mina zkApps development.", "bold green")
+    fade_in_text(
+        "This is an AI assistant that helps you with Mina zkApps development.",
+        "bold green",
+    )
     fade_in_text("Type 'save' to save your conversation", "bold blue")
     fade_in_text("Type 'reset' to reset conversation", "bold blue")
     fade_in_text("Type 'quit' to exit.", "bold red")
+
 
 startup()
 
 history = []
 markdown_history = []
 
+
 def clear_screen():
-    command = 'cls' if platform.system().lower()=="windows" else 'clear'
+    command = "cls" if platform.system().lower() == "windows" else "clear"
     os.system(command)
+
 
 def save_conversation_to_markdown():
     filename = f"conversation_{uuid.uuid4()}.md"
@@ -41,6 +52,7 @@ def save_conversation_to_markdown():
         for line in markdown_history:
             file.write(line + "\n")
     print(Fore.GREEN + "Conversation saved to " + filename + Style.RESET_ALL)
+
 
 while True:
     user_message = input(Fore.BLUE + "\nYou: " + Style.RESET_ALL)

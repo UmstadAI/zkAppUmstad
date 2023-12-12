@@ -9,6 +9,8 @@ node_modules
 coverage
 
 cli/initial_project/
+cli/sudoku/
+
 
 # next.js
 .next/
