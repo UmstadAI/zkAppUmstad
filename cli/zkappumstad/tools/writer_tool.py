@@ -10,16 +10,17 @@ function_description = {
         "properties": {
             "contract_name": {
                 "type": "string",
-                "description": "The name of the contract related the project",         
+                "description": "The name of the contract related the project",
             },
             "code": {
                 "type": "string",
-                "description": "The typescript code for zkApps smart contracts and their tests to write.",
+                "description": "The typescript code for zkApps smart contracts and their tests to write. Or markdown code for readme file.",
             },
-            "is_test": {
-                "type": "boolean",
-                "description": "true if the code is smart contract test false if it is not test code"
-            } 
+            "file_type": {  # enum, CONTRACT, TEST, README
+                "type": "string",
+                "enum": ["CONTRACT", "TEST", "README"],
+                "description": "The type of the file to write.",
+            },
         },
         "required": ["code", "is_test"],
     },
@@ -27,18 +28,25 @@ function_description = {
 
 function_messages = "Writing code to file...\n"
 
-basedir = "initial_project/contracts/src"
-def run_tool(contract_name, code, is_test):
+basedir = "initial_project"
+basedir_src = "initial_project/contracts/src"
+
+
+def run_tool(contract_name="", code="", file_type="CONTRACT"):
     try:
-        if is_test:
+        if file_type == "TEST":
             filename = f"{contract_name}.test.ts"
-        else:
+        elif file_type == "CONTRACT":
             filename = f"{contract_name}.ts"
-        file_path = os.path.join(basedir, filename)
+        if file_type == "README":
+            filename = "README.md"
+            file_path = os.path.join(basedir, filename)
+        else:
+            file_path = os.path.join(basedir_src, filename)
 
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
 
-        with open(file_path, 'w') as file:
+        with open(file_path, "w") as file:
             file.write(code)
             fade_in_text(f"Code written successfully to {file_path}!", "bold green")
 
@@ -46,7 +54,7 @@ def run_tool(contract_name, code, is_test):
 
     except Exception as e:
         print(f"An error occurred: {e}")
-    
+
 
 writer_tool = Tool(
     name="write_code",
