@@ -46,6 +46,7 @@ def create_completion(history, message) -> Generator[str, None, None]:
                     *history,
                 ],
                 model="gpt-4-1106-preview",
+                temperature=0.2,
                 stream=True,
                 functions=[tool.description for tool in tools.values()],
                 function_call="auto",
