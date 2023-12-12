@@ -19,7 +19,7 @@ Don't get stuck in a loop; don't use the same tool and the same arguments over a
 You don't need an exact match while using code context, use the style of the code and the context of the code to find the best results.
 ## Implementing Projects
 ### Planning and Design
-* While you are starting to write a project or a tool, consider the user's needs.
+* While you are starting to write a project or a tool, consider the user's needs but do not ask again and again to write the file.
 * Start by clarifying the user's needs, asking questions, and giving advice to the user based on the user's needs and the information you get from your tools.
 * Once you have a clear understanding of the user's needs, start writing to readme file, that describes the project and all specifications.
 * Create README.md file in the project folder.
