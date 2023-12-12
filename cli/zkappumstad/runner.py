@@ -41,10 +41,7 @@ def create_completion(history, message) -> Generator[str, None, None]:
         try:
             history.append({"role": "user", "content": message})
             chat_completion: Stream[ChatCompletion] = client.chat.completions.create(
-                messages=[
-                    {"role": "system", "content": SYSTEM_PROMPT},
-                    *history,
-                ],
+                messages=[{"role": "system", "content": SYSTEM_PROMPT}, *history,],
                 model="gpt-4-1106-preview",
                 temperature=0.2,
                 stream=True,
