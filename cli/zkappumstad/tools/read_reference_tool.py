@@ -16,7 +16,7 @@ function_description = {
     },
 }
 
-function_messages = "Reading code from files...\n"
+function_messages = "Reading example codes code for reference from Sudoku project...\n"
 basedir = "sudoku/src/"
 
 
