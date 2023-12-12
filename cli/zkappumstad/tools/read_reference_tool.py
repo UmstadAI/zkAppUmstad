@@ -4,7 +4,7 @@ from colorama import Fore, Style
 
 function_description = {
     "name": "read_reference_repo",
-    "description": "This tool reads the reference zkApps project repository. It's useful for reviewing the current state of smart contracts and test files. Use this function to read codes from existing zkApps projects. The tool will list all files in the specified directory and display their contents. Use this function if user asks read or evaulate or understand the existing codes in the current zkapps project",
+    "description": "This tool reads the reference zkApps project repository. It's useful to understand zkApps Smart Contract Structure and logic before writing smart contracts and their tests. Always use this function to get reference smart contract code. It will give you example Sudoku Smart contract, their tests and additional files for zkApps. Understand codes and use them for referencing before generate Smart Contracts.",
     "parameters": {
         "type": "object",
         "properties": {
@@ -49,7 +49,7 @@ def run_tool(directory=basedir):
         print(f"An error occurred: {e}")
 
 
-reader_tool = Tool(
+read_reference_tool = Tool(
     name="read_reference_repo",
     description=function_description,
     message=function_messages,

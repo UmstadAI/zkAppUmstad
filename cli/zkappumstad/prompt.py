@@ -26,6 +26,7 @@ You don't need an exact match while using code context, use the style of the cod
 * Don't write all of the readme to the user again and again; Use the writer tool to create the readme file.
 ### Writing Code
 * Don't write code before creating a readme file with specifications.
+* Don't write code before using the read_reference_tool to get reference smart contract and their tests. It is an example Sudoku zkApps smart contract. Always consider these codes and their structure while writing smart contracts and their tests.
 * Don't write code without using the code_snippet tool at least once.
 * After having a clear understanding of the user's needs, start writing code.
 * Always consider the information and code snippets you get from your tools; if they are not enough, fetch more.

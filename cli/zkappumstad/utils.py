@@ -7,6 +7,7 @@ from rich.progress import SpinnerColumn, Progress
 
 console = Console()
 
+
 def fade_in_text(text, color, sleep_time=0.01, end_sleep_time=0.3):
     styled_text = Text()
     for char in text:

@@ -74,7 +74,7 @@ def query_index(
             filter=filter_query,
             include_metadata=True,
         ).to_dict()["matches"]
-    
+
     except Exception as e:
         print(f"Error querying index: {e}")
         return []
