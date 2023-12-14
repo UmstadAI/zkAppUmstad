@@ -38,7 +38,6 @@ async function runTool(query: string, vector_type: string) {
 
     // TODO: Look the matches and if need implement format results
     console.log(matches)
-    
 }
  
 export const docTool: Tool = {
