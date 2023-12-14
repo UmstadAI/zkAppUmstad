@@ -2,6 +2,14 @@ import OpenAI from "openai";
 import type { Tool } from "./tool";
 import type { ChatCompletionCreateParams } from 'openai/resources/chat'
 import { getEmbeddings, getMatchesFromEmbeddings } from "./utils"
+import { ScoredPineconeRecord } from "@pinecone-database/pinecone";
+
+export type Metadata = {
+    url: string,
+    text: string,
+    chunk: string,
+    hash: string
+}
 
 const functionDescription: ChatCompletionCreateParams.Function = {
     name: "search_for_context",
@@ -20,14 +28,17 @@ const functionDescription: ChatCompletionCreateParams.Function = {
 
 const functionMessage = "Fetching context about mina docs...\n"
 
-function formatResults(matches: any[]) {
-// Your implementation here
+async function formatResults() {
+    // Not implemented
 }
-
 
 async function runTool(query: string, vector_type: string) {
     const embeddings = await getEmbeddings(query)
     const matches = await getMatchesFromEmbeddings(embeddings, 7, "zkappumstad", vector_type)
+
+    // TODO: Look the matches and if need implement format results
+    console.log(matches)
+    
 }
  
 export const docTool: Tool = {
