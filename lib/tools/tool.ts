@@ -1,8 +1,8 @@
 import type { ChatCompletionCreateParams } from 'openai/resources/chat'
 
-type Tool = {
+export type Tool = {
   name: string
-  description: ChatCompletionCreateParams
+  description: ChatCompletionCreateParams.Function
   message: string
   callable: Function
 }
