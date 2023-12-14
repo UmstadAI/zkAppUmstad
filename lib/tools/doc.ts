@@ -1,5 +1,22 @@
+import OpenAI from "openai";
+import { Configuration, OpenAIApi } from 'openai-edge'
 import type { Tool } from "./tool";
 import type { ChatCompletionCreateParams } from 'openai/resources/chat'
+import { Pinecone, type ScoredPineconeRecord } from "@pinecone-database/pinecone";
+
+
+const configuration = new Configuration({
+    apiKey: process.env.OPENAI_API_KEY
+})
+
+const openai = new OpenAIApi(configuration);
+
+const pinecone = new Pinecone(
+    {
+      environment: process.env.PINECONE_ENVIRONMENT as string,     
+      apiKey: process.env.PINECONE_API_KEY as string,      
+    }
+);
 
 const functionDescription: ChatCompletionCreateParams.Function = {
     name: "search_for_context",
@@ -18,7 +35,20 @@ const functionDescription: ChatCompletionCreateParams.Function = {
 
 const functionMessage = "Fetching context about mina docs...\n"
 
-function runner() {
+async function getEmbeddings(query: string, model: string = "text-embedding-ada-002") {
+    // Your implementation here
+}
+  
+async function queryIndex(embedding: any, indexName: string = "zkappumstad", topK: number = 7, vectorType: string) {
+// Your implementation here
+}
+
+function formatResults(matches: any[]) {
+// Your implementation here
+}
+
+
+function runTool() {
     console.log(functionMessage)
 }
  
@@ -26,5 +56,5 @@ export const docTool: Tool = {
     name: functionDescription.name,
     description: functionDescription,
     message: functionMessage,
-    callable: runner
+    callable: runTool
 }
