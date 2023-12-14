@@ -4,13 +4,11 @@ import type { Tool } from "./tool";
 import type { ChatCompletionCreateParams } from 'openai/resources/chat'
 import { Pinecone, type ScoredPineconeRecord } from "@pinecone-database/pinecone";
 
-
 const configuration = new Configuration({
     apiKey: process.env.OPENAI_API_KEY
 })
 
 const openai = new OpenAIApi(configuration);
-
 const pinecone = new Pinecone(
     {
       environment: process.env.PINECONE_ENVIRONMENT as string,     
