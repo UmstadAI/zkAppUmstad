@@ -10,7 +10,7 @@ export type Metadata = {
   chunk: string
   hash: string
 }
-const VECTOR_TYPE = process.env.DOCS_VECTOR_TYPE || 'DOCS_VECTOR_TYPE'
+const VECTOR_TYPE = 'docs'
 const functionDescription: ChatCompletionCreateParams.Function = {
   name: 'search_for_context',
   description:
