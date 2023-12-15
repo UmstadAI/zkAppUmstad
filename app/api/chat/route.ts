@@ -94,9 +94,9 @@ export async function POST(req: Request) {
     model = 'gpt-4-1106-preview'
   }
   const openai = new OpenAI(configuration)
+
   const transformStream = new TransformStream({})
   const writer = transformStream.writable.getWriter()
-
   await writer.ready
   const runner = openai.beta.chat.completions
     .runTools({
@@ -175,7 +175,6 @@ export async function POST(req: Request) {
       })
     }
   })*/
-
-  return new Response(transformStream.readable)
+  return new StreamingTextResponse(transformStream.readable)
   // return new StreamingTextResponse(stream)
 }
