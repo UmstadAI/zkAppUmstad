@@ -72,7 +72,7 @@ export async function POST(req: Request) {
 
     const ratelimit = new Ratelimit({
       redis: kv,
-      limiter: Ratelimit.slidingWindow(100, '1d')
+      limiter: Ratelimit.slidingWindow(30, '1d')
     })
 
     const { success, limit, reset, remaining } = await ratelimit.limit(
