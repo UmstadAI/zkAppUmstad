@@ -1,4 +1,3 @@
-import OpenAI from 'openai'
 import type { Tool } from './tool'
 import type { ChatCompletionCreateParams } from 'openai/resources/chat'
 import { getEmbeddings, getMatchesFromEmbeddings } from './utils'
