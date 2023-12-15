@@ -50,7 +50,7 @@ async function runTool(args: { query: string }): Promise<string> {
   const matches = await getMatchesFromEmbeddings(
     embeddings,
     3,
-    'zkappumstad',
+    process.env.PINECONE_INDEX as string,
     VECTOR_TYPE
   )
 
