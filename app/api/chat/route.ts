@@ -147,6 +147,6 @@ export async function POST(req: Request) {
         })
     })
   runner.finalContent()
-
-  return new StreamingTextResponse(transformStream.readable)
+  const stream = OpenAIStream(runner)
+  return new StreamingTextResponse(stream)
 }
