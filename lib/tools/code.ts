@@ -49,12 +49,7 @@ async function formatResults(matches: ScoredPineconeRecord[]) {
 
 async function runTool(args: { query: string }): Promise<string> {
   const embeddings = await getEmbeddings(args.query)
-  const matches = await getMatchesFromEmbeddings(
-    embeddings,
-    3,
-    process.env.PINECONE_INDEX as string,
-    VECTOR_TYPE
-  )
+  const matches = await getMatchesFromEmbeddings(embeddings, 3, VECTOR_TYPE)
 
   return formatResults(matches)
 }
@@ -72,8 +67,8 @@ export const codeToolRunnable: RunnableToolFunction<{ query: string }> = {
     name: functionDescription.name,
     function: runTool,
     parse: JSON.parse,
-    description:     
-    'Always firstly use this tool for any code related requests. Understand and benchmark the smart contract structure. Search for context from code examples in the documentations, use this tool to retrieve context about code, when you need a reference code, Second most used tool.',
+    description:
+      'Always firstly use this tool for any code related requests. Understand and benchmark the smart contract structure. Search for context from code examples in the documentations, use this tool to retrieve context about code, when you need a reference code, Second most used tool.',
     parameters: {
       type: 'object',
       properties: {

@@ -48,15 +48,15 @@ async function formatResults(matches: ScoredPineconeRecord[]) {
 }
 
 async function runTool(args: { query: string }): Promise<string> {
-  const embeddings = await getEmbeddings(args.query)
-  const matches = await getMatchesFromEmbeddings(
-    embeddings,
-    7,
-    process.env.PINECONE_INDEX as string,
-    VECTOR_TYPE
-  )
+  try {
+    const embeddings = await getEmbeddings(args.query)
+    const matches = await getMatchesFromEmbeddings(embeddings, 7, VECTOR_TYPE)
 
-  return formatResults(matches)
+    return formatResults(matches)
+  } catch (e) {
+    console.log('Error fetching docs: ', e)
+    return 'Error fetching docs'
+  }
 }
 
 export const docTool: Tool = {

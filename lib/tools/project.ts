@@ -27,7 +27,8 @@ const functionDescription: ChatCompletionCreateParams.Function = {
       },
       project_name: {
         type: 'string',
-        description: "It is in the metadata of the index, you can use it to filter the results, optional value that can be used after finding projects.",
+        description:
+          'It is in the metadata of the index, you can use it to filter the results, optional value that can be used after finding projects.'
       }
     },
     required: ['query']
@@ -53,12 +54,7 @@ async function formatResults(matches: ScoredPineconeRecord[]) {
 
 async function runTool(args: { query: string }): Promise<string> {
   const embeddings = await getEmbeddings(args.query)
-  const matches = await getMatchesFromEmbeddings(
-    embeddings,
-    3,
-    process.env.PINECONE_INDEX as string,
-    VECTOR_TYPE
-  )
+  const matches = await getMatchesFromEmbeddings(embeddings, 3, VECTOR_TYPE)
 
   return formatResults(matches)
 }
@@ -76,8 +72,8 @@ export const projectToolRunnable: RunnableToolFunction<{ query: string }> = {
     name: functionDescription.name,
     function: runTool,
     parse: JSON.parse,
-    description:     
-    'Search for context for example zkApp projects or developer tools on MINA Protocol, use this tool to retrieve project code examples about zkApps, o(1)js, MINA smart contracts. You will need this tool when user asks smart contracts or zkApp projects.',
+    description:
+      'Search for context for example zkApp projects or developer tools on MINA Protocol, use this tool to retrieve project code examples about zkApps, o(1)js, MINA smart contracts. You will need this tool when user asks smart contracts or zkApp projects.',
     parameters: {
       type: 'object',
       properties: {
@@ -87,8 +83,9 @@ export const projectToolRunnable: RunnableToolFunction<{ query: string }> = {
             'The query to search for. 1-3 sentences are enough. English only.'
         },
         project_name: {
-            type: 'string',
-            description: "It is in the metadata of the index, you can use it to filter the results, optional value that can be used after finding projects.",
+          type: 'string',
+          description:
+            'It is in the metadata of the index, you can use it to filter the results, optional value that can be used after finding projects.'
         }
       }
     }

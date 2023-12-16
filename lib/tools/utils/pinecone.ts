@@ -1,48 +1,48 @@
-import { Pinecone, type ScoredPineconeRecord } from "@pinecone-database/pinecone";
+import {
+  Pinecone,
+  type ScoredPineconeRecord
+} from '@pinecone-database/pinecone'
 
 export type Metadata = {
-  url: string,
-  text: string,
-  chunk: string,
+  url: string
+  text: string
+  chunk: string
   hash: string
 }
 
-type VectorType = 'docs' | 'code' | 'project' | 'issue';
+type VectorType = 'docs' | 'code' | 'project' | 'issue'
 
 function getVectorType(vector_type: string): string | undefined {
   if (!isVectorType(vector_type)) {
-      throw new Error('Invalid vector type');
+    throw new Error('Invalid vector type')
   }
   const vectorTypeMap: Record<VectorType, string | undefined> = {
     docs: process.env.DOCS_VECTOR_TYPE,
     code: process.env.CODE_VECTOR_TYPE,
     project: process.env.PROJECT_VECTOR_TYPE,
     issue: process.env.ISSUE_VECTOR_TYPE
-  };
+  }
 
-  return vectorTypeMap[vector_type];
+  return vectorTypeMap[vector_type]
 }
 
 function isVectorType(type: string): type is VectorType {
-  return ['docs', 'code', 'project', 'issue'].includes(type);
+  return ['docs', 'code', 'project', 'issue'].includes(type)
 }
 
 const getMatchesFromEmbeddings = async (
-  embeddings: number[], 
-  topK: number, 
-  namespace: string, 
+  embeddings: number[],
+  topK: number,
   vector_type: string
 ): Promise<ScoredPineconeRecord<Metadata>[]> => {
-  const pinecone = new Pinecone(
-    {
-      environment: process.env.PINECONE_ENVIRONMENT as string,     
-      apiKey: process.env.PINECONE_API_KEY as string,      
-    }
-  );
+  const pinecone = new Pinecone({
+    environment: process.env.PINECONE_ENVIRONMENT as string,
+    apiKey: process.env.PINECONE_API_KEY as string
+  })
 
-  const vectorType = getVectorType(vector_type);
+  const vectorType = getVectorType(vector_type)
 
-  const indexName: string = process.env.PINECONE_INDEX || '';
+  const indexName: string = process.env.PINECONE_INDEX || ''
   if (indexName === '') {
     throw new Error('PINECONE_INDEX environment variable not set')
   }
@@ -52,21 +52,20 @@ const getMatchesFromEmbeddings = async (
     throw new Error(`Index ${indexName} does not exist`)
   }
 
-  const index = pinecone!.Index<Metadata>(indexName);
-  const pineconeNamespace = index.namespace(namespace ?? '')
+  const index = pinecone!.Index<Metadata>(indexName)
 
   try {
-    const queryResult = await pineconeNamespace.query({
+    const queryResult = await index.query({
       vector: embeddings,
       topK,
       filter: {
         vector_type: vectorType
       },
-      includeMetadata: true,
+      includeMetadata: true
     })
     return queryResult.matches || []
   } catch (e) {
-    console.log("Error querying embeddings: ", e)
+    console.log('Error querying embeddings: ', e)
     throw new Error(`Error querying embeddings: ${e}`)
   }
 }

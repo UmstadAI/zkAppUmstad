@@ -49,12 +49,7 @@ async function formatResults(matches: ScoredPineconeRecord[]) {
 
 async function runTool(args: { query: string }): Promise<string> {
   const embeddings = await getEmbeddings(args.query)
-  const matches = await getMatchesFromEmbeddings(
-    embeddings,
-    5,
-    process.env.PINECONE_INDEX as string,
-    VECTOR_TYPE
-  )
+  const matches = await getMatchesFromEmbeddings(embeddings, 5, VECTOR_TYPE)
 
   return formatResults(matches)
 }
@@ -72,8 +67,8 @@ export const issueToolRunnable: RunnableToolFunction<{ query: string }> = {
     name: functionDescription.name,
     function: runTool,
     parse: JSON.parse,
-    description:     
-    'Search for context about problems, errors, issues, discussions an their solutions on MINA protocol, zkApps, o1js, use this tool to retrieve problems, errors, issues and their solutions about zkApps, o(1)js, MINA smart contracts. You will need this tool when user ask about problems, issues, errors, creative questions etc. or strange questions',
+    description:
+      'Search for context about problems, errors, issues, discussions an their solutions on MINA protocol, zkApps, o1js, use this tool to retrieve problems, errors, issues and their solutions about zkApps, o(1)js, MINA smart contracts. You will need this tool when user ask about problems, issues, errors, creative questions etc. or strange questions',
     parameters: {
       type: 'object',
       properties: {

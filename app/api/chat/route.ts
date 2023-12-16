@@ -1,27 +1,52 @@
 import { kv } from '@vercel/kv'
-import { Message, OpenAIStream, StreamingTextResponse } from 'ai'
+import { FunctionCall, OpenAIStream, StreamingTextResponse } from 'ai'
 import { Ratelimit } from '@upstash/ratelimit'
 import OpenAI from 'openai'
 
-import { Pinecone } from '@pinecone-database/pinecone'
-import { getContext } from './utils/context'
-import { getCodeContext } from './utils/codeContext'
-import { getProjectContext } from './utils/projectContext'
-import { getIssueContext } from './utils/issueContext'
-
-import { setPromtWithContext, SYSTEM_PROMPT } from './prompts'
+import { SYSTEM_PROMPT } from './prompts'
 import { validateApiKey } from '@/lib/utils'
-import { runnables } from '@/lib/tools'
+import { runnables, toolMap } from '@/lib/tools'
 import { auth } from '@/auth'
 import { nanoid } from '@/lib/utils'
-import { Run } from 'langchain/dist/callbacks/handlers/tracer'
-import { Runnable } from 'langchain/dist/schema/runnable'
-import { RunnableToolFunction } from 'openai/lib/RunnableFunction'
-import { ChatCompletion, ChatCompletionChunk } from 'openai/resources'
+import {
+  ChatCompletion,
+  ChatCompletionChunk,
+  ChatCompletionMessage
+} from 'openai/resources'
 import { ChatCompletionSnapshot } from 'openai/lib/ChatCompletionStream'
-import { write } from 'fs'
 
 export const runtime = 'edge'
+
+export const addToKV = async (
+  json_id: string,
+  messages: ChatCompletionMessage[],
+  completion: ChatCompletion,
+  userId: string
+) => {
+  if (messages.length < 1) return
+  const first_message_content = messages[0]?.content || ''
+  const title =
+    first_message_content.length > 100
+      ? first_message_content.substring(0, 100)
+      : first_message_content
+  const id = json_id ?? nanoid()
+  const createdAt = Date.now()
+  const path = `/chat/${id}`
+  const message = completion.choices[0].message
+  const payload = {
+    id,
+    title,
+    userId,
+    createdAt,
+    path,
+    messages: [...messages, message]
+  }
+  await kv.hmset(`chat:${id}`, payload)
+  await kv.zadd(`user:chat:${userId}`, {
+    score: createdAt,
+    member: `chat:${id}`
+  })
+}
 
 export async function POST(req: Request) {
   const json = await req.json()
@@ -111,42 +136,53 @@ export async function POST(req: Request) {
       ],
       tools: runnables
     })
+    // .on('functionCall', (call: FunctionCall) => {
+    //   console.log('Got function call', call.name)
+    //   writer
+    //     .write('Got function call')
+    //     .then(r => {
+    //       console.log('writer.write(Got function call)')
+    //       console.log(r)
+    //     })
+    //     .catch(_ => {
+    //       console.log('error writer.write(Got function call)')
+    //     })
+    //   if (toolMap.hasOwnProperty(call.name || ''))
+    //     writer
+    //       .write(toolMap[call.name || ''].message)
+    //       .then(r => {
+    //         console.log('writer.write(toolMap[call.name || ].message)')
+    //         console.log(r)
+    //       })
+    //       .catch(console.error)
+    // })
+    // .on('functionCallResult', content => {
+    //   console.log('Got function result')
+    //   writer
+    //     .write('Got function result')
+    //     .then(r => {
+    //       console.log("writer.write('Got function result')")
+    //       console.log(r)
+    //     })
+    //     .catch(console.error)
+    // })
     .on(
       'chunk',
       (chunk: ChatCompletionChunk, snapshot: ChatCompletionSnapshot) => {
         const choice = chunk.choices[0].delta
         if (choice.content) {
-          console.log(choice.content)
           writer.write(choice.content)
         }
       }
     )
     .on('finalChatCompletion', (completion: ChatCompletion) => {
-      const title = json.messages[0].content.substring(0, 100)
-      const id = json.id ?? nanoid()
-      const createdAt = Date.now()
-      const path = `/chat/${id}`
-      const message = completion.choices[0].message
-      const payload = {
-        id,
-        title,
-        userId,
-        createdAt,
-        path,
-        messages: [...messages, message]
-      }
-      kv.hmset(`chat:${id}`, payload)
-        .then(() =>
-          kv.zadd(`user:chat:${userId}`, {
-            score: createdAt,
-            member: `chat:${id}`
-          })
-        )
-        .then(() => {
-          writer.close()
-        })
+      addToKV(json.id, messages, completion, userId).then(() => {
+        // writer.close()
+      })
     })
-  runner.finalContent()
+    .on('end', () => {
+      writer.close()
+    })
   const stream = OpenAIStream(runner)
   return new StreamingTextResponse(stream)
 }

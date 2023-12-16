@@ -10,5 +10,14 @@ type ToolMap = {
 }
 
 export const tools: Tool[] = [docTool, codeTool, projectTool, issueTool]
+export const toolMap = tools.reduce((acc: ToolMap, tool: Tool) => {
+  acc[tool.name] = tool
+  return acc
+}, {})
 
-export const runnables: RunnableToolFunction<any>[] = [docToolRunnable, codeToolRunnable, projectToolRunnable, issueToolRunnable]
+export const runnables: RunnableToolFunction<any>[] = [
+  docToolRunnable,
+  codeToolRunnable,
+  projectToolRunnable,
+  issueToolRunnable
+]
