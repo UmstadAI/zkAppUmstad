@@ -1,5 +1,5 @@
 import { kv } from '@vercel/kv'
-import { FunctionCall, OpenAIStream, StreamingTextResponse } from 'ai'
+import { OpenAIStream, StreamingTextResponse } from 'ai'
 import { Ratelimit } from '@upstash/ratelimit'
 import OpenAI from 'openai'
 
@@ -9,19 +9,22 @@ import { runnables, toolMap } from '@/lib/tools'
 import { auth } from '@/auth'
 import { nanoid } from '@/lib/utils'
 import {
+  Chat,
   ChatCompletion,
-  ChatCompletionChunk,
-  ChatCompletionMessage
+  ChatCompletionAssistantMessageParam,
+  ChatCompletionMessage,
+  ChatCompletionMessageParam,
+  ChatCompletionMessageToolCall,
+  ChatCompletionToolMessageParam
 } from 'openai/resources'
-import { ChatCompletionSnapshot } from 'openai/lib/ChatCompletionStream'
-
 export const runtime = 'edge'
 
 export const addToKV = async (
   json_id: string,
   messages: ChatCompletionMessage[],
-  completion: ChatCompletion,
-  userId: string
+  message: ChatCompletionMessageParam,
+  userId: string,
+  tool_messages: ChatCompletionToolMessageParam[] = []
 ) => {
   if (messages.length < 1) return
   const first_message_content = messages[0]?.content || ''
@@ -32,14 +35,13 @@ export const addToKV = async (
   const id = json_id ?? nanoid()
   const createdAt = Date.now()
   const path = `/chat/${id}`
-  const message = completion.choices[0].message
   const payload = {
     id,
     title,
     userId,
     createdAt,
     path,
-    messages: [...messages, message]
+    messages: [...messages, message, ...tool_messages]
   }
   await kv.hmset(`chat:${id}`, payload)
   await kv.zadd(`user:chat:${userId}`, {
@@ -119,10 +121,9 @@ export async function POST(req: Request) {
     model = 'gpt-4-1106-preview'
   }
   const openai = new OpenAI(configuration)
-
-  const transformStream = new TransformStream({})
-  const writer = transformStream.writable.getWriter()
-  await writer.ready
+  console.log(JSON.stringify(messages))
+  const tool_calls: ChatCompletionMessageToolCall[] = []
+  const tool_messages: ChatCompletionToolMessageParam[] = []
   const runner = openai.beta.chat.completions
     .runTools({
       stream: true,
@@ -136,22 +137,27 @@ export async function POST(req: Request) {
       ],
       tools: runnables
     })
-    .on(
-      'chunk',
-      (chunk: ChatCompletionChunk, snapshot: ChatCompletionSnapshot) => {
-        const choice = chunk.choices[0].delta
-        if (choice.content) {
-          writer.write(choice.content)
-        }
-      }
-    )
-    .on('finalChatCompletion', (completion: ChatCompletion) => {
-      addToKV(json.id, messages, completion, userId).then(() => {
-        // writer.close()
-      })
+    .on('functionCall', (call: ChatCompletionMessage.FunctionCall) => {
+      console.log('Got function call', call.name)
+      const tool_call = {
+        type: 'function',
+        id: '' + tool_calls.length,
+        function: { ...call }
+      } as ChatCompletionMessageToolCall
+      tool_calls.push(tool_call)
     })
-    .on('end', () => {
-      writer.close()
+    .on('functionCallResult', content => {
+      const message: ChatCompletionToolMessageParam = {
+        role: 'tool',
+        tool_call_id: '' + (tool_calls.length - 1),
+        content
+      }
+      tool_messages.push(message)
+    })
+    .on('finalChatCompletion', (completion: ChatCompletion) => {
+      const message = completion.choices[0].message
+      message.tool_calls = tool_calls
+      addToKV(json.id, messages, message, userId, tool_messages)
     })
   const stream = OpenAIStream(runner)
   return new StreamingTextResponse(stream)
