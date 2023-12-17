@@ -136,36 +136,6 @@ export async function POST(req: Request) {
       ],
       tools: runnables
     })
-    // .on('functionCall', (call: FunctionCall) => {
-    //   console.log('Got function call', call.name)
-    //   writer
-    //     .write('Got function call')
-    //     .then(r => {
-    //       console.log('writer.write(Got function call)')
-    //       console.log(r)
-    //     })
-    //     .catch(_ => {
-    //       console.log('error writer.write(Got function call)')
-    //     })
-    //   if (toolMap.hasOwnProperty(call.name || ''))
-    //     writer
-    //       .write(toolMap[call.name || ''].message)
-    //       .then(r => {
-    //         console.log('writer.write(toolMap[call.name || ].message)')
-    //         console.log(r)
-    //       })
-    //       .catch(console.error)
-    // })
-    // .on('functionCallResult', content => {
-    //   console.log('Got function result')
-    //   writer
-    //     .write('Got function result')
-    //     .then(r => {
-    //       console.log("writer.write('Got function result')")
-    //       console.log(r)
-    //     })
-    //     .catch(console.error)
-    // })
     .on(
       'chunk',
       (chunk: ChatCompletionChunk, snapshot: ChatCompletionSnapshot) => {
