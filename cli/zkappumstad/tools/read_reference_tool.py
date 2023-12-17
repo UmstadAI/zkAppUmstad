@@ -16,8 +16,8 @@ function_description = {
     },
 }
 
-function_messages = "Reading example codes code for reference from Sudoku project...\n"
-basedir = "sudoku/src/"
+function_messages = "Reading example codes code for reference from Examples...\n"
+basedir = "examples/"
 
 
 def run_tool(directory=basedir):
