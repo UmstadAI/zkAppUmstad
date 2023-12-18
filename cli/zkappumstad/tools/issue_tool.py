@@ -63,7 +63,7 @@ def format_results(matches):
     """Format the results from the index query."""
     results = []
     for i, match in enumerate(matches):
-        if match["score"] > 0.85:
+        if match["score"] > 0.75:
             metadata = match["metadata"]
             title = metadata.get("title", "")
             text = metadata.get("text", "")
