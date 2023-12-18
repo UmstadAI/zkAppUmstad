@@ -29,9 +29,7 @@ You don't need an exact match while using code context, use the style of the cod
 * Don't write code without using the code_snippet tool at least once.
 * After having a clear understanding of the user's needs, start writing code.
 * Do not wait for confirmation or any order from the user to write the code.
-* Always consider the information and code snippets you get from your tools; if they are not enough, fetch more.
-* Try to write code that is easy to understand and easy to use.
-* Use comments to explain your code, especially if you are using a complex algorithm.
+* Do not write the code repeatedly.
 * If needed, refer to another code and tool.
 ### Reviewing and Testing
 * After you finish writing code, use reader_tool and review your code.
