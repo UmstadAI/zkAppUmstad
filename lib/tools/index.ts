@@ -10,7 +10,13 @@ type ToolMap = {
   [key: string]: Tool
 }
 
-export const tools: Tool[] = [docTool, codeTool, projectTool, issueTool, explorerTool]
+export const tools: Tool[] = [
+  docTool,
+  codeTool,
+  projectTool,
+  issueTool,
+  explorerTool
+]
 export const toolMap = tools.reduce((acc: ToolMap, tool: Tool) => {
   acc[tool.name] = tool
   return acc

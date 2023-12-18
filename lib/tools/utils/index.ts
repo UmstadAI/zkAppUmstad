@@ -1,2 +1,2 @@
-export { getEmbeddings } from './embeddings.ts';
-export { getMatchesFromEmbeddings } from './pinecone.ts';
+export { getEmbeddings } from './embeddings.ts'
+export { getMatchesFromEmbeddings } from './pinecone.ts'
