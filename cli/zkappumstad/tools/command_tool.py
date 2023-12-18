@@ -25,15 +25,18 @@ basedir = "initial_project"
 basedir_contracts = "initial_project/contracts/"
 basedir_src = "initial_project/contracts/src"
 
-
 def run_tool(command_type=""):
     try:
         if command_type == "TEST":
-            result = subprocess.run(["npm", "run", "test"], check=True, cwd=basedir_contracts)
-            return result
+            result = subprocess.run(["npm", "run", "test"], check=True, capture_output=True, text=True, cwd=basedir_contracts)
+            output = result.stdout + result.stderr
+            print(output)
+            return output
         elif command_type == "HELP":
-            result = subprocess.run(["zk", "--help"], check=True, cwd=basedir_contracts)
-            return result
+            result = subprocess.run(["zk", "--help"], check=True, text=True, capture_output=True, cwd=basedir_contracts)
+            output = result.stdout + result.stderr
+            print(output)
+            return output
 
     except subprocess.CalledProcessError as e:
         print(f"Command failed with error: {e}")
