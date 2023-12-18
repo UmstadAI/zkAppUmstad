@@ -16,6 +16,7 @@ from zkappumstad.tools import (
     writer_tool,
     reader_tool,
     read_reference_tool,
+    command_tool
 )
 from zkappumstad.prompt import SYSTEM_PROMPT
 
@@ -32,6 +33,7 @@ tools: dict[str, Tool] = {
         writer_tool,
         reader_tool,
         read_reference_tool,
+        command_tool
     ]
 }
 
