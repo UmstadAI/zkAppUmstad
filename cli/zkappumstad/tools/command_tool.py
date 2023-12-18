@@ -1,7 +1,5 @@
-import os
 import subprocess
 from .tool import Tool
-from zkappumstad.utils import fade_in_text
 
 function_description = {
     "name": "run_command",
