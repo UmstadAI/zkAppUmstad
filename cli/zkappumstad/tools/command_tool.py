@@ -41,6 +41,8 @@ def run_tool(command_type=""):
     except subprocess.CalledProcessError as e:
         print(f"Command failed with error: {e}")
         print(e.stderr)
+        output = e.stdout + e.stderr
+        return output
     except Exception as e:
         print(f"An error occurred: {e}")
 
