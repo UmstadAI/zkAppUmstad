@@ -13,6 +13,10 @@ const functionDescription: ChatCompletionCreateParams.Function = {
         type: 'string',
         description:
           'The query to search for. 1-3 sentences are enough. English only.'
+      },
+      input: {
+        type: 'string',
+        description: 'Transaction Hash or Block Hash or Account Id'
       }
     },
     required: ['query']
@@ -21,8 +25,19 @@ const functionDescription: ChatCompletionCreateParams.Function = {
 
 const functionMessage = 'Fetching context from explorer...\n'
 
-async function runTool(args: { query: string }): Promise<string> {
-  return 'Get'
+function isPublicKey(inputString: string | undefined): boolean {
+    const prefix = "B62";
+    return inputString !== undefined && inputString.startsWith(prefix);
+}
+  
+
+async function runTool(args: { query: string, input: string }): Promise<string> {
+    console.log(args.query, args.input)
+    if(isPublicKey(args.input)) {
+        return "It is public key"
+    } else {
+        return "It is possibly transaction hash"
+    }
 }
 
 export const explorerTool: Tool = {
@@ -47,6 +62,10 @@ export const explorerToolRunnable: RunnableToolFunction<{ query: string }> = {
           type: 'string',
           description:
             'The query to search for. 1-3 sentences are enough. English only.'
+        },
+        input: {
+            type: 'string',
+            description: 'Transaction Hash or Block Hash or Account Id'
         }
       }
     }
