@@ -35,6 +35,7 @@ You don't need an exact match while using code context, use the style of the cod
 * If needed, refer to another code and tool.
 ### Reviewing and Testing
 * After you finish writing code, use reader_tool and review your code.
+* You can run tests by using command_tool.
 * You can use the issue_tool for problems and issues that you encounter.
 * Create a simple report that describes your code; try to analyze your code and find bugs.
 * Always write tests for your code; try to test your code with different inputs.
