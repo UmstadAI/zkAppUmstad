@@ -1,12 +1,12 @@
 import type { Tool } from './tool'
 import type { ChatCompletionCreateParams } from 'openai/resources/chat'
 import { RunnableToolFunction } from 'openai/lib/RunnableFunction'
-import { getAccountInfo, getBlockInfo, getBlockchainSummary, getLatestBlock } from './utils'
+import { getAccountInfo, getBlockInfo, getBlockchainSummary, getCurrentPrice, getLatestBlock } from './utils'
 
 const functionDescription: ChatCompletionCreateParams.Function = {
   name: 'explorer_tool',
   description:
-    'This tool takes inputs like transaction hash, account id or block hash and process it then gives the details to the user.',
+    'This tool takes inputs like transaction hash, account id or block hash and process it then gives the details to the user. Also can be used to get current summary of the blockchain or latest block or current Price of MINA in dollar.',
   parameters: {
     type: 'object',
     properties: {
@@ -43,10 +43,11 @@ async function runTool(args: { query: string, input: string }): Promise<string> 
           console.log(response)
           return response
         } else {
+          const currentPrice = "Current MINA Price is: " + await getCurrentPrice()
           const latestBlockResponse = await getLatestBlock()
           const summaryResponse = await getBlockchainSummary()
-          console.log(latestBlockResponse + summaryResponse)
-          return latestBlockResponse + summaryResponse
+          console.log(currentPrice + latestBlockResponse + summaryResponse)
+          return currentPrice + latestBlockResponse + summaryResponse
         }
     }
 }
@@ -58,14 +59,14 @@ export const explorerTool: Tool = {
   callable: runTool
 }
 
-export const explorerToolRunnable: RunnableToolFunction<{ query: string }> = {
+export const explorerToolRunnable: RunnableToolFunction<{ query: string, input: string }> = {
   type: 'function',
   function: {
     name: functionDescription.name,
     function: runTool,
     parse: JSON.parse,
     description:
-      'This tool takes inputs like transaction hash, account id or block hash and process it then gives the details to the user.',
+    'This tool takes inputs like transaction hash, account id or block hash and process it then gives the details to the user. Also can be used to get current summary of the blockchain or latest block or current Price of MINA in dollar.',
     parameters: {
       type: 'object',
       properties: {

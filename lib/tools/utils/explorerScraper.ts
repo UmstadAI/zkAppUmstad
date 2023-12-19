@@ -66,3 +66,19 @@ export async function getBlockchainSummary() {
         throw error;
     }
 }
+
+export async function getCurrentPrice() {
+    try {
+        const url = `https://api.coingecko.com/api/v3/simple/price?ids=mina-protocol&vs_currencies=usd`
+        const response = await fetch(url, options)
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        return await response.text();
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        throw error;
+    }
+}
