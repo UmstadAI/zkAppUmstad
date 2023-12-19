@@ -7,15 +7,21 @@ export async function getAccountInfo(input: string) {
     try {
         const url = `https://api.minaexplorer.com/accounts/${input}`
         const response = await fetch(url, options)
+        const data = await response.json()
 
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            return "Cannot fetch the API, the account is not exits or response is not OK";
         }
 
-        return await response.text();
+        delete data.account.epochStakingAccount
+        delete data.account.nextEpochStakingAccount
+        delete data.account.epochDelegators
+        delete data.account.nextEpochDelegators
+
+        return JSON.stringify(data);
     } catch (error) {
         console.error('Error fetching data:', error);
-        throw error;
+        return "Cannot get the account from explorer. Perhaps it does not exist."
     }
 }
 
@@ -25,13 +31,13 @@ export async function getBlockInfo(input: string) {
         const response = await fetch(url, options)
 
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            return "Cannot fetch the API, the input is wrong or response is not OK";
         }
 
         return await response.text();
     } catch (error) {
         console.error('Error fetching data:', error);
-        throw error;
+        return "Cannot get the block info. Perhaps it does not exist."
     }
 }
 
@@ -41,13 +47,13 @@ export async function getLatestBlock() {
         const response = await fetch(url, options)
 
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            return "Cannot fetch the API, the input is wrong or response is not OK";
         }
 
         return await response.text();
     } catch (error) {
         console.error('Error fetching data:', error);
-        throw error;
+        return "Cannot get the latest block. Maybe there is some issue in the API"
     }
 }
 
@@ -57,13 +63,13 @@ export async function getBlockchainSummary() {
         const response = await fetch(url, options)
 
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            return "Cannot fetch the API, the input is wrong or response is not OK";
         }
 
         return await response.text();
     } catch (error) {
         console.error('Error fetching data:', error);
-        throw error;
+        return "Cannot get the blockchain summary. Maybe there is some issue in the API"
     }
 }
 
@@ -73,12 +79,12 @@ export async function getCurrentPrice() {
         const response = await fetch(url, options)
 
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            return "Cannot fetch the API, response is not OK";
         }
 
         return await response.text();
     } catch (error) {
         console.error('Error fetching data:', error);
-        throw error;
+        return "Cannot get the current price because there is something with coingecko api."
     }
 }
