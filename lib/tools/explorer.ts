@@ -17,7 +17,7 @@ const functionDescription: ChatCompletionCreateParams.Function = {
       },
       input: {
         type: 'string',
-        description: 'Transaction Hash or Block Hash or Account Id'
+        description: 'Block Hash or Account Id'
       }
     },
     required: ['query']
@@ -77,7 +77,7 @@ export const explorerToolRunnable: RunnableToolFunction<{ query: string, input: 
         },
         input: {
             type: 'string',
-            description: 'Transaction Hash or Block Hash or Account Id'
+            description: 'Block Hash or Account Id'
         }
       }
     }
