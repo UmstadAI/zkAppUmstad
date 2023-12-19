@@ -1,7 +1,7 @@
 import type { Tool } from './tool'
 import type { ChatCompletionCreateParams } from 'openai/resources/chat'
 import { RunnableToolFunction } from 'openai/lib/RunnableFunction'
-import { getAccountInfo } from './utils'
+import { getAccountInfo, getBlockInfo, getBlockchainSummary, getLatestBlock } from './utils'
 
 const functionDescription: ChatCompletionCreateParams.Function = {
   name: 'explorer_tool',
@@ -38,7 +38,16 @@ async function runTool(args: { query: string, input: string }): Promise<string> 
         console.log(response)
         return response
     } else {
-        return "It is possibly transaction hash"
+        if(args.input) {
+          const response = await getBlockInfo(args.input)
+          console.log(response)
+          return response
+        } else {
+          const latestBlockResponse = await getLatestBlock()
+          const summaryResponse = await getBlockchainSummary()
+          console.log(latestBlockResponse + summaryResponse)
+          return latestBlockResponse + summaryResponse
+        }
     }
 }
 
