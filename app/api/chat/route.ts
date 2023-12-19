@@ -1,5 +1,5 @@
 import { kv } from '@vercel/kv'
-import { OpenAIStream, StreamingTextResponse } from 'ai'
+import { OpenAIStream, StreamingTextResponse, experimental_StreamData } from 'ai'
 import { Ratelimit } from '@upstash/ratelimit'
 import OpenAI from 'openai'
 
@@ -125,7 +125,7 @@ export async function POST(req: Request) {
 
   const tool_calls: ChatCompletionMessageToolCall[] = []
   const tool_messages: ChatCompletionToolMessageParam[] = []
-  
+
   const runner = openai.beta.chat.completions
     .runTools({
       stream: true,
@@ -146,6 +146,12 @@ export async function POST(req: Request) {
         function: { ...call }
       } as ChatCompletionMessageToolCall
       tool_calls.push(tool_call)
+      messages.push(
+        {
+          role: 'system',
+          content: call.name
+        }
+      )
     })
     .on('functionCallResult', (content) => {
       const message: ChatCompletionToolMessageParam = {
@@ -157,10 +163,8 @@ export async function POST(req: Request) {
     })
     .on('finalChatCompletion', (completion: ChatCompletion) => {
       const message = completion.choices[0].message
-      message.tool_calls = tool_calls
       addToKV(json.id, messages, message, userId, tool_calls)
     })
-
   const stream = OpenAIStream(runner)
   return new StreamingTextResponse(stream)
 }
