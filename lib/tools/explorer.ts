@@ -35,7 +35,8 @@ function isPublicKey(inputString: string | undefined): boolean {
 async function runTool(args: { query: string, input: string }): Promise<string> {
     if(isPublicKey(args.input)) {
         const response = await getAccountInfo(args.input)
-        return response.toString()
+        console.log(response)
+        return response
     } else {
         return "It is possibly transaction hash"
     }

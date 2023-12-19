@@ -1,7 +1,6 @@
 const options = {
     method: "GET",
     headers: {}, // Add any required headers here
-    body: "{}"
 };
 
 export async function getAccountInfo(input: string) {
@@ -12,8 +11,8 @@ export async function getAccountInfo(input: string) {
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        
-        return await response.json();
+
+        return await response.text();
     } catch (error) {
         console.error('Error fetching data:', error);
         throw error;
