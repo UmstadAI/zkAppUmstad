@@ -36,7 +36,7 @@ export async function getChat(id: string, userId: string) {
   if (!chat || (userId && chat.userId.toString() !== userId)) {
     return null
   }
-  console.log(chat)
+  
   return chat
 }
 
