@@ -43,18 +43,15 @@ async function runTool(args: {
 }): Promise<string> {
   if (isPublicKey(args.input)) {
     const response = await getAccountInfo(args.input)
-    console.log(response)
     return response
   } else {
     if (args.input) {
       const response = await getBlockInfo(args.input)
-      console.log(response)
       return response
     } else {
       const currentPrice = 'Current MINA Price is: ' + (await getCurrentPrice())
       const latestBlockResponse = await getLatestBlock()
       const summaryResponse = await getBlockchainSummary()
-      console.log(currentPrice + latestBlockResponse + summaryResponse)
       return currentPrice + latestBlockResponse + summaryResponse
     }
   }

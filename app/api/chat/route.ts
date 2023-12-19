@@ -120,10 +120,13 @@ export async function POST(req: Request) {
 
     model = 'gpt-4-1106-preview'
   }
+
   const openai = new OpenAI(configuration)
   console.log(JSON.stringify(messages))
+
   const tool_calls: ChatCompletionMessageToolCall[] = []
   const tool_messages: ChatCompletionToolMessageParam[] = []
+  
   const runner = openai.beta.chat.completions
     .runTools({
       stream: true,
