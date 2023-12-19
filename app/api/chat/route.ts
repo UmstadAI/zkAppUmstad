@@ -9,9 +9,7 @@ import { runnables, toolMap } from '@/lib/tools'
 import { auth } from '@/auth'
 import { nanoid } from '@/lib/utils'
 import {
-  Chat,
   ChatCompletion,
-  ChatCompletionAssistantMessageParam,
   ChatCompletionMessage,
   ChatCompletionMessageParam,
   ChatCompletionMessageToolCall,
@@ -24,7 +22,7 @@ export const addToKV = async (
   messages: ChatCompletionMessage[],
   message: ChatCompletionMessageParam,
   userId: string,
-  tool_messages: ChatCompletionToolMessageParam[] = []
+  tool_calls: ChatCompletionMessageToolCall[]
 ) => {
   if (messages.length < 1) return
   const first_message_content = messages[0]?.content || ''
@@ -41,8 +39,10 @@ export const addToKV = async (
     userId,
     createdAt,
     path,
-    messages: [...messages, message, ...tool_messages]
+    messages: [...messages, message],
+    tool_calls: [tool_calls]
   }
+
   await kv.hmset(`chat:${id}`, payload)
   await kv.zadd(`user:chat:${userId}`, {
     score: createdAt,
@@ -122,7 +122,6 @@ export async function POST(req: Request) {
   }
 
   const openai = new OpenAI(configuration)
-  console.log(JSON.stringify(messages))
 
   const tool_calls: ChatCompletionMessageToolCall[] = []
   const tool_messages: ChatCompletionToolMessageParam[] = []
@@ -141,7 +140,6 @@ export async function POST(req: Request) {
       tools: runnables
     })
     .on('functionCall', (call: ChatCompletionMessage.FunctionCall) => {
-      console.log('Got function call', call.name)
       const tool_call = {
         type: 'function',
         id: '' + tool_calls.length,
@@ -149,7 +147,7 @@ export async function POST(req: Request) {
       } as ChatCompletionMessageToolCall
       tool_calls.push(tool_call)
     })
-    .on('functionCallResult', content => {
+    .on('functionCallResult', (content) => {
       const message: ChatCompletionToolMessageParam = {
         role: 'tool',
         tool_call_id: '' + (tool_calls.length - 1),
@@ -160,8 +158,9 @@ export async function POST(req: Request) {
     .on('finalChatCompletion', (completion: ChatCompletion) => {
       const message = completion.choices[0].message
       message.tool_calls = tool_calls
-      addToKV(json.id, messages, message, userId, tool_messages)
+      addToKV(json.id, messages, message, userId, tool_calls)
     })
+
   const stream = OpenAIStream(runner)
   return new StreamingTextResponse(stream)
 }
