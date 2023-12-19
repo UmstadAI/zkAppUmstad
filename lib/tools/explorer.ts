@@ -1,7 +1,13 @@
 import type { Tool } from './tool'
 import type { ChatCompletionCreateParams } from 'openai/resources/chat'
 import { RunnableToolFunction } from 'openai/lib/RunnableFunction'
-import { getAccountInfo, getBlockInfo, getBlockchainSummary, getCurrentPrice, getLatestBlock } from './utils'
+import {
+  getAccountInfo,
+  getBlockInfo,
+  getBlockchainSummary,
+  getCurrentPrice,
+  getLatestBlock
+} from './utils'
 
 const functionDescription: ChatCompletionCreateParams.Function = {
   name: 'explorer_tool',
@@ -27,29 +33,31 @@ const functionDescription: ChatCompletionCreateParams.Function = {
 const functionMessage = 'Fetching context from explorer...\n'
 
 function isPublicKey(inputString: string | undefined): boolean {
-    const prefix = "B62";
-    return inputString !== undefined && inputString.startsWith(prefix);
+  const prefix = 'B62'
+  return inputString !== undefined && inputString.startsWith(prefix)
 }
-  
 
-async function runTool(args: { query: string, input: string }): Promise<string> {
-    if(isPublicKey(args.input)) {
-        const response = await getAccountInfo(args.input)
-        console.log(response)
-        return response
+async function runTool(args: {
+  query: string
+  input: string
+}): Promise<string> {
+  if (isPublicKey(args.input)) {
+    const response = await getAccountInfo(args.input)
+    console.log(response)
+    return response
+  } else {
+    if (args.input) {
+      const response = await getBlockInfo(args.input)
+      console.log(response)
+      return response
     } else {
-        if(args.input) {
-          const response = await getBlockInfo(args.input)
-          console.log(response)
-          return response
-        } else {
-          const currentPrice = "Current MINA Price is: " + await getCurrentPrice()
-          const latestBlockResponse = await getLatestBlock()
-          const summaryResponse = await getBlockchainSummary()
-          console.log(currentPrice + latestBlockResponse + summaryResponse)
-          return currentPrice + latestBlockResponse + summaryResponse
-        }
+      const currentPrice = 'Current MINA Price is: ' + (await getCurrentPrice())
+      const latestBlockResponse = await getLatestBlock()
+      const summaryResponse = await getBlockchainSummary()
+      console.log(currentPrice + latestBlockResponse + summaryResponse)
+      return currentPrice + latestBlockResponse + summaryResponse
     }
+  }
 }
 
 export const explorerTool: Tool = {
@@ -59,14 +67,17 @@ export const explorerTool: Tool = {
   callable: runTool
 }
 
-export const explorerToolRunnable: RunnableToolFunction<{ query: string, input: string }> = {
+export const explorerToolRunnable: RunnableToolFunction<{
+  query: string
+  input: string
+}> = {
   type: 'function',
   function: {
     name: functionDescription.name,
     function: runTool,
     parse: JSON.parse,
     description:
-    'This tool takes inputs like transaction hash, account id or block hash and process it then gives the details to the user. Also can be used to get current summary of the blockchain or latest block or current Price of MINA in dollar.',
+      'This tool takes inputs like transaction hash, account id or block hash and process it then gives the details to the user. Also can be used to get current summary of the blockchain or latest block or current Price of MINA in dollar.',
     parameters: {
       type: 'object',
       properties: {
@@ -76,8 +87,8 @@ export const explorerToolRunnable: RunnableToolFunction<{ query: string, input: 
             'The query to search for. 1-3 sentences are enough. English only.'
         },
         input: {
-            type: 'string',
-            description: 'Block Hash or Account Id'
+          type: 'string',
+          description: 'Block Hash or Account Id'
         }
       }
     }
