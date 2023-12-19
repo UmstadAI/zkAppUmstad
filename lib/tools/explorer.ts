@@ -1,6 +1,7 @@
 import type { Tool } from './tool'
 import type { ChatCompletionCreateParams } from 'openai/resources/chat'
 import { RunnableToolFunction } from 'openai/lib/RunnableFunction'
+import { getAccountInfo } from './utils'
 
 const functionDescription: ChatCompletionCreateParams.Function = {
   name: 'explorer_tool',
@@ -32,9 +33,9 @@ function isPublicKey(inputString: string | undefined): boolean {
   
 
 async function runTool(args: { query: string, input: string }): Promise<string> {
-    console.log(args.query, args.input)
     if(isPublicKey(args.input)) {
-        return "It is public key"
+        const response = await getAccountInfo(args.input)
+        return response.toString()
     } else {
         return "It is possibly transaction hash"
     }
