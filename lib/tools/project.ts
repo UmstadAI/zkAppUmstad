@@ -66,7 +66,10 @@ export const projectTool: Tool = {
   callable: runTool
 }
 
-export const projectToolRunnable: RunnableToolFunction<{ query: string }> = {
+export const projectToolRunnable: RunnableToolFunction<{
+  query: string
+  project_name: string | undefined
+}> = {
   type: 'function',
   function: {
     name: functionDescription.name,
