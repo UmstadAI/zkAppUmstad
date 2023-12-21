@@ -65,7 +65,7 @@ export async function Header() {
             <Link href="/" target="_blank" rel="nofollow" className='flex'>
               <Image src={Logo} alt='zkApp Umstad' className='h-16 w-16'/>
               <div className={zen_tokyo_zoo.className}>
-                <h5 className='mt-5 hidden text-xl text-[#fbb43f] md:flex'>ZKAPP UMSTAD</h5>
+                <h5 className='mt-5 hidden text-xl text-[#655bf7] dark:text-[#ffffff] md:flex'>ZKAPP UMSTAD</h5>
               </div>
             </Link>
           </div>
