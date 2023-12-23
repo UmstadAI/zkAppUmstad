@@ -1,7 +1,7 @@
 import * as React from 'react'
 import Link from 'next/link'
 import Image from 'next/image';
-import { Montserrat } from 'next/font/google';
+import { Nunito } from 'next/font/google';
 
 import { cn } from '@/lib/utils'
 import { auth } from '@/auth'
@@ -11,18 +11,15 @@ import { Sidebar } from '@/components/sidebar'
 import { SidebarList } from '@/components/sidebar-list'
 import {
   IconGitHub,
-  IconNextChat,
   IconSeparator,
-  IconVercel
 } from '@/components/ui/icons'
 import { SidebarFooter } from '@/components/sidebar-footer'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { ClearHistory } from '@/components/clear-history'
 import { UserMenu } from '@/components/user-menu'
-import { LoginButton } from '@/components/login-button'
 import Logo from '@/assets/logo/logo.svg'
 
-const zen_tokyo_zoo = Montserrat({
+const zen_tokyo_zoo = Nunito({
   subsets: ['latin'],
   weight: '600',
 })
