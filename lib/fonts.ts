@@ -1,4 +1,4 @@
-import { Roboto_Mono as FontMono, Titillium_Web as FontSans} from 'next/font/google'
+import { Roboto_Mono as FontMono, Open_Sans as FontSans} from 'next/font/google'
 
 export const fontSans = FontSans({
   subsets: ['latin'],
