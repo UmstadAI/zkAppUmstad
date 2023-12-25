@@ -5,8 +5,7 @@ from openai import OpenAI
 from dotenv import load_dotenv, find_dotenv
 from openai.types.chat import ChatCompletion
 from openai._streaming import Stream
-from zkappumstad.runners import RunnerMessage
-from zkappumstad.utils import fade_in_text
+from zkappumstad.runners import RunnerMessage, ToolMessage, StateChange, StreamMessage
 
 from zkappumstad.tools import (
     Tool,
@@ -64,7 +63,7 @@ def create_completion(history, message) -> Generator[RunnerMessage, None, None]:
                 function_name = part.choices[0].delta.function_call.name
                 tool = tools[function_name]
 
-                yield fade_in_text(tool.message, "bold blue")
+                yield ToolMessage(tool.message, "TOOL_MESSAGE")
                 args = "".join(
                     list(
                         part.choices[0].delta.function_call.arguments
@@ -91,10 +90,10 @@ def create_completion(history, message) -> Generator[RunnerMessage, None, None]:
 
             yield part.choices[0].delta.content
 
-            i = 0
             for part in chat_completion:
-                yield part.choices[0].delta.content or ""
-                i += 1
+                yield StreamMessage(
+                    part.choices[0].delta.content or "", "STREAM_MESSAGE"
+                )
             break
 
         except Exception as e:
