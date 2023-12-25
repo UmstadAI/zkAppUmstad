@@ -5,6 +5,7 @@ from openai import OpenAI
 from dotenv import load_dotenv, find_dotenv
 from openai.types.chat import ChatCompletion
 from openai._streaming import Stream
+from zkappumstad.runners import RunnerMessage
 from zkappumstad.utils import fade_in_text
 
 from zkappumstad.tools import (
@@ -16,7 +17,7 @@ from zkappumstad.tools import (
     writer_tool,
     reader_tool,
     read_reference_tool,
-    command_tool
+    command_tool,
 )
 from zkappumstad.prompt import SYSTEM_PROMPT
 
@@ -33,17 +34,20 @@ tools: dict[str, Tool] = {
         writer_tool,
         reader_tool,
         read_reference_tool,
-        command_tool
+        command_tool,
     ]
 }
 
 
-def create_completion(history, message) -> Generator[str, None, None]:
+def create_completion(history, message) -> Generator[RunnerMessage, None, None]:
     while True:
         try:
             history.append({"role": "user", "content": message})
             chat_completion: Stream[ChatCompletion] = client.chat.completions.create(
-                messages=[{"role": "system", "content": SYSTEM_PROMPT}, *history,],
+                messages=[
+                    {"role": "system", "content": SYSTEM_PROMPT},
+                    *history,
+                ],
                 model="gpt-4-1106-preview",
                 temperature=0.2,
                 stream=True,

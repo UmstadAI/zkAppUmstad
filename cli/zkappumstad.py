@@ -6,6 +6,7 @@ from colorama import Fore, Style
 from rich.console import Console
 from zkappumstad.utils import fade_in_text
 from zkappumstad.runner import create_completion
+from zkappumstad.runners import StreamMessage, ToolMessage, StateChange
 
 console = Console()
 
@@ -54,6 +55,12 @@ def save_conversation_to_markdown():
     print(Fore.GREEN + "Conversation saved to " + filename + Style.RESET_ALL)
 
 
+states = [
+    {"name": "chat_agent", "runner": create_completion},
+    {"name": "code_runner", "runner": create_completion},
+]
+state = 0
+
 while True:
     user_message = input(Fore.BLUE + "\nYou: " + Style.RESET_ALL)
     markdown_history.append(f"**You**: {user_message}")
@@ -77,7 +84,13 @@ while True:
 
     response_text = ""
     for part in completion:
-        print(part or "", end="")
+        if isinstance(part, StreamMessage):
+            print(part.message or "", end="")
+        elif isinstance(part, ToolMessage):
+            fade_in_text(part.message, "bold blue")
+        elif isinstance(part, StateChange):
+            state = part.new_state
+
         response_text += part or ""
 
     print()
