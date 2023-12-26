@@ -62,6 +62,9 @@ states = [
 state = 0
 
 while True:
+    if state != 0:
+        states[state]["runner"](history)
+
     user_message = input(Fore.BLUE + "\nYou: " + Style.RESET_ALL)
     markdown_history.append(f"**You**: {user_message}")
 

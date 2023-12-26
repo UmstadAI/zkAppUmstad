@@ -13,10 +13,6 @@ from zkappumstad.tools import (
     code_tool,
     project_tool,
     issue_tool,
-    writer_tool,
-    reader_tool,
-    read_reference_tool,
-    command_tool,
 )
 from zkappumstad.prompt import SYSTEM_PROMPT
 
@@ -30,10 +26,6 @@ tools: dict[str, Tool] = {
         code_tool,
         project_tool,
         issue_tool,
-        writer_tool,
-        reader_tool,
-        read_reference_tool,
-        command_tool,
     ]
 }
 
@@ -81,7 +73,9 @@ def create_completion(history, message) -> Generator[RunnerMessage, None, None]:
 
                 args = loads(args)
                 result = tool.function(**args)
-
+                if isinstance(result, StateChange):
+                    yield result
+                    break
                 history.append(
                     {"role": "function", "name": function_name, "content": result}
                 )

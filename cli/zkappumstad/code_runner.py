@@ -28,10 +28,9 @@ tools: dict[str, Tool] = {
 }
 
 
-def create_completion(history, message) -> Generator[str, None, None]:
+def create_completion(history) -> Generator[str, None, None]:
     while True:
         try:
-            history.append({"role": "user", "content": message})
             chat_completion: Stream[ChatCompletion] = client.chat.completions.create(
                 messages=[
                     {"role": "system", "content": SYSTEM_PROMPT},
