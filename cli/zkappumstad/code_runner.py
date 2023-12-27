@@ -3,15 +3,14 @@ from json import loads
 
 from openai import OpenAI
 from dotenv import load_dotenv, find_dotenv
-from openai.types.chat import ChatCompletion
-from openai._streaming import Stream
-from zkappumstad.utils import fade_in_text
+from zkappumstad.runners import ToolMessage, StateChange
 
 from zkappumstad.tools import (
     Tool,
     writer_tool,
     reader_tool,
     read_reference_tool,
+    code_tool,
 )
 from zkappumstad.prompt import SYSTEM_PROMPT
 
@@ -21,6 +20,7 @@ client = OpenAI()
 tools: dict[str, Tool] = {
     tool.name: tool
     for tool in [
+        code_tool,
         writer_tool,
         reader_tool,
         read_reference_tool,
@@ -28,68 +28,119 @@ tools: dict[str, Tool] = {
 }
 
 
-def create_completion(history) -> Generator[str, None, None]:
-    while True:
-        try:
-            chat_completion: Stream[ChatCompletion] = client.chat.completions.create(
-                messages=[
-                    {"role": "system", "content": SYSTEM_PROMPT},
-                    *history,
-                ],
-                model="gpt-4-1106-preview",
-                temperature=0.2,
-                stream=True,
-                functions=[tool.description for tool in tools.values()],
-                function_call="auto",
-            )
+def fetch_code_context(history):
+    """
+    Fetch code context query built by gpt-4, using the message history.
+    """
+    try:
+        chat_completion = client.chat.completions.create(
+            messages=[
+                {"role": "system", "content": SYSTEM_PROMPT},
+                *history,
+            ],
+            model="gpt-4-1106-preview",
+            temperature=0.2,
+            functions=[code_tool],
+            function_call=code_tool.name,
+        )
+        args = chat_completion.choices[0].message.function_call.arguments
+        history.append(
+            {
+                "role": "assistant",
+                "content": None,
+                "function_call": {"name": code_tool.name, "arguments": args},
+            }
+        )
+        args = loads(args)
+        code_context = code_tool.function(**args)
+        history.append(
+            {
+                "role": "function",
+                "name": code_tool.name,
+                "content": code_context,
+            }
+        )
+        return ToolMessage("Code context fetched.", "TOOL_MESSAGE")
+    except Exception as e:
+        yield ToolMessage("Error fetching code context.", "TOOL_MESSAGE")
 
-            if not isinstance(chat_completion, Stream):
-                continue
 
-            part = next(chat_completion)
+def read_references(history):
+    """
+    If haven't read reference repo, read it.
+    """
+    try:
+        if any(
+            [
+                message["role"] == "function"
+                and message["name"] == read_reference_tool.name
+                for message in history
+            ]
+        ):
+            return
+        reference = read_reference_tool.function()
+        history.append(
+            {
+                "role": "assistant",
+                "content": None,
+                "function_call": {"name": read_reference_tool.name, "arguments": "{}"},
+            }
+        )
+        history.append(
+            {
+                "role": "function",
+                "name": read_reference_tool.name,
+                "content": reference,
+            }
+        )
+        return ToolMessage("Reference codes read.", "TOOL_MESSAGE")
+    except Exception as e:
+        return ToolMessage("Error reading reference codes.", "TOOL_MESSAGE")
 
-            if part.choices[0].delta.function_call:
-                function_name = part.choices[0].delta.function_call.name
-                tool = tools[function_name]
 
-                yield fade_in_text(tool.message, "bold blue")
-                args = "".join(
-                    list(
-                        part.choices[0].delta.function_call.arguments
-                        for part in chat_completion
-                        if part.choices[0].delta.function_call
-                    )
-                )
-                history.append(
-                    {
-                        "role": "assistant",
-                        "content": None,
-                        "function_call": {"name": function_name, "arguments": args},
-                    }
-                )
+def write_code(history):
+    """
+    Write code using the writer tool.
+    """
+    try:
+        chat_completion = client.chat.completions.create(
+            messages=[
+                {"role": "system", "content": SYSTEM_PROMPT},
+                *history,
+            ],
+            model="gpt-4-1106-preview",
+            temperature=0.2,
+            functions=[writer_tool],
+            function_call=writer_tool.name,
+        )
+        args = chat_completion.choices[0].message.function_call.arguments
+        history.append(
+            {
+                "role": "assistant",
+                "content": None,
+                "function_call": {"name": writer_tool.name, "arguments": args},
+            }
+        )
+        args = loads(args)
+        code = writer_tool.function(**args)
+        history.append(
+            {
+                "role": "function",
+                "name": writer_tool.name,
+                "content": code,
+            }
+        )
+        return ToolMessage(f"Code written to {args['filename']}", "TOOL_MESSAGE")
+    except Exception as e:
+        return ToolMessage("Error writing code.", "TOOL_MESSAGE")
 
-                args = loads(args)
-                result = tool.function(**args)
 
-                history.append(
-                    {"role": "function", "name": function_name, "content": result}
-                )
-
-                continue
-
-            yield part.choices[0].delta.content
-
-            i = 0
-            for part in chat_completion:
-                yield part.choices[0].delta.content or ""
-                i += 1
-            break
-
-        except Exception as e:
-            print(e)
-            print(e.with_traceback())
-            return None
+def code_runner(history) -> Generator[str, None, None]:
+    yield fetch_code_context(history)
+    yield read_references(history)
+    yield write_code(history)
+    yield StateChange(0, "STATE_CHANGE")
 
 
 if __name__ == "__main__":
-    create_completion([], "What's the weather in San Francisco?")
+    code_runner([])
