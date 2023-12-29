@@ -11,7 +11,7 @@ export type Metadata = {
   hash: string
 }
 
-const VECTOR_TYPE = 'project'
+const VECTOR_TYPE = 'code'
 
 const functionDescription: ChatCompletionCreateParams.Function = {
   name: 'search_for_project_context',
