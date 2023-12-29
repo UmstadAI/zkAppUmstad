@@ -1,8 +1,8 @@
 import * as React from 'react'
 import Link from 'next/link'
 
-import Image from 'next/image';
-import { Nunito } from 'next/font/google';
+import Image from 'next/image'
+import { Nunito } from 'next/font/google'
 
 import { cn } from '@/lib/utils'
 import { auth } from '@/auth'
@@ -10,10 +10,7 @@ import { clearChats } from '@/app/actions'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Sidebar } from '@/components/sidebar'
 import { SidebarList } from '@/components/sidebar-list'
-import {
-  IconGitHub,
-  IconSeparator,
-} from '@/components/ui/icons'
+import { IconGitHub, IconSeparator } from '@/components/ui/icons'
 import { SidebarFooter } from '@/components/sidebar-footer'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { ClearHistory } from '@/components/clear-history'
@@ -63,7 +60,9 @@ export async function Header() {
             <Link href="/" target="_blank" rel="nofollow" className="flex">
               <Image src={Logo} alt="zkApp Umstad" className="h-16 w-16" />
               <div className={zen_tokyo_zoo.className}>
-                <h5 className='mt-5 hidden text-xl text-[#655bf7] dark:text-[#ffffff] md:flex'>ZKAPPS UMSTAD</h5>
+                <h5 className="mt-5 hidden text-xl text-[#655bf7] dark:text-[#ffffff] md:flex">
+                  ZKAPPS UMSTAD
+                </h5>
               </div>
             </Link>
           </div>
