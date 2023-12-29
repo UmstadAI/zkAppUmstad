@@ -9,4 +9,4 @@ export {
   getLatestBlock,
   getCurrentPrice
 } from './explorerScraper.ts'
-export {deprecatedCodeRules} from './deprecatedCodeRules.ts'
+export { deprecatedCodeRules } from './deprecatedCodeRules.ts'

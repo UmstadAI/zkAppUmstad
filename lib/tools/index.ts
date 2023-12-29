@@ -4,7 +4,10 @@ import { codeTool, codeToolRunnable } from './code'
 import { projectTool, projectToolRunnable } from './project'
 import { issueTool, issueToolRunnable } from './issue'
 import { explorerTool, explorerToolRunnable } from './explorer'
-import { checkDeprecatedTool, checkDeprecatedToolRunnable } from './checkDeprecated'
+import {
+  checkDeprecatedTool,
+  checkDeprecatedToolRunnable
+} from './checkDeprecated'
 import { Tool } from './tool'
 
 type ToolMap = {

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import Link from 'next/link'
-import Image from 'next/image';
-import { Montserrat } from 'next/font/google';
+import Image from 'next/image'
+import { Montserrat } from 'next/font/google'
 
 import { cn } from '@/lib/utils'
 import { auth } from '@/auth'
@@ -24,7 +24,7 @@ import Logo from '@/assets/logo/logo.svg'
 
 const zen_tokyo_zoo = Montserrat({
   subsets: ['latin'],
-  weight: '600',
+  weight: '600'
 })
 
 export async function Header() {
@@ -45,7 +45,7 @@ export async function Header() {
           </Sidebar>
         ) : (
           <Link href="/" target="_blank" rel="nofollow">
-            <Image src={Logo} alt='zkApp Umstad' className='h-16 w-16'/>
+            <Image src={Logo} alt="zkApp Umstad" className="h-16 w-16" />
           </Link>
         )}
         <div className="flex items-center">
@@ -60,18 +60,22 @@ export async function Header() {
         </div>
       </div>
       <div>
-        { session?.user ? (
+        {session?.user ? (
           <div className="hidden items-center justify-center space-x-2 sm:flex">
-            <Link href="/" target="_blank" rel="nofollow" className='flex'>
-              <Image src={Logo} alt='zkApp Umstad' className='h-16 w-16'/>
+            <Link href="/" target="_blank" rel="nofollow" className="flex">
+              <Image src={Logo} alt="zkApp Umstad" className="h-16 w-16" />
               <div className={zen_tokyo_zoo.className}>
-                <h5 className='mt-5 hidden text-xl text-[#fbb43f] md:flex'>ZKAPP UMSTAD</h5>
+                <h5 className="mt-5 hidden text-xl text-[#fbb43f] md:flex">
+                  ZKAPP UMSTAD
+                </h5>
               </div>
             </Link>
           </div>
-        ) : ('') }
+        ) : (
+          ''
+        )}
       </div>
-      
+
       <div className="flex items-center justify-end space-x-2">
         <a
           target="_blank"

@@ -126,7 +126,7 @@ export async function POST(req: Request) {
 
   const tool_calls: ChatCompletionMessageToolCall[] = []
   const tool_messages: ChatCompletionToolMessageParam[] = []
-  
+
   const runner = openai.beta.chat.completions
     .runTools({
       stream: true,
@@ -139,7 +139,7 @@ export async function POST(req: Request) {
         },
         ...messages
       ],
-      tools: runnables,
+      tools: runnables
     })
     .on('functionCall', (call: ChatCompletionMessage.FunctionCall) => {
       console.log('Got function call', call.name)
