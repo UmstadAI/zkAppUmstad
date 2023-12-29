@@ -138,7 +138,7 @@ export async function POST(req: Request) {
         },
         ...messages
       ],
-      tools: runnables
+      tools: runnables,
     })
     .on('functionCall', (call: ChatCompletionMessage.FunctionCall) => {
       console.log('Got function call', call.name)
