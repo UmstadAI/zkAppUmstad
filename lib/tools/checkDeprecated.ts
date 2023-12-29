@@ -25,7 +25,6 @@ async function runTool(args: {
   query: string
 }): Promise<string> {
     const depArray = deprecatedCodeRules
-    console.log(JSON.stringify(depArray))
   return JSON.stringify(depArray)
 }
 

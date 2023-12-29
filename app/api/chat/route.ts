@@ -138,7 +138,6 @@ export async function POST(req: Request) {
         },
         ...messages
       ],
-      temperature: 0.2,
       tools: runnables,
     })
     .on('functionCall', (call: ChatCompletionMessage.FunctionCall) => {

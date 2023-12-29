@@ -124,10 +124,6 @@ export const deprecatedCodeRules = [
         "code": "sign(zkappKey?: PrivateKey)"
     },
     {
-        "comment": "/**\n   * Approve an account update or callback. This will include the account update in the zkApp's public input,\n   * which means it allows you to read and use its content in a proof, make assertions about it, and modify it.\n   *\n   * If this is called with a callback as the first parameter, it will first extract the account update produced by that callback.\n   * The extracted account update is returned.\n   *\n   * ```ts\n   * \\@method myApprovingMethod(callback: Callback) {\n   *   let approvedUpdate = this.approve(callback);\n   * }\n   * ```\n   *\n   * Under the hood, \"approving\" just means that the account update is made a child of the zkApp in the\n   * tree of account updates that forms the transaction.\n   * The second parameter `layout` allows you to also make assertions about the approved update's _own_ children,\n   * by specifying a certain expected layout of children. See {@link AccountUpdate.Layout}.\n   *\n   * @param updateOrCallback\n   * @param layout\n   * @returns The account update that was approved (needed when passing in a Callback)\n   */\n  approve(\n    updateOrCallback: AccountUpdate | Callback<any>,\n    layout?: AccountUpdatesLayout\n  ) {\n    let accountUpdate =\n      updateOrCallback instanceof AccountUpdate\n        ? updateOrCallback\n        : Provable.witness(AccountUpdate, () => updateOrCallback.accountUpdate);\n    this.self.approve(accountUpdate, layout);\n    return accountUpdate;\n  }\n\n  send(args: {\n    to: PublicKey | AccountUpdate | SmartContract;\n    amount: number | bigint | UInt64;\n  }) {\n    return this.self.send(args);\n  }\n\n  /**\n   * @deprecated use `this.account.tokenSymbol`\n   */",
-        "code": "get tokenSymbol()"
-    },
-    {
         "comment": "/**\n   * @deprecated use `this.account.<field>.set()`\n   */",
         "code": "setValue<T>(maybeValue: SetOrKeep<T>, value: T)"
     },
@@ -258,10 +254,6 @@ export const deprecatedCodeRules = [
     {
         "comment": "/**\n   * @deprecated use {@link Provable.log}\n   */",
         "code": "static log = Provable.log"
-    },
-    {
-        "comment": "/**\n *\n * @deprecated This is deprecated in favor of {@link Mina.Network}, which is exactly the same function.\n * The name `BerkeleyQANet` was misleading because it suggested that this is specific to a particular network.\n */",
-        "code": "function BerkeleyQANet(graphqlEndpoint: string)"
     },
     {
         "comment": "/**\n * @deprecated It's deprecated to pass in the fee payer's private key. Pass in the public key instead.\n * ```\n * // good\n * Mina.transaction(publicKey, ...);\n * Mina.transaction({ sender: publicKey }, ...);\n *\n * // deprecated\n * Mina.transaction(privateKey, ...);\n * Mina.transaction({ feePayerKey: privateKey }, ...);\n * ```\n */\nfunction transaction(\n  sender: DeprecatedFeePayerSpec,\n  f: () => void\n): Promise<Transaction>;\nfunction transaction(\n  senderOrF: DeprecatedFeePayerSpec | (() => void),\n  fOrUndefined?: () => void\n): Promise<Transaction> {\n  let sender: DeprecatedFeePayerSpec;\n  let f: () => void;\n  try {\n    if (fOrUndefined !== undefined) {\n      sender = senderOrF as DeprecatedFeePayerSpec;\n      f = fOrUndefined;\n    } else {\n      sender = undefined;\n      f = senderOrF as () => void;\n    }\n    return activeInstance.transaction(sender, f);\n  } catch (error) {\n    throw prettifyStacktrace(error);\n  }\n}\n\n/**\n * Returns the public key of the current transaction's sender account.\n *\n * Throws an error if not inside a transaction, or the sender wasn't passed in.\n */",
