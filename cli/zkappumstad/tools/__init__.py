@@ -8,3 +8,4 @@ from .writer_tool import writer_tool
 from .reader_tool import reader_tool
 from .read_reference_tool import read_reference_tool
 from .command_tool import command_tool
+from .state_change_tool import state_change_tool

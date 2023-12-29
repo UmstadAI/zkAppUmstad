@@ -6,7 +6,7 @@ from colorama import Fore, Style
 from rich.console import Console
 from zkappumstad.utils import fade_in_text
 from zkappumstad.runner import create_completion
-from zkappumstad.code_runner import code_runner
+from zkappumstad.code_runner import code_runner, clean_code_tools
 from zkappumstad.runners import StreamMessage, ToolMessage, StateChange
 
 console = Console()
@@ -57,13 +57,11 @@ def save_conversation_to_markdown():
 
 
 state: int = 0
-
+user_message: str = ""
 while True:
-    if state == 1:
-        code_runner(history)
-
-    user_message = input(Fore.BLUE + "\nYou: " + Style.RESET_ALL)
-    markdown_history.append(f"**You**: {user_message}")
+    if state == 0:
+        user_message = input(Fore.BLUE + "\nYou: " + Style.RESET_ALL)
+        markdown_history.append(f"**You**: {user_message}")
 
     if user_message.lower() == "quit":
         break
@@ -77,7 +75,11 @@ while True:
         startup()
         continue
 
-    completion = create_completion(history, user_message)
+    completion = (
+        create_completion(clean_code_tools(history), user_message)
+        if state == 0
+        else code_runner(history)
+    )
     if completion is None:
         print("[bold red]Sorry, I didn't understand that.[/bold red]")
         continue
@@ -86,12 +88,12 @@ while True:
     for part in completion:
         if isinstance(part, StreamMessage):
             print(part.message or "", end="")
+            response_text += part.message or ""
         elif isinstance(part, ToolMessage):
             fade_in_text(part.message, "bold blue")
+            response_text += part.message
         elif isinstance(part, StateChange):
             state = part.new_state
-
-        response_text += part or ""
 
     print()
     markdown_history.append(f"**Umstad:** {response_text} \n")

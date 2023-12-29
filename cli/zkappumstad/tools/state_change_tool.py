@@ -4,12 +4,12 @@ from zkappumstad.runners import StateChange
 
 function_description = {
     "name": "change_state",
-    "description": "Change the state of the agent. You can use this tool to change the state to coder agent.",
+    "description": "Change the state of the agent. You can use this tool to change the state to coder agent. When you decide to start coding, use this tool to change the state to coder agent.",
     "parameters": {
         "type": "object",
         "properties": {
             "new_state": {
-                "type": "int",
+                "type": "number",
                 "description": "New state of the agent. 0 for chat agent, 1 for coder agent.",
                 "enum": [1],
             },
@@ -18,7 +18,7 @@ function_description = {
     },
 }
 
-FUNCTION_MESSAGE = "Changing agent state...\n"
+FUNCTION_MESSAGE = "Changing agent state..."
 
 
 def run_tool(new_state: int):
@@ -26,7 +26,7 @@ def run_tool(new_state: int):
     return StateChange(new_state, "STATE_CHANGE")
 
 
-doc_tool = Tool(
+state_change_tool = Tool(
     name="change_state",
     description=function_description,
     message=FUNCTION_MESSAGE,

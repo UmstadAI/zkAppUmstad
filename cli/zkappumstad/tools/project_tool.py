@@ -35,7 +35,7 @@ function_description = {
     },
 }
 
-function_messages = "Fetching context about Projects...\n"
+function_messages = "Fetching context about Projects..."
 
 
 def get_text_embbeddings(query, model="text-embedding-ada-002"):
@@ -83,7 +83,6 @@ def query_index(
 def format_results(matches):
     """Format the results from the index query."""
     results = []
-    print("there are", len(matches), "matches")
     for i, match in enumerate(matches):
         if match["score"] > 0.65:
             metadata = match["metadata"]
@@ -91,7 +90,6 @@ def format_results(matches):
             text = metadata.get("text", "")
             formatted_result = f"## Result {i + 1}:\n{title}\n{text}"
             results.append(formatted_result)
-    print("there are", len(results), "results")
     return "\n".join(results)
 
 

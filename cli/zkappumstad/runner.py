@@ -13,6 +13,7 @@ from zkappumstad.tools import (
     code_tool,
     project_tool,
     issue_tool,
+    state_change_tool,
 )
 from zkappumstad.prompt import SYSTEM_PROMPT
 
@@ -21,12 +22,7 @@ load_dotenv(find_dotenv(".env.local"), override=True)
 client = OpenAI()
 tools: dict[str, Tool] = {
     tool.name: tool
-    for tool in [
-        doc_tool,
-        code_tool,
-        project_tool,
-        issue_tool,
-    ]
+    for tool in [doc_tool, code_tool, project_tool, issue_tool, state_change_tool]
 }
 
 
@@ -82,8 +78,7 @@ def create_completion(history, message) -> Generator[RunnerMessage, None, None]:
 
                 continue
 
-            yield part.choices[0].delta.content
-
+            yield StreamMessage(part.choices[0].delta.content or "", "STREAM_MESSAGE")
             for part in chat_completion:
                 yield StreamMessage(
                     part.choices[0].delta.content or "", "STREAM_MESSAGE"

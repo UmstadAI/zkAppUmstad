@@ -11,6 +11,7 @@ from zkappumstad.tools import (
     reader_tool,
     read_reference_tool,
     code_tool,
+    command_tool,
 )
 from zkappumstad.prompt import SYSTEM_PROMPT
 
@@ -40,8 +41,8 @@ def fetch_code_context(history):
             ],
             model="gpt-4-1106-preview",
             temperature=0.2,
-            functions=[code_tool],
-            function_call=code_tool.name,
+            functions=[code_tool.description],
+            function_call={"name": code_tool.name},
         )
         args = chat_completion.choices[0].message.function_call.arguments
         history.append(
@@ -62,7 +63,7 @@ def fetch_code_context(history):
         )
         return ToolMessage("Code context fetched.", "TOOL_MESSAGE")
     except Exception as e:
-        yield ToolMessage("Error fetching code context.", "TOOL_MESSAGE")
+        return ToolMessage("Error fetching code context.", "TOOL_MESSAGE")
 
 
 def read_references(history):
@@ -110,8 +111,8 @@ def write_code(history):
             ],
             model="gpt-4-1106-preview",
             temperature=0.2,
-            functions=[writer_tool],
-            function_call=writer_tool.name,
+            functions=[writer_tool.description],
+            function_call={"name": writer_tool.name},
         )
         args = chat_completion.choices[0].message.function_call.arguments
         history.append(
@@ -130,15 +131,53 @@ def write_code(history):
                 "content": code,
             }
         )
-        return ToolMessage(f"Code written to {args['filename']}", "TOOL_MESSAGE")
+        return ToolMessage(f"Code written to {args['contract_name']}", "TOOL_MESSAGE")
     except Exception as e:
+        print(e)
         return ToolMessage("Error writing code.", "TOOL_MESSAGE")
 
 
-def code_runner(history) -> Generator[str, None, None]:
+def build_code():
+    return command_tool.function(command_type="BUILD")
+
+
+def clean_code_tools(history):
+    """
+    Remove code tool messages from history.
+    """
+    return [
+        message
+        for message in history
+        if not (
+            message["role"] == "function"
+            and message["name"] == read_reference_tool.name
+        )
+        or (
+            message["role"] == "assistant"
+            and message["function_call"]["name"] == read_reference_tool.name
+        )
+    ]
+
+
+def code_runner(history, max_iterations=3) -> Generator[str, None, None]:
     yield fetch_code_context(history)
     yield read_references(history)
-    yield write_code(history)
+    for i in range(max_iterations):
+        yield write_code(history)
+        std_out, std_err = build_code()
+        if std_err or "error" in std_out.lower():
+            yield ToolMessage(
+                "Build failed" + ("retrying" if i < max_iterations - 1 else ""),
+                "TOOL_MESSAGE",
+            )
+        else:
+            yield ToolMessage("Build succeeded", "TOOL_MESSAGE")
+            break
+    else:
+        yield ToolMessage(
+            f"Couldn't complete the contract after {max_iterations} tries.",
+            "TOOL_MESSAGE",
+        )
     yield StateChange(0, "STATE_CHANGE")
 
 

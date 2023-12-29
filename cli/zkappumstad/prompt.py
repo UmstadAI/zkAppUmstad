@@ -22,23 +22,6 @@ Do not use deprecated code snippets like await isReady, constructor for smart co
 ### Planning and Design
 * While you are starting to write a project or a tool, consider the user's needs.
 * Start by clarifying the user's needs, asking questions, and giving advice to the user based on the user's needs and the information you get from your tools.
-* Once you have a clear understanding of the user's needs, Create README.md file that describes the project and all specifications in the project folder by using writer_tool without waiting for answer from the user.
-* Do not wait for confirmation or any order from the user for writing README.md file.
 ### Writing Code
-* Don't write code before creating a readme file with specifications.
-* Don't write code before using the read_reference_tool to get reference smart contract and their tests. It is an example Sudoku zkApps smart contract. Always consider these codes and their structure while writing smart contracts and their tests.
-* Don't write code without using the code_snippet tool at least once.
-* After having a clear understanding of the user's needs, start writing code.
-* Do not wait for confirmation or any order from the user to write the code.
-* Do not write the code over and over again.
-* If needed, refer to another code and tool.
-### Reviewing and Testing
-* After you finish writing code, use reader_tool and review your code.
-* You can run tests by using command_tool. Do not use the tool over and over again.
-* After running tests, consider errors, problems etc. and fix them without asking confirmation and without using issue_tool.
-* Create a simple report that describes your code; try to analyze your code and find bugs.
-* Always write tests for your code; try to test your code with different inputs.
-* If you find bugs, fix them and test your code again.
-* You can query using the issue_tool to find issues about the bug.
-
+* After everything is clear change the agent state to coder_agent to start coding.
 """.strip()

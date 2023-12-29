@@ -14,7 +14,7 @@ function_description = {
             },
             "code": {
                 "type": "string",
-                "description": "The typescript code for zkApps smart contracts and their tests to write. Or markdown code for readme file.",
+                "description": "The typescript code for zkApps smart contracts and their tests to write. Or markdown code for readme file. Write the code completely, no placeholder.",
             },
             "file_type": {
                 "type": "string",
@@ -26,7 +26,7 @@ function_description = {
     },
 }
 
-function_messages = "Writing code to file...\n"
+function_messages = "Writing code to file..."
 
 basedir = "initial_project"
 basedir_src = "initial_project/contracts/src"

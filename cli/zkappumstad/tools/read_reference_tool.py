@@ -16,7 +16,7 @@ function_description = {
     },
 }
 
-function_messages = "Reading example codes code for reference from Examples...\n"
+function_messages = "Reading example codes code for reference from Examples..."
 basedir = "examples/"
 
 
@@ -37,11 +37,11 @@ def run_tool(directory=basedir):
             file_path = os.path.join(directory, filename)
             with open(file_path, "r") as file:
                 code_content += file.read()
-                print(
-                    Fore.GREEN
-                    + f"Contents of {file_path}:\n{code_content}\n"
-                    + Style.RESET_ALL
-                )
+                # print(
+                #     Fore.GREEN
+                #     + f"Contents of {file_path}:\n{code_content}\n"
+                #     + Style.RESET_ALL
+                # )
 
         return code_content
 
