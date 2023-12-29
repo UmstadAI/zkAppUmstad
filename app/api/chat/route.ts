@@ -118,7 +118,7 @@ export async function POST(req: Request) {
       })
     }
 
-    model = 'gpt-4-1106-preview'
+    model = 'gpt-3.5-turbo-1106'
   }
 
   const openai = new OpenAI(configuration)
