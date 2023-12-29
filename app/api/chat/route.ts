@@ -131,6 +131,7 @@ export async function POST(req: Request) {
     .runTools({
       stream: true,
       model,
+      temperature: 0.2,
       messages: [
         {
           role: 'system',
