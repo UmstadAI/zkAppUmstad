@@ -5,7 +5,7 @@ import { deprecatedCodeRules } from './utils'
 
 const functionDescription: ChatCompletionCreateParams.Function = {
   name: 'check_deprecated_codes',
-  description: '',
+  description: 'It returns o1js linter rules and deprecated codes. Use this function before writing any smart contract to learn about rules and deprecated code of o1js.',
   parameters: {
     type: 'object',
     properties: {
@@ -24,7 +24,9 @@ const functionMessage = 'Fetching data from deprecatedCodeRules file ...\n'
 async function runTool(args: {
   query: string
 }): Promise<string> {
-  return ''
+    const depArray = deprecatedCodeRules
+    console.log(JSON.stringify(depArray))
+  return JSON.stringify(depArray)
 }
 
 export const checkDeprecatedTool: Tool = {
@@ -42,7 +44,7 @@ export const checkDeprecatedToolRunnable: RunnableToolFunction<{
     name: functionDescription.name,
     function: runTool,
     parse: JSON.parse,
-    description: '',
+    description: 'It returns o1js linter rules and deprecated codes. Use this function before writing any smart contract to learn about rules and deprecated code of o1js.',
     parameters: {
       type: 'object',
       properties: {
