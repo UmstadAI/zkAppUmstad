@@ -13,7 +13,6 @@ cli/sudoku/
 cli/examples/
 
 
-
 # next.js
 .next/
 out/

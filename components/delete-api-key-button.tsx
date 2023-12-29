@@ -8,45 +8,35 @@ import { cn } from '@/lib/utils'
 import Swal from 'sweetalert2'
 
 interface DeleteApiKeyButtonProps extends ButtonProps {
-    text?: string,
-  }
+  text?: string
+}
 
-export function DeleteApiKeyButton({ 
-    text = 'DELETE OPEN AI API KEY',
-    className,
-    ...props
+export function DeleteApiKeyButton({
+  text = 'DELETE OPEN AI API KEY',
+  className,
+  ...props
 }: DeleteApiKeyButtonProps) {
-    const [isLoading, setIsLoading] = React.useState(false)
-    function deleteApiKey(key: string) {
-        localStorage.removeItem('ai-token')
-        Swal.fire(
-            'Done!',
-            'You deleted your API Key from local storage',
-            'success'
-          )
-    }
-    return (
-        <>
-            <Button
-                variant="secondary"
-                onClick={() => {
-                    setIsLoading(true)
-                    deleteApiKey('')  
-                    setIsLoading(false)                 
-                }}
-                disabled={isLoading}
-                className={cn(
-                    'flex',
-                    className
-                )}
-                {...props}
-                >
-                {isLoading ? (
-                    <IconSpinner className="mr-2 animate-spin" />
-                ) : 
-                null}
-                {text}
-            </Button>
-        </>
-    )
+  const [isLoading, setIsLoading] = React.useState(false)
+  function deleteApiKey(key: string) {
+    localStorage.removeItem('ai-token')
+    Swal.fire('Done!', 'You deleted your API Key from local storage', 'success')
+  }
+  return (
+    <>
+      <Button
+        variant="secondary"
+        onClick={() => {
+          setIsLoading(true)
+          deleteApiKey('')
+          setIsLoading(false)
+        }}
+        disabled={isLoading}
+        className={cn('flex', className)}
+        {...props}
+      >
+        {isLoading ? <IconSpinner className="mr-2 animate-spin" /> : null}
+        {text}
+      </Button>
+    </>
+  )
 }

@@ -12,8 +12,10 @@ export function FooterText({ className, ...props }: React.ComponentProps<'p'>) {
       )}
       {...props}
     >
-      zkApp Umstad AI Chatbot | Developed for {' '}
-      <ExternalLink href="https://minaprotocol.com/">MINA Protocol </ExternalLink>
+      zkApp Umstad AI Chatbot | Developed for{' '}
+      <ExternalLink href="https://minaprotocol.com/">
+        MINA Protocol{' '}
+      </ExternalLink>
     </p>
   )
 }

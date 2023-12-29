@@ -8,5 +8,5 @@ export const fontSans = FontSans({
 
 export const fontMono = FontMono({
   subsets: ['latin'],
-  variable: '--font-mono',
+  variable: '--font-mono'
 })

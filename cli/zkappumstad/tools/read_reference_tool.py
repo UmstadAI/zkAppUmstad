@@ -16,7 +16,8 @@ function_description = {
     },
 }
 
-function_messages = "Reading example codes code for reference from examples...\n"
+function_messages = "Reading example codes code for reference from Examples...\n"
+
 basedir = "examples/"
 
 

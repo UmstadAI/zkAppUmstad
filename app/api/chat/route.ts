@@ -1,21 +1,54 @@
 import { kv } from '@vercel/kv'
-import { Message, OpenAIStream, StreamingTextResponse } from 'ai'
-import { Configuration, OpenAIApi } from 'openai-edge'
+import { OpenAIStream, StreamingTextResponse } from 'ai'
 import { Ratelimit } from '@upstash/ratelimit'
+import OpenAI from 'openai'
 
-import { Pinecone } from "@pinecone-database/pinecone";   
-import { getContext } from './utils/context'
-import { getCodeContext } from './utils/codeContext';
-import { getProjectContext } from './utils/projectContext';
-import { getIssueContext } from './utils/issueContext'
-
-import { setPromtWithContext } from './prompts';
+import { SYSTEM_PROMPT } from './prompts'
 import { validateApiKey } from '@/lib/utils'
-
+import { runnables, toolMap } from '@/lib/tools'
 import { auth } from '@/auth'
 import { nanoid } from '@/lib/utils'
-
+import {
+  Chat,
+  ChatCompletion,
+  ChatCompletionAssistantMessageParam,
+  ChatCompletionMessage,
+  ChatCompletionMessageParam,
+  ChatCompletionMessageToolCall,
+  ChatCompletionToolMessageParam
+} from 'openai/resources'
 export const runtime = 'edge'
+
+export const addToKV = async (
+  json_id: string,
+  messages: ChatCompletionMessage[],
+  message: ChatCompletionMessageParam,
+  userId: string,
+  tool_messages: ChatCompletionToolMessageParam[] = []
+) => {
+  if (messages.length < 1) return
+  const first_message_content = messages[0]?.content || ''
+  const title =
+    first_message_content.length > 100
+      ? first_message_content.substring(0, 100)
+      : first_message_content
+  const id = json_id ?? nanoid()
+  const createdAt = Date.now()
+  const path = `/chat/${id}`
+  const payload = {
+    id,
+    title,
+    userId,
+    createdAt,
+    path,
+    messages: [...messages, message, ...tool_messages]
+  }
+  await kv.hmset(`chat:${id}`, payload)
+  await kv.zadd(`user:chat:${userId}`, {
+    score: createdAt,
+    member: `chat:${id}`
+  })
+}
 
 export async function POST(req: Request) {
   const json = await req.json()
@@ -28,15 +61,15 @@ export async function POST(req: Request) {
     })
   }
 
-  let openai
+  let configuration
   let model
 
   const ip = req.headers.get('x-forwarded-for')
-  
+
   if (validateApiKey(previewToken)) {
-    const configuration = new Configuration({
+    configuration = {
       apiKey: previewToken
-    })
+    }
 
     const ratelimit = new Ratelimit({
       redis: kv,
@@ -46,7 +79,7 @@ export async function POST(req: Request) {
     const { success, limit, reset, remaining } = await ratelimit.limit(
       `ratelimit_${ip}`
     )
-  
+
     if (!success) {
       return new Response('You have reached your request limit for the day.', {
         status: 429,
@@ -58,22 +91,21 @@ export async function POST(req: Request) {
       })
     }
 
-    openai = new OpenAIApi(configuration)
     model = 'gpt-4-1106-preview'
   } else {
-    const configuration = new Configuration({
+    configuration = {
       apiKey: process.env.OPENAI_API_KEY
-    })
+    }
 
     const ratelimit = new Ratelimit({
       redis: kv,
-      limiter: Ratelimit.slidingWindow(100, '1d')
+      limiter: Ratelimit.slidingWindow(30, '1d')
     })
 
     const { success, limit, reset, remaining } = await ratelimit.limit(
       `ratelimit_${ip}`
     )
-  
+
     // TODO: Add Pop Up for Rate Limit
     if (!success) {
       return new Response('You have reached your request limit for the day.', {
@@ -85,58 +117,52 @@ export async function POST(req: Request) {
         }
       })
     }
-    
-    openai = new OpenAIApi(configuration)
+
     model = 'gpt-4-1106-preview'
   }
 
-  const pinecone = new Pinecone({
-    environment: process.env.PINECONE_ENVIRONMENT as string,     
-    apiKey: process.env.PINECONE_API_KEY as string,      
-  });      
+  const openai = new OpenAI(configuration)
+  console.log(JSON.stringify(messages))
 
-  const lastMessage = messages[messages.length - 1]
-  const context = await getContext(lastMessage.content, '')
-  const codeContext = await getCodeContext(lastMessage.content, '')
-  const projectContext = await getProjectContext(lastMessage.content, '')
-  const issueContext = await getIssueContext(lastMessage.content, '')
+  const tool_calls: ChatCompletionMessageToolCall[] = []
+  const tool_messages: ChatCompletionToolMessageParam[] = []
 
-  const promt = setPromtWithContext(codeContext, context, projectContext, issueContext)
-
-  const res = await openai.createChatCompletion({
-    model: model,
-    messages: [...promt, ...messages.filter((message: Message) => message.role === 'user')],
-    temperature: 0.2,
-    stream: true
-  })
-
-  const stream = OpenAIStream(res, {
-    async onCompletion(completion) {
-      const title = json.messages[0].content.substring(0, 100)
-      const id = json.id ?? nanoid()
-      const createdAt = Date.now()
-      const path = `/chat/${id}`
-      const payload = {
-        id,
-        title,
-        userId,
-        createdAt,
-        path,
-        messages: [
-          ...messages,
-          {
-            content: completion,
-            role: 'assistant'
-          }
-        ]
+  const runner = openai.beta.chat.completions
+    .runTools({
+      stream: true,
+      model,
+      temperature: 0.2,
+      messages: [
+        {
+          role: 'system',
+          content: SYSTEM_PROMPT
+        },
+        ...messages
+      ],
+      tools: runnables
+    })
+    .on('functionCall', (call: ChatCompletionMessage.FunctionCall) => {
+      console.log('Got function call', call.name)
+      const tool_call = {
+        type: 'function',
+        id: '' + tool_calls.length,
+        function: { ...call }
+      } as ChatCompletionMessageToolCall
+      tool_calls.push(tool_call)
+    })
+    .on('functionCallResult', content => {
+      const message: ChatCompletionToolMessageParam = {
+        role: 'tool',
+        tool_call_id: '' + (tool_calls.length - 1),
+        content
       }
-      await kv.hmset(`chat:${id}`, payload)
-      await kv.zadd(`user:chat:${userId}`, {
-        score: createdAt,
-        member: `chat:${id}`
-      })
-    }
-  })
-
+      tool_messages.push(message)
+    })
+    .on('finalChatCompletion', (completion: ChatCompletion) => {
+      const message = completion.choices[0].message
+      message.tool_calls = tool_calls
+      addToKV(json.id, messages, message, userId, tool_messages)
+    })
+  const stream = OpenAIStream(runner)
   return new StreamingTextResponse(stream)
 }

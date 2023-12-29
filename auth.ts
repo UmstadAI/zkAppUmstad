@@ -6,7 +6,7 @@ import sha256 from 'crypto-js/sha256'
 import Hex from 'crypto-js/enc-hex'
 
 function reduceUserId(userId: string) {
-  const hash = BigInt('0x' + Hex.stringify(sha256(userId)));
+  const hash = BigInt('0x' + Hex.stringify(sha256(userId)))
   const stringHash = (hash % BigInt('9007199254740992')).toString()
   return stringHash
 }
@@ -45,6 +45,6 @@ export const {
     }
   },
   pages: {
-    signIn: '/sign-in', // overrides the next-auth default signin page https://authjs.dev/guides/basics/pages
+    signIn: '/sign-in' // overrides the next-auth default signin page https://authjs.dev/guides/basics/pages
   }
 })

@@ -43,6 +43,6 @@ export function formatDate(input: string | number | Date): string {
 }
 
 export function validateApiKey(apiKey: string): boolean {
-  const apiKeyRegex = /^sk-[a-zA-Z0-9]{22}BlbkFJ[a-zA-Z0-9]{20}$/;
-  return apiKeyRegex.test(apiKey);
+  const apiKeyRegex = /^sk-[a-zA-Z0-9]{22}BlbkFJ[a-zA-Z0-9]{20}$/
+  return apiKeyRegex.test(apiKey)
 }
