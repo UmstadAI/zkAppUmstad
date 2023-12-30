@@ -1,3 +1,5 @@
+'use server';
+
 const options = {
   method: 'GET',
   headers: {} // Add any required headers here
