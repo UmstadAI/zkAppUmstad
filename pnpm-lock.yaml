@@ -35,6 +35,12 @@ dependencies:
   '@radix-ui/react-tooltip':
     specifier: ^1.0.6
     version: 1.0.6(@types/react-dom@17.0.14)(@types/react@17.0.14)(react-dom@18.2.0)(react@18.2.0)
+  '@types/react':
+    specifier: 17.0.14
+    version: 17.0.14
+  '@types/react-dom':
+    specifier: 17.0.14
+    version: 17.0.14
   '@upstash/ratelimit':
     specifier: ^0.4.4
     version: 0.4.4
@@ -87,10 +93,10 @@ dependencies:
     specifier: ^0.5.1
     version: 0.5.1
   react:
-    specifier: ^18.2.0
+    specifier: '18'
     version: 18.2.0
   react-dom:
-    specifier: ^18.2.0
+    specifier: '18'
     version: 18.2.0(react@18.2.0)
   react-hot-toast:
     specifier: ^2.4.1
@@ -127,12 +133,6 @@ devDependencies:
   '@types/node':
     specifier: ^17.0.12
     version: 17.0.12
-  '@types/react':
-    specifier: 17.0.14
-    version: 17.0.14
-  '@types/react-dom':
-    specifier: 17.0.14
-    version: 17.0.14
   '@types/react-syntax-highlighter':
     specifier: ^15.5.6
     version: 15.5.6
@@ -1300,6 +1300,7 @@ packages:
     resolution: {integrity: sha512-H03xwEP1oXmSfl3iobtmQ/2dHF5aBHr8aUMwyGZya6OW45G+xtdzmq6HkncefiBt5JU8DVyaWl/nWZbjZCnzAQ==}
     dependencies:
       '@types/react': 17.0.14
+    dev: false
 
   /@types/react-syntax-highlighter@15.5.6:
     resolution: {integrity: sha512-i7wFuLbIAFlabTeD2I1cLjEOrG/xdMa/rpx2zwzAoGHuXJDhSqp9BSfDlMHSh9JSuNfxHk9eEmMX6D55GiyjGg==}

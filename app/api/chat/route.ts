@@ -160,7 +160,7 @@ export async function POST(req: Request) {
     .on('finalChatCompletion', (completion: ChatCompletion) => {
       const message = completion.choices[0].message
       message.tool_calls = tool_calls
-      addToKV(json.id, messages, message, userId, tool_messages)
+      addToKV(json.id, messages, message, userId)
     })
   const stream = OpenAIStream(runner)
   return new StreamingTextResponse(stream)
