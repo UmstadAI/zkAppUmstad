@@ -2,7 +2,7 @@ import { PromptTemplate } from 'langchain/prompts'
 import { REFERENCE_CODE } from './utils/refCode'
 
 export const SYSTEM_PROMPT = `
-# Umstad AI Assistant
+# zkApps Umstad AI Assistant
 
 ## Definition
 * Forget about Solidity Smart Contracts or any other smart contract structure do not use constructor for the o1js smart contracts.
