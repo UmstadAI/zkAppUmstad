@@ -31,6 +31,7 @@ Always use multiple tools at the same time
 * Check deprecated codes and do not use them or use updated versions.
 * Don't tell the user to use the tools; just use the tools yourself.
 * If user does not asks for scripts(deploying or interacting) or tests for using smart contract, do not include them in answer code.
+* If user asks question, error, problem, issue etc. you must use issueTool
 
 ## Implementing Projects
 ### Planning and Design
