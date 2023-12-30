@@ -5,13 +5,11 @@ import OpenAI from 'openai'
 
 import { SYSTEM_PROMPT } from './prompts'
 import { validateApiKey } from '@/lib/utils'
-import { runnables, toolMap } from '@/lib/tools'
+import { runnables } from '@/lib/tools'
 import { auth } from '@/auth'
 import { nanoid } from '@/lib/utils'
 import {
-  Chat,
   ChatCompletion,
-  ChatCompletionAssistantMessageParam,
   ChatCompletionMessage,
   ChatCompletionMessageParam,
   ChatCompletionMessageToolCall,
