@@ -79,6 +79,7 @@ export async function getCurrentPrice() {
     const response = await fetch(url, options)
 
     if (!response.ok) {
+      console.log("RESPONSE IS NOT OK")
       return 'Cannot fetch the API, response is not OK'
     }
 
