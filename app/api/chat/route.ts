@@ -19,12 +19,11 @@ import {
 } from 'openai/resources'
 export const runtime = 'edge'
 
-export const addToKV = async (
+const addToKV = async (
   json_id: string,
   messages: ChatCompletionMessage[],
   message: ChatCompletionMessageParam,
   userId: string,
-  tool_messages: ChatCompletionToolMessageParam[] = []
 ) => {
   if (messages.length < 1) return
   const first_message_content = messages[0]?.content || ''
@@ -41,7 +40,7 @@ export const addToKV = async (
     userId,
     createdAt,
     path,
-    messages: [...messages, message, ...tool_messages]
+    messages: [...messages, message]
   }
   await kv.hmset(`chat:${id}`, payload)
   await kv.zadd(`user:chat:${userId}`, {
