@@ -23,7 +23,7 @@ const addToKV = async (
   json_id: string,
   messages: ChatCompletionMessage[],
   message: ChatCompletionMessageParam,
-  userId: string,
+  userId: string
 ) => {
   if (messages.length < 1) return
   const first_message_content = messages[0]?.content || ''
