@@ -4,6 +4,10 @@ import { codeTool, codeToolRunnable } from './code'
 import { projectTool, projectToolRunnable } from './project'
 import { issueTool, issueToolRunnable } from './issue'
 import { explorerTool, explorerToolRunnable } from './explorer'
+import {
+  checkDeprecatedTool,
+  checkDeprecatedToolRunnable
+} from './checkDeprecated'
 import { Tool } from './tool'
 
 type ToolMap = {
@@ -15,7 +19,8 @@ export const tools: Tool[] = [
   codeTool,
   projectTool,
   issueTool,
-  explorerTool
+  explorerTool,
+  checkDeprecatedTool
 ]
 export const toolMap = tools.reduce((acc: ToolMap, tool: Tool) => {
   acc[tool.name] = tool
@@ -27,5 +32,6 @@ export const runnables: RunnableToolFunction<any>[] = [
   codeToolRunnable,
   projectToolRunnable,
   issueToolRunnable,
-  explorerToolRunnable
+  explorerToolRunnable,
+  checkDeprecatedToolRunnable
 ]

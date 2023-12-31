@@ -11,10 +11,10 @@ import { Header } from '@/components/header'
 
 export const metadata: Metadata = {
   title: {
-    default: 'zkApp Umstad - AI Agent',
+    default: 'zkApps Umstad - AI Agent',
     template: `%s - Next.js AI Chatbot`
   },
-  description: 'An AI-powered chatbot for zkApp builders.',
+  description: 'An AI-powered chatbot for zkApps builders.',
   themeColor: [
     { media: '(prefers-color-scheme: light)', color: 'white' },
     { media: '(prefers-color-scheme: dark)', color: 'black' }

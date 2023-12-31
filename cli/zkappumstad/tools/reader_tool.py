@@ -36,10 +36,11 @@ def run_tool(directory=basedir):
         for filename in ts_files:
             file_path = os.path.join(directory, filename)
             with open(file_path, "r") as file:
-                code_content += file.read()
+                file_content = file.read()
+                code_content += file_content
                 print(
                     Fore.GREEN
-                    + f"Contents of {file_path}:\n{code_content}\n"
+                    + f"Contents of {file_path}:\n{file_content}\n"
                     + Style.RESET_ALL
                 )
 

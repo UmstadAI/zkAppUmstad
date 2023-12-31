@@ -1,3 +1,5 @@
+'use server';
+
 const options = {
   method: 'GET',
   headers: {} // Add any required headers here
@@ -76,7 +78,13 @@ export async function getBlockchainSummary() {
 export async function getCurrentPrice() {
   try {
     const url = `https://api.coingecko.com/api/v3/simple/price?ids=mina-protocol&vs_currencies=usd`
-    const response = await fetch(url, options)
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      mode: 'cors',
+  })
 
     if (!response.ok) {
       return 'Cannot fetch the API, response is not OK'

@@ -11,7 +11,8 @@ const exampleMessages = [
   },
   {
     heading: 'Create smart contracts by using o1js',
-    message: 'Create simple MINA Smart Contracts by using o1js(snarkyjs) library and explain it to a beginner developer \n'
+    message:
+      'Create simple MINA Smart Contracts by using o1js(snarkyjs) library and explain it to a beginner developer \n'
   }
 ]
 
@@ -23,10 +24,10 @@ export function EmptyScreen({ setInput }: Pick<UseChatHelpers, 'setInput'>) {
           Welcome to zkApp Umstad AI Chatbot!
         </h1>
         <p className="mb-2 leading-normal text-muted-foreground">
-          This is an open source zkApp Umstad AI Chatbot which is specifically 
-          designed to assist developers working on zkApp development. 
-          Powered by the GPT language model developed by OpenAI, 
-          it has been extensively trained on MINA Protocol, zkApps, smart contracts, o1js. 
+          This is an open source zkApp Umstad AI Chatbot which is specifically
+          designed to assist developers working on zkApp development. Powered by
+          the GPT language model developed by OpenAI, it has been extensively
+          trained on MINA Protocol, zkApps, smart contracts, o1js.
         </p>
         <p className="leading-normal text-muted-foreground">
           You can start a conversation here or try the following examples:

@@ -5,13 +5,11 @@ import OpenAI from 'openai'
 
 import { SYSTEM_PROMPT } from './prompts'
 import { validateApiKey } from '@/lib/utils'
-import { runnables, toolMap } from '@/lib/tools'
+import { runnables } from '@/lib/tools'
 import { auth } from '@/auth'
 import { nanoid } from '@/lib/utils'
 import {
-  Chat,
   ChatCompletion,
-  ChatCompletionAssistantMessageParam,
   ChatCompletionMessage,
   ChatCompletionMessageParam,
   ChatCompletionMessageToolCall,
@@ -19,12 +17,11 @@ import {
 } from 'openai/resources'
 export const runtime = 'edge'
 
-export const addToKV = async (
+const addToKV = async (
   json_id: string,
   messages: ChatCompletionMessage[],
   message: ChatCompletionMessageParam,
-  userId: string,
-  tool_messages: ChatCompletionToolMessageParam[] = []
+  userId: string
 ) => {
   if (messages.length < 1) return
   const first_message_content = messages[0]?.content || ''
@@ -41,7 +38,7 @@ export const addToKV = async (
     userId,
     createdAt,
     path,
-    messages: [...messages, message, ...tool_messages]
+    messages: [...messages, message]
   }
   await kv.hmset(`chat:${id}`, payload)
   await kv.zadd(`user:chat:${userId}`, {
@@ -126,11 +123,12 @@ export async function POST(req: Request) {
 
   const tool_calls: ChatCompletionMessageToolCall[] = []
   const tool_messages: ChatCompletionToolMessageParam[] = []
-  
+
   const runner = openai.beta.chat.completions
     .runTools({
       stream: true,
       model,
+      temperature: 0.2,
       messages: [
         {
           role: 'system',
@@ -160,7 +158,7 @@ export async function POST(req: Request) {
     .on('finalChatCompletion', (completion: ChatCompletion) => {
       const message = completion.choices[0].message
       message.tool_calls = tool_calls
-      addToKV(json.id, messages, message, userId, tool_messages)
+      addToKV(json.id, messages, message, userId)
     })
   const stream = OpenAIStream(runner)
   return new StreamingTextResponse(stream)

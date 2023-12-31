@@ -1,6 +1,6 @@
 import {
   Roboto_Mono as FontMono,
-  Titillium_Web as FontSans
+  Open_Sans as FontSans
 } from 'next/font/google'
 
 export const fontSans = FontSans({

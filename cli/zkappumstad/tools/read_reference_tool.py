@@ -29,7 +29,7 @@ def run_tool(directory=basedir):
         ts_files = [
             f
             for f in os.listdir(directory)
-            if f.endswith(".ts") or f.endswith(".test.ts") or f.endswith(".js")
+            if f.endswith(".ts")
         ]
 
         code_content = ""
@@ -42,6 +42,7 @@ def run_tool(directory=basedir):
                      + f"Contents of {file_path}:\n{code_content}\n"
                      + Style.RESET_ALL
                 ) """
+
 
         return code_content
 
