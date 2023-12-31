@@ -137,8 +137,29 @@ def write_code(history):
         return ToolMessage("Error writing code.", "TOOL_MESSAGE")
 
 
-def build_code():
-    return command_tool.function(command_type="BUILD")
+def build_code(history):
+    std_out, std_err = command_tool.function(command_type="BUILD")
+    if not std_err and "error" not in std_out.lower():
+        return True
+    history.append(
+        {
+            "role": "assistant",
+            "content": None,
+            "function_call": {"name": command_tool.name, "arguments": "{}"},
+        }
+    )
+    history.append(
+        {
+            "role": "function",
+            "name": command_tool.name,
+            "content": std_out,
+        }
+    )
+
+    return False
+
+
+CODE_TOOLS = set([code_tool.name, writer_tool.name, reader_tool.name])
 
 
 def clean_code_tools(history):
@@ -149,12 +170,11 @@ def clean_code_tools(history):
         message
         for message in history
         if not (
-            message["role"] == "function"
-            and message["name"] == read_reference_tool.name
-        )
-        or (
-            message["role"] == "assistant"
-            and message["function_call"]["name"] == read_reference_tool.name
+            (message["role"] == "function" and message["name"] in CODE_TOOLS)
+            or (
+                message["role"] == "assistant"
+                and message["function_call"]["name"] in CODE_TOOLS
+            )
         )
     ]
 
@@ -164,8 +184,8 @@ def code_runner(history, max_iterations=3) -> Generator[str, None, None]:
     yield read_references(history)
     for i in range(max_iterations):
         yield write_code(history)
-        std_out, std_err = build_code()
-        if std_err or "error" in std_out.lower():
+        build_success = build_code(history)
+        if not build_success:
             yield ToolMessage(
                 "Build failed" + ("retrying" if i < max_iterations - 1 else ""),
                 "TOOL_MESSAGE",
