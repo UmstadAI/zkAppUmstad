@@ -10,8 +10,6 @@ coverage
 
 cli/initial_project/
 cli/sudoku/
-cli/examples/
-
 
 # next.js
 .next/

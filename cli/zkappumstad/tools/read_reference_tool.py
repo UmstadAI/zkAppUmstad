@@ -4,7 +4,7 @@ from colorama import Fore, Style
 
 function_description = {
     "name": "read_reference_repo",
-    "description": "This tool reads the reference zkApps smart contracts. It's useful to understand zkApps Smart Contract Structure and logic before writing smart contracts and their tests. Always use this function to get reference smart contract code. It will give you example Sudoku Smart contract and simple escrow contract to benchmarking. Understand codes and use them for referencing before generate Smart Contracts.",
+    "description": "This tool reads the reference zkApps project repository. It's useful to understand zkApps Smart Contract Structure and logic before writing smart contracts and their tests. Always use this function to get reference smart contract code. It will give you example Sudoku and Tic Tac Toe Smart contracts, their tests and additional files for zkApps and also deprecated code database. Understand codes and use them for referencing before generate Smart Contracts.",
     "parameters": {
         "type": "object",
         "properties": {
@@ -16,8 +16,7 @@ function_description = {
     },
 }
 
-function_messages = "Reading example codes code for reference from Examples...\n"
-
+function_messages = "Reading example codes code for reference from Examples..."
 basedir = "examples/"
 
 
@@ -38,12 +37,12 @@ def run_tool(directory=basedir):
             file_path = os.path.join(directory, filename)
             with open(file_path, "r") as file:
                 code_content += file.read()
+                """ print(
+                     Fore.GREEN
+                     + f"Contents of {file_path}:\n{code_content}\n"
+                     + Style.RESET_ALL
+                ) """
 
-        print(
-            Fore.GREEN
-            + f"Total Combined Contents:\n{code_content}\n"
-            + Style.RESET_ALL
-        )
 
         return code_content
 

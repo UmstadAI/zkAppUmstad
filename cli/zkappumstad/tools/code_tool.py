@@ -31,7 +31,7 @@ function_description = {
     },
 }
 
-function_messages = "Fetching context about code snippets...\n"
+function_messages = "Fetching context about code snippets..."
 
 
 def get_text_embeddings(query, model_name="text-embedding-ada-002"):
@@ -62,7 +62,7 @@ def query_index(embedding, index_name, top_k=5, vector_type=vector_type):
 
 def format_results(matches):
     """Format the query results for display."""
-    filtered_matches = [match for match in matches if match["score"] > 0.5]
+    filtered_matches = [match for match in matches if match["score"] > 0.25]
     formatted_texts = []
     for i, match in enumerate(filtered_matches):
         metadata = match["metadata"]
@@ -81,7 +81,7 @@ def run_tool(query="", vector_type=vector_type):
 
     matches = query_index(embedding, "zkappumstad", vector_type=vector_type)
     if not matches:
-        return "No matches found."
+        return "No matches found in the database for the query: " + query
 
     formatted_text = format_results(matches)
     return formatted_text

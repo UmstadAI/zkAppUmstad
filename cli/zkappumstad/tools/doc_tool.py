@@ -31,7 +31,7 @@ function_description = {
     },
 }
 
-function_messages = "Fetching context about mina docs...\n"
+function_messages = "Fetching context about mina docs..."
 
 
 def get_text_embbeddings(query, model="text-embedding-ada-002"):

@@ -5,7 +5,7 @@ from openai import OpenAI
 from dotenv import load_dotenv, find_dotenv
 from openai.types.chat import ChatCompletion
 from openai._streaming import Stream
-from zkappumstad.utils import fade_in_text
+from zkappumstad.runners import RunnerMessage, ToolMessage, StateChange, StreamMessage
 
 from zkappumstad.tools import (
     Tool,
@@ -13,10 +13,7 @@ from zkappumstad.tools import (
     code_tool,
     project_tool,
     issue_tool,
-    writer_tool,
-    reader_tool,
-    read_reference_tool,
-    command_tool
+    state_change_tool,
 )
 from zkappumstad.prompt import SYSTEM_PROMPT
 
@@ -25,25 +22,19 @@ load_dotenv(find_dotenv(".env.local"), override=True)
 client = OpenAI()
 tools: dict[str, Tool] = {
     tool.name: tool
-    for tool in [
-        doc_tool,
-        code_tool,
-        project_tool,
-        issue_tool,
-        writer_tool,
-        reader_tool,
-        read_reference_tool,
-        command_tool
-    ]
+    for tool in [doc_tool, code_tool, project_tool, issue_tool, state_change_tool]
 }
 
 
-def create_completion(history, message) -> Generator[str, None, None]:
+def create_completion(history, message) -> Generator[RunnerMessage, None, None]:
     while True:
         try:
             history.append({"role": "user", "content": message})
             chat_completion: Stream[ChatCompletion] = client.chat.completions.create(
-                messages=[{"role": "system", "content": SYSTEM_PROMPT}, *history,],
+                messages=[
+                    {"role": "system", "content": SYSTEM_PROMPT},
+                    *history,
+                ],
                 model="gpt-4-1106-preview",
                 temperature=0.2,
                 stream=True,
@@ -60,7 +51,7 @@ def create_completion(history, message) -> Generator[str, None, None]:
                 function_name = part.choices[0].delta.function_call.name
                 tool = tools[function_name]
 
-                yield fade_in_text(tool.message, "bold blue")
+                yield ToolMessage(tool.message, "TOOL_MESSAGE")
                 args = "".join(
                     list(
                         part.choices[0].delta.function_call.arguments
@@ -78,19 +69,20 @@ def create_completion(history, message) -> Generator[str, None, None]:
 
                 args = loads(args)
                 result = tool.function(**args)
-
+                if isinstance(result, StateChange):
+                    yield result
+                    break
                 history.append(
                     {"role": "function", "name": function_name, "content": result}
                 )
 
                 continue
 
-            yield part.choices[0].delta.content
-
-            i = 0
+            yield StreamMessage(part.choices[0].delta.content or "", "STREAM_MESSAGE")
             for part in chat_completion:
-                yield part.choices[0].delta.content or ""
-                i += 1
+                yield StreamMessage(
+                    part.choices[0].delta.content or "", "STREAM_MESSAGE"
+                )
             break
 
         except Exception as e:
