@@ -1,72 +1,61 @@
-<a href="https://chat.vercel.ai/">
-  <img alt="Next.js 13 and app template Router-ready AI chatbot." src="https://chat.vercel.ai/opengraph-image.png">
-  <h1 align="center">Next.js AI Chatbot</h1>
-</a>
+# zkApps Umstad AI Assistant
 
-<p align="center">
-  An open-source AI chatbot app template built with Next.js, the Vercel AI SDK, OpenAI, and Vercel KV.
-</p>
+## Introduction
+zkApps Umstad AI Assistant, your expert guide in the world of MINA Protocol, o1js. Designed to assist developers, this chatbot provides in-depth assistance with zkApps o1js which is specifically designed to assist developers working on zkApps development  powered by the GPT language model. This project includes two main application:
 
-<p align="center">
-  <a href="#features"><strong>Features</strong></a> ·
-  <a href="#model-providers"><strong>Model Providers</strong></a> ·
-  <a href="#deploy-your-own"><strong>Deploy Your Own</strong></a> ·
-  <a href="#running-locally"><strong>Running locally</strong></a> ·
-  <a href="#authors"><strong>Authors</strong></a>
-</p>
-<br/>
+- **Web Application Chatbot:** zkappsumstad.com
+- **CLI Agent:** DOWNLOAD LINK HERE!
 
+# zkApps Umstad Chatbot
 ## Features
 
-- [Next.js](https://nextjs.org) App Router
-- React Server Components (RSCs), Suspense, and Server Actions
-- [Vercel AI SDK](https://sdk.vercel.ai/docs) for streaming chat UI
-- Support for OpenAI (default), Anthropic, Hugging Face, or custom AI chat models and/or LangChain
-- Edge runtime-ready
-- [shadcn/ui](https://ui.shadcn.com)
-  - Styling with [Tailwind CSS](https://tailwindcss.com)
-  - [Radix UI](https://radix-ui.com) for headless component primitives
-  - Icons from [Phosphor Icons](https://phosphoricons.com)
-- Chat History, rate limiting, and session storage with [Vercel KV](https://vercel.com/storage/kv)
-- [NextAuth.js](https://github.com/nextauthjs/next-auth) for authentication
+The Umstad AI Assistant offers a comprehensive range of features designed to support developers in various aspects of the MINA Protocol and o1js:
 
-## Model Providers
+1. **Documentation & General Knowledge:**
+   - Access to extensive resources including the Mina Protocol documentation, o1js guides, and Auro Wallet information.
+   - Integration with Mina Book and Mina Blog for up-to-date knowledge and insights.
+   - Availability of various project documentations to enhance understanding and application.
 
-This template ships with OpenAI `gpt-3.5-turbo` as the default. However, thanks to the [Vercel AI SDK](https://sdk.vercel.ai/docs), you can switch LLM providers to [Anthropic](https://anthropic.com), [Hugging Face](https://huggingface.co), or using [LangChain](https://js.langchain.com) with just a few lines of code.
+2. **Example Codebase:**
+   - Embedded code examples within the documentation for practical reference.
 
-## Deploy Your Own
+3. **Projects Repositories:**
+   - Embedded codebase of zkApps projects.
 
-You can deploy your own version of the Next.js AI Chatbot to Vercel with one click:
+4. **Community Interaction and Issue Tracking:**
+   - Embedded and processed integration with the Mina Protocol Discord channels, specifically zkapps-developers and zkapps-questions, for community support and engagement.
+   - Direct access to o1js GitHub Issues, providing insights into current challenges, bugs, and solutions within the community.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?demo-title=Next.js+Chat&demo-description=A+full-featured%2C+hackable+Next.js+AI+chatbot+built+by+Vercel+Labs&demo-url=https%3A%2F%2Fchat.vercel.ai%2F&demo-image=%2F%2Fimages.ctfassets.net%2Fe5382hct74si%2F4aVPvWuTmBvzM5cEdRdqeW%2F4234f9baf160f68ffb385a43c3527645%2FCleanShot_2023-06-16_at_17.09.21.png&project-name=Next.js+Chat&repository-name=nextjs-chat&repository-url=https%3A%2F%2Fgithub.com%2Fvercel-labs%2Fai-chatbot&from=templates&skippable-integrations=1&env=OPENAI_API_KEY%2CAUTH_GITHUB_ID%2CAUTH_GITHUB_SECRET%2CAUTH_SECRET&envDescription=How+to+get+these+env+vars&envLink=https%3A%2F%2Fgithub.com%2Fvercel-labs%2Fai-chatbot%2Fblob%2Fmain%2F.env.example&teamCreateStatus=hidden&stores=[{"type":"kv"}])
+5. **Mainnet Blockchain Information Access:**
+    - Direct access to Blockchain Summary, Block  and Account Information utilizing Mina Explorer API.
+    - Current MINA Price utilizing Coingecko API(TODO: Fix Fetching issue for deployment)
 
-## Creating a KV Database Instance
 
-Follow the steps outlined in the [quick start guide](https://vercel.com/docs/storage/vercel-kv/quickstart#create-a-kv-database) provided by Vercel. This guide will assist you in creating and configuring your KV database instance on Vercel, enabling your application to interact with it.
+## Best Practices for Asking Questions
+1. **Be Specific:** Clearly state your issue or the topic you need assistance with.
 
-Remember to update your environment variables (`KV_URL`, `KV_REST_API_URL`, `KV_REST_API_TOKEN`, `KV_REST_API_READ_ONLY_TOKEN`) in the `.env` file with the appropriate credentials provided during the KV database setup.
+2. **Querying issues, errors, problems:** Begin with "I have an issue ..." or "I have a problem ..." for asking about errors, issues, problems, discussion, strange questions etc in order to utilize Issue Tool which queries the Issue Vectors which includes Discord and Github data.
 
-## Running locally
+3. **Do not extend the conversation:** Even though ```gpt-4-1106-preview``` can handle overlong contexts, it is strongly advised that not to extend the conversation too much(For now, ideal 3 questions). Just create new chat after 2-3 questions because every query creates crowded context.
 
-You will need to use the environment variables [defined in `.env.example`](.env.example) to run Next.js AI Chatbot. It's recommended you use [Vercel Environment Variables](https://vercel.com/docs/concepts/projects/environment-variables) for this, but a `.env` file is all that is necessary.
+## Technical Details
+### Architecture Overview
 
-> Note: You should not commit your `.env` file or it will expose secrets that will allow others to control access to your various OpenAI and authentication provider accounts.
+### Backend Technologies
+- **Language and Frameworks:** Built using Next.js functions, OpenAI node.js ensuring robust and scalable performance.
+- **Database:** Uses vercel KV db.
+- **APIs:** Uses Vercel Functions.
 
-1. Install Vercel CLI: `npm i -g vercel`
-2. Link local instance with Vercel and GitHub accounts (creates `.vercel` directory): `vercel link`
-3. Download your environment variables: `vercel env pull`
+### Security and Compliance
+- **Data Privacy:** We store your conversations in the KV db. Do not share confidentials, private keys etc. We are not responsible for Vercel's security.
+- **OPENAI API KEY:** Application stores your OpenAI API KEY on the browser local storage. So, if you are using shared computer, please remove your key in the settings panel.
 
-```bash
-pnpm install
-pnpm dev
-```
+## Getting Started
+To start using Umstad AI Assistant, simply access our web application and type your query in the chat window. Our AI will guide you through the rest.
 
-Your app template should now be running on [localhost:3000](http://localhost:3000/).
+## Support
+For any technical issues or further inquiries, please contact our support team at [berkingurcan@gmail.com](mailto:berkingurcan@gmail.com).
 
-## Authors
 
-This library is created by [Vercel](https://vercel.com) and [Next.js](https://nextjs.org) team members, with contributions from:
-
-- Jared Palmer ([@jaredpalmer](https://twitter.com/jaredpalmer)) - [Vercel](https://vercel.com)
-- Shu Ding ([@shuding\_](https://twitter.com/shuding_)) - [Vercel](https://vercel.com)
-- shadcn ([@shadcn](https://twitter.com/shadcn)) - [Contractor](https://shadcn.com)
+## Acknowledgements
+Special thanks to the Mina Protocol zkIgnite program for funding the project and all contributors to this project.
