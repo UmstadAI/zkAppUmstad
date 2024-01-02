@@ -51,16 +51,17 @@ The Umstad AI Assistant offers a comprehensive range of features designed to sup
 - **OPENAI API KEY:** Application stores your OpenAI API KEY on the browser local storage. So, if you are using shared computer, please remove your key in the settings panel.
 
 # zkApps Umstad CLI AGENT
-
+TODO
 ## Features
-
+TODO
 ## Usage
-
+TODO
 ### Installation
-
+TODO
 ### Getting Started
-
+TODO
 ### Best Practices for Agent
+TODO
 
 ## Architecture
 
