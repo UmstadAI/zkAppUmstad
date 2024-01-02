@@ -50,12 +50,24 @@ The Umstad AI Assistant offers a comprehensive range of features designed to sup
 - **Data Privacy:** We store your conversations in the KV db. Do not share confidentials, private keys etc. We are not responsible for Vercel's security.
 - **OPENAI API KEY:** Application stores your OpenAI API KEY on the browser local storage. So, if you are using shared computer, please remove your key in the settings panel.
 
-## Getting Started
-To start using Umstad AI Assistant, simply access our web application and type your query in the chat window. Our AI will guide you through the rest.
+# zkApps Umstad CLI AGENT
 
-## Support
+## Features
+
+## Usage
+
+### Installation
+
+### Getting Started
+
+### Best Practices for Agent
+
+## Architecture
+
+
+# Support
 For any technical issues or further inquiries, please contact our support team at [berkingurcan@gmail.com](mailto:berkingurcan@gmail.com).
 
 
-## Acknowledgements
+# Acknowledgements
 Special thanks to the Mina Protocol zkIgnite program for funding the project and all contributors to this project.
