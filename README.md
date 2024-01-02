@@ -6,7 +6,7 @@ zkApps Umstad AI Assistant, your expert guide in the world of MINA Protocol, o1j
 - **Web Application Chatbot:** zkappsumstad.com
 - **CLI Agent:** DOWNLOAD LINK HERE!
 
-# zkApps Umstad Chatbot
+# zkApps Umstad Chatbot
 ## Features
 
 The Umstad AI Assistant offers a comprehensive range of features designed to support developers in various aspects of the MINA Protocol and o1js:
