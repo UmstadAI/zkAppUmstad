@@ -12,6 +12,7 @@ from zkappumstad.tools import (
     read_reference_tool,
     code_tool,
     command_tool,
+    prd_tool,
 )
 from zkappumstad.prompt import SYSTEM_PROMPT
 
@@ -159,6 +160,31 @@ def build_code(history):
     return False
 
 
+def prepare_prd(history):
+    """
+    Prepare PRD using the prd tool.
+    """
+    try:
+        message = prd_tool.function(history=history)
+        history.append(
+            {
+                "role": "assistant",
+                "content": None,
+                "function_call": {"name": prd_tool.name, "arguments": "{}"},
+            }
+        )
+        history.append(
+            {
+                "role": "function",
+                "name": prd_tool.name,
+                "content": message,
+            }
+        )
+        return ToolMessage(prd_tool.message, "TOOL_MESSAGE")
+    except Exception as e:
+        return ToolMessage("Error preparing PRD.", "TOOL_MESSAGE")
+
+
 CODE_TOOLS = set([code_tool.name, writer_tool.name, reader_tool.name])
 
 
@@ -182,6 +208,7 @@ def clean_code_tools(history):
 def code_runner(history, max_iterations=3) -> Generator[str, None, None]:
     yield fetch_code_context(history)
     yield read_references(history)
+    yield prepare_prd(history)
     for i in range(max_iterations):
         yield write_code(history)
         build_success = build_code(history)
