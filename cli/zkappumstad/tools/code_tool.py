@@ -1,5 +1,4 @@
 import os
-import pinecone
 import requests
 
 from .tool import Tool
@@ -30,16 +29,6 @@ function_description = {
 function_messages = "Fetching context about code snippets..."
 
 
-def get_text_embeddings(query, model_name="text-embedding-ada-002"):
-    """Create text embeddings for a given query."""
-    try:
-        embeddings = client.embeddings.create(input=query, model=model_name)
-        return embeddings.data[0].embedding
-    except Exception as e:
-        print(f"Error in generating embeddings: {e}")
-        return None
-
-
 def format_results(matches):
     """Format the query results for display."""
     filtered_matches = [match for match in matches if match["score"] > 0.25]
@@ -55,10 +44,6 @@ def format_results(matches):
 
 def run_tool(query=""):
     """Run the query tool with the given parameters."""
-    embedding = get_text_embeddings(query)
-    if embedding is None:
-        return "Failed to generate embeddings."
-
     matches = query_index(tool=function_description.name, query=query)
     if not matches:
         return "No matches found in the database for the query: " + query
