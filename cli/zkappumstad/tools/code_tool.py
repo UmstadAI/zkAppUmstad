@@ -21,27 +21,13 @@ function_description = {
 function_messages = "Fetching context about code snippets..."
 
 
-def format_results(matches):
-    """Format the query results for display."""
-    filtered_matches = [match for match in matches if match["score"] > 0.25]
-    formatted_texts = []
-    for i, match in enumerate(filtered_matches):
-        metadata = match["metadata"]
-        title = metadata.get("title", "")
-        text = metadata.get("text", "")
-        formatted_text = f"## Result {i + 1}:\n{title}\n{text}"
-        formatted_texts.append(formatted_text)
-    return "\n".join(formatted_texts)
-
-
 def run_tool(query=""):
     """Run the query tool with the given parameters."""
-    matches = query_index(tool=function_description.name, query=query)
+    matches = query_index(tool="search_for_code_context", query=query)
     if not matches:
         return "No matches found in the database for the query: " + query
 
-    formatted_text = format_results(matches)
-    return formatted_text
+    return matches
 
 
 code_tool = Tool(
