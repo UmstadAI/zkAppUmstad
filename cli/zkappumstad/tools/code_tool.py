@@ -1,5 +1,6 @@
 import os
 import pinecone
+import requests
 
 from .tool import Tool
 
@@ -7,12 +8,6 @@ from openai import OpenAI
 from dotenv import load_dotenv, find_dotenv
 
 load_dotenv(find_dotenv(".env.local"))
-
-pinecone_api_key = os.getenv("PINECONE_API_KEY") or "YOUR_API_KEY"
-pinecone_env = os.getenv("PINECONE_ENVIRONMENT") or "YOUR_ENV"
-vector_type = os.getenv("CODE_VECTOR_TYPE") or "VECTOR_TYPE"
-
-pinecone.init(api_key=pinecone_api_key, environment=pinecone_env)
 
 client = OpenAI()
 
@@ -44,21 +39,20 @@ def get_text_embeddings(query, model_name="text-embedding-ada-002"):
         return None
 
 
-def query_index(embedding, index_name, top_k=5, vector_type=vector_type):
-    """Query the index with the given embedding."""
-    try:
-        index = pinecone.Index(index_name)
-        query_results = index.query(
-            vector=embedding,
-            top_k=top_k,
-            filter={"vector_type": vector_type},
-            include_metadata=True,
-        )
-        return query_results.to_dict()["matches"]
-    except Exception as e:
-        print(f"Error in querying index: {e}")
-        return []
+def query_index(tool, query):
+    url = 'https://zkappsumstad.com/api/embeddings'
 
+    payload = {
+        'tool': tool,
+        'query': query
+    }
+
+    response = requests.post(url, json=payload)
+    if response.status_code == 200:
+        return response.body
+    else:
+        return {"error": f"Request failed with status code {response.status_code}"}
+    
 
 def format_results(matches):
     """Format the query results for display."""
@@ -73,13 +67,13 @@ def format_results(matches):
     return "\n".join(formatted_texts)
 
 
-def run_tool(query="", vector_type=vector_type):
+def run_tool(query=""):
     """Run the query tool with the given parameters."""
     embedding = get_text_embeddings(query)
     if embedding is None:
         return "Failed to generate embeddings."
 
-    matches = query_index(embedding, "zkappumstad", vector_type=vector_type)
+    matches = query_index(tool=function_description.name, query=query)
     if not matches:
         return "No matches found in the database for the query: " + query
 
