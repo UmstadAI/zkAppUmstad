@@ -50,7 +50,7 @@ def query_index(tool, query):
         response = requests.post(url, json=payload)
         if response.status_code == 200:
             try:
-                return response.json()
+                return response.text
             except ValueError as e:
                 return {"error": f"JSON decoding failed: {str(e)}", "response": response.text}
         else:
