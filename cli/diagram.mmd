@@ -19,43 +19,22 @@ stateDiagram-v2
 
     state CoderAgent {
         [*] --> CodeRunner
-        state CodeTools {
-            state CodeSearchTool
-            state CodeReviewTool
+        CodeRunner --> SearchCodeExamples
+        SearchCodeExamples --> ReadReferences
+        ReadReferences --> BuildLoop
+        state BuildLoop {
+            state WriteCode
             state CodeBuildTool
-            [*] --> CodeSearchTool
-            [*] --> CodeReviewTool
-            [*] --> CodeBuildTool
-            CodeSearchTool --> [*]
-            CodeReviewTool --> [*]
+            [*] --> WriteCode
+            WriteCode --> CodeBuildTool
+            CodeBuildTool --> WriteCode
             CodeBuildTool --> [*]
         }
-        CodeRunner --> CodeTools
-        CodeTools --> CodeRunner
     }
     ChatAgent --> CoderAgent
     CoderAgent --> ChatAgent
 
     ChatAgent --> Output
     
-    state TesterAgent {
-        [*] --> TestRunner
-        state TestTools {
-            state TestCommandTool
-            state TestReviewTool
-            state IssueSearchTool
-            [*] --> TestSearchTool
-            [*] --> TestReviewTool
-            [*] --> IssueSearchTool
-            TestSearchTool --> [*]
-            TestReviewTool --> [*]
-            IssueSearchTool --> [*]
-        }
-        TestRunner --> TestTools
-        TestTools --> TestRunner
-    }
-
-    ChatAgent --> TesterAgent
-    TesterAgent --> ChatAgent
 
     Output --> [*]
