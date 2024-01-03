@@ -28,7 +28,9 @@ function_messages = "Fetching context about Projects..."
 
 def run_tool(query="", project_name=None):
     """Run the search tool with the provided query."""
-    matches = query_project(tool="search_for_project_context", query=query, project_name=project_name)
+    matches = query_project(
+        tool="search_for_project_context", query=query, project_name=project_name
+    )
     if not matches:
         return "No matches found."
 

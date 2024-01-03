@@ -20,12 +20,13 @@ function_description = {
 
 function_messages = "Fetching context about mina docs..."
 
+
 def run_tool(query=""):
     """Run the search tool with the provided query."""
     matches = query_index(tool="search_for_context", query=query)
     if not matches:
         return "No matches found."
-    
+
     return matches
 
 

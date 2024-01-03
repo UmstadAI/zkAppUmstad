@@ -26,11 +26,7 @@ def run_tool(directory=basedir):
         if not os.path.exists(directory):
             return f"The directory '{directory}' does not exist."
 
-        ts_files = [
-            f
-            for f in os.listdir(directory)
-            if f.endswith(".ts")
-        ]
+        ts_files = [f for f in os.listdir(directory) if f.endswith(".ts")]
 
         code_content = ""
         for filename in ts_files:
@@ -42,7 +38,6 @@ def run_tool(directory=basedir):
                      + f"Contents of {file_path}:\n{code_content}\n"
                      + Style.RESET_ALL
                 ) """
-
 
         return code_content
 
