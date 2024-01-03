@@ -1,15 +1,7 @@
-import os
 import requests
 
 from .tool import Tool
 from .api_query import query_index
-
-from openai import OpenAI
-from dotenv import load_dotenv, find_dotenv
-
-load_dotenv(find_dotenv(".env.local"))
-
-client = OpenAI()
 
 function_description = {
     "name": "search_for_code_context",
