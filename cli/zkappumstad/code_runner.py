@@ -13,6 +13,7 @@ from zkappumstad.tools import (
     code_tool,
     command_tool,
     prd_tool,
+    issue_tool,
 )
 from zkappumstad.prompt import SYSTEM_PROMPT
 
@@ -185,6 +186,33 @@ def prepare_prd(history):
         return ToolMessage("Error preparing PRD.", "TOOL_MESSAGE")
 
 
+def get_issue(history):
+    """
+    Get issue using the issue tool.
+    """
+    try:
+        message = issue_tool.function(query=history[-1]["content"])
+        if not message or len(message) == 0:
+            return ToolMessage("No relevant issues on Github", "TOOL_MESSAGE")
+        history.append(
+            {
+                "role": "assistant",
+                "content": None,
+                "function_call": {"name": issue_tool.name, "arguments": "{}"},
+            }
+        )
+        history.append(
+            {
+                "role": "function",
+                "name": issue_tool.name,
+                "content": message,
+            }
+        )
+        return ToolMessage(issue_tool.message, "TOOL_MESSAGE")
+    except Exception as e:
+        return ToolMessage("Error getting issue.", "TOOL_MESSAGE")
+
+
 CODE_TOOLS = set([code_tool.name, writer_tool.name, reader_tool.name])
 
 
@@ -217,6 +245,7 @@ def code_runner(history, max_iterations=3) -> Generator[str, None, None]:
                 "Build failed" + ("retrying" if i < max_iterations - 1 else ""),
                 "TOOL_MESSAGE",
             )
+            yield get_issue(history)
         else:
             yield ToolMessage("Build succeeded", "TOOL_MESSAGE")
             break
