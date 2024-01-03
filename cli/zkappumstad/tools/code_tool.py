@@ -41,17 +41,22 @@ def get_text_embeddings(query, model_name="text-embedding-ada-002"):
 
 def query_index(tool, query):
     url = 'https://zkappsumstad.com/api/embeddings'
-
     payload = {
         'tool': tool,
         'query': query
     }
 
-    response = requests.post(url, json=payload)
-    if response.status_code == 200:
-        return response.body
-    else:
-        return {"error": f"Request failed with status code {response.status_code}"}
+    try:
+        response = requests.post(url, json=payload)
+        if response.status_code == 200:
+            try:
+                return response.json()
+            except ValueError as e:
+                return {"error": f"JSON decoding failed: {str(e)}", "response": response.text}
+        else:
+            return {"error": f"Request failed with status code {response.status_code}", "response": response.text}
+    except requests.exceptions.RequestException as e:
+        return {"error": f"Request failed: {str(e)}"}
     
 
 def format_results(matches):
