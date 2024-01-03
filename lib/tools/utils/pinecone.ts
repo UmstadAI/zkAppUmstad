@@ -63,7 +63,7 @@ const getMatchesFromEmbeddings = async (
         filter: {
           vector_type: vectorType,
           project_name: {
-            "$in": [`Project Name: ${project_name}`, project_name]
+            $in: [`Project Name: ${project_name}`, project_name]
           }
         },
         includeMetadata: true

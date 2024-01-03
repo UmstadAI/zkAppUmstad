@@ -8,8 +8,8 @@ export async function POST(req: Request) {
   if (!toolObject) {
     return new Response('Tool not found', { status: 404 })
   }
-  
-  const result: string = project 
+
+  const result: string = project
     ? await toolObject.callable({ query, project })
     : await toolObject.callable({ query })
   return new Response(result, { status: 200 })
