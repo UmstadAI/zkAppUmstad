@@ -3,6 +3,7 @@ import pinecone
 import requests
 
 from .tool import Tool
+from .api_query import query_index
 
 from openai import OpenAI
 from dotenv import load_dotenv, find_dotenv
@@ -38,26 +39,6 @@ def get_text_embeddings(query, model_name="text-embedding-ada-002"):
         print(f"Error in generating embeddings: {e}")
         return None
 
-
-def query_index(tool, query):
-    url = 'https://zkappsumstad.com/api/embeddings'
-    payload = {
-        'tool': tool,
-        'query': query
-    }
-
-    try:
-        response = requests.post(url, json=payload)
-        if response.status_code == 200:
-            try:
-                return response.text
-            except ValueError as e:
-                return {"error": f"JSON decoding failed: {str(e)}", "response": response.text}
-        else:
-            return {"error": f"Request failed with status code {response.status_code}", "response": response.text}
-    except requests.exceptions.RequestException as e:
-        return {"error": f"Request failed: {str(e)}"}
-    
 
 def format_results(matches):
     """Format the query results for display."""
