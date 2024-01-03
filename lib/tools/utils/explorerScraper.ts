@@ -1,4 +1,4 @@
-'use server';
+'use server'
 
 const options = {
   method: 'GET',
@@ -81,10 +81,10 @@ export async function getCurrentPrice() {
     const response = await fetch(url, {
       method: 'GET',
       headers: {
-          'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
-      mode: 'cors',
-  })
+      mode: 'cors'
+    })
 
     if (!response.ok) {
       return 'Cannot fetch the API, response is not OK'

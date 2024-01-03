@@ -11,7 +11,6 @@ import { runnables } from '@/lib/tools'
 import { OpenAIApi } from 'openai-edge'
 export const runtime = 'edge'
 
-
 export async function POST(req: Request) {
   const json = await req.json()
   const { message, previewToken } = json
@@ -49,8 +48,7 @@ export async function POST(req: Request) {
     model = 'gpt-4-1106-preview'
     const openai = new OpenAI(configuration)
 
-    const runner = openai.beta.chat.completions
-    .runTools({
+    const runner = openai.beta.chat.completions.runTools({
       stream: true,
       model,
       temperature: 0.2,
@@ -60,8 +58,8 @@ export async function POST(req: Request) {
           content: SYSTEM_PROMPT
         },
         {
-            role: 'user',
-            content: message
+          role: 'user',
+          content: message
         }
       ],
       tools: runnables
@@ -70,6 +68,9 @@ export async function POST(req: Request) {
     const stream = OpenAIStream(runner)
     return new StreamingTextResponse(stream)
   } else {
-        return NextResponse.json({ error: 'OPENAI API KEY NOT FOUND' }, { status: 500 })
-    }
+    return NextResponse.json(
+      { error: 'OPENAI API KEY NOT FOUND' },
+      { status: 500 }
+    )
+  }
 }
