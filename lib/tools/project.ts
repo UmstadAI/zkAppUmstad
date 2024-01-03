@@ -52,9 +52,9 @@ async function formatResults(matches: ScoredPineconeRecord[]) {
   return results.join('\n')
 }
 
-async function runTool(args: { query: string }): Promise<string> {
+async function runTool(args: { query: string, project_name?: string }): Promise<string> {
   const embeddings = await getEmbeddings(args.query)
-  const matches = await getMatchesFromEmbeddings(embeddings, 3, VECTOR_TYPE)
+  const matches = await getMatchesFromEmbeddings(embeddings, 3, VECTOR_TYPE, args.project_name)
 
   return formatResults(matches)
 }
