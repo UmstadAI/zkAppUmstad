@@ -8,7 +8,6 @@ import { SYSTEM_PROMPT } from '../chat/prompts'
 import { validateApiKey } from '@/lib/utils'
 import { runnables } from '@/lib/tools'
 
-import { OpenAIApi } from 'openai-edge'
 export const runtime = 'edge'
 
 export async function POST(req: Request) {
