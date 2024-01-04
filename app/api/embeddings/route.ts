@@ -2,7 +2,6 @@ import { tools } from '@/lib/tools'
 import { kv } from '@vercel/kv'
 import { Ratelimit } from '@upstash/ratelimit'
 
-
 export async function POST(req: Request) {
   const json = await req.json()
   const { tool, query, project } = json
