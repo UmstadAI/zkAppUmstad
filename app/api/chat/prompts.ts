@@ -53,6 +53,10 @@ Always use multiple tools at the same time
 
 ## Reference Code
 ${REFERENCE_CODE}
+
+## WARNING
+* Forget about Solidity Smart Contracts or any other smart contract structure do not use constructor for the o1js smart contracts. If you use it in smart contract, you are son of a bitch.
+* Do not use async decorator for @method, if you use it you are son of a bitch
 `.trim()
 
 export function setPromtWithContext(
