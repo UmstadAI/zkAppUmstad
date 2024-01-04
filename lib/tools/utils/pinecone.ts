@@ -33,7 +33,8 @@ function isVectorType(type: string): type is VectorType {
 const getMatchesFromEmbeddings = async (
   embeddings: number[],
   topK: number,
-  vector_type: string
+  vector_type: string,
+  project_name?: string
 ): Promise<ScoredPineconeRecord<Metadata>[]> => {
   const pinecone = new Pinecone({
     environment: process.env.PINECONE_ENVIRONMENT as string,
@@ -54,19 +55,39 @@ const getMatchesFromEmbeddings = async (
 
   const index = pinecone!.Index<Metadata>(indexName)
 
-  try {
-    const queryResult = await index.query({
-      vector: embeddings,
-      topK,
-      filter: {
-        vector_type: vectorType
-      },
-      includeMetadata: true
-    })
-    return queryResult.matches || []
-  } catch (e) {
-    console.log('Error querying embeddings: ', e)
-    throw new Error(`Error querying embeddings: ${e}`)
+  if (project_name) {
+    try {
+      const queryResult = await index.query({
+        vector: embeddings,
+        topK,
+        filter: {
+          vector_type: vectorType,
+          project_name: {
+            $in: [`Project Name: ${project_name}`, project_name]
+          }
+        },
+        includeMetadata: true
+      })
+      return queryResult.matches || []
+    } catch (e) {
+      console.log('Error querying embeddings: ', e)
+      throw new Error(`Error querying embeddings: ${e}`)
+    }
+  } else {
+    try {
+      const queryResult = await index.query({
+        vector: embeddings,
+        topK,
+        filter: {
+          vector_type: vectorType
+        },
+        includeMetadata: true
+      })
+      return queryResult.matches || []
+    } catch (e) {
+      console.log('Error querying embeddings: ', e)
+      throw new Error(`Error querying embeddings: ${e}`)
+    }
   }
 }
 
