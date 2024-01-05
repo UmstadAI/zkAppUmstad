@@ -28,7 +28,8 @@ stateDiagram-v2
             state CodeBuildTool
             [*] --> WriteCode
             WriteCode --> CodeBuildTool
-            CodeBuildTool --> WriteCode
+            CodeBuildTool --> QueryDocsIssues
+            QueryDocsIssues --> WriteCode
             CodeBuildTool --> [*]
         }
     }
