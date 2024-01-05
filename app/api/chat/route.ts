@@ -3,8 +3,6 @@ import { OpenAIStream, StreamingTextResponse } from 'ai'
 import { Ratelimit } from '@upstash/ratelimit'
 import OpenAI from 'openai'
 
-import { Stream } from 'stream'
-
 import { SYSTEM_PROMPT } from './prompts'
 import { validateApiKey } from '@/lib/utils'
 import { runnables } from '@/lib/tools'
