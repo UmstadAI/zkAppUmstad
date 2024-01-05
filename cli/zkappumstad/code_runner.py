@@ -186,31 +186,67 @@ def prepare_prd(history):
         return ToolMessage("Error preparing PRD.", "TOOL_MESSAGE")
 
 
-def get_issue(history):
-    """
-    Get issue using the issue tool.
-    """
+def create_query_and_search(history):
     try:
-        message = issue_tool.function(query=history[-1]["content"])
-        if not message or len(message) == 0:
-            return ToolMessage("No relevant issues on Github", "TOOL_MESSAGE")
+        chat_completion = client.chat.completions.create(
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are a developer in the company. Check the message history written code and last build output. Then If you need to make a query on issues or documentation, you can use the following tools.",
+                },
+                *history,
+            ],
+            model="gpt-4-1106-preview",
+            temperature=0.2,
+            functions=[
+                {
+                    "name": "create_query",
+                    "description": "Search for issues on Github and official documentations of Mina and o1js.",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "issues_query": {
+                                "type": "string",
+                                "description": "The query to search for. 1-3 sentences are enough. English only.",
+                            },
+                            "documentation_query": {
+                                "type": "string",
+                                "description": "The query to search for. 1-3 sentences are enough. English only.",
+                            },
+                        },
+                    },
+                }
+            ],
+            function_call={"name": "create_query"},
+        )
+        args = chat_completion.choices[0].message.function_call.arguments
         history.append(
             {
                 "role": "assistant",
                 "content": None,
-                "function_call": {"name": issue_tool.name, "arguments": "{}"},
+                "function_call": {"name": "create_query", "arguments": args},
             }
         )
+        args = loads(args)
+        response = ""
+        issues_query = args.get("issues_query", None)
+        if issues_query:
+            response += issue_tool.function(query=issues_query)
+        documentation_query = args.get("documentation_query", None)
+        if documentation_query:
+            response += "\n" + reader_tool.function(query=documentation_query)
+        if response == "":
+            response = "No relevant issues on Github or documentation found."
         history.append(
             {
                 "role": "function",
-                "name": issue_tool.name,
-                "content": message,
+                "name": "create_query",
+                "content": response,
             }
         )
-        return ToolMessage(issue_tool.message, "TOOL_MESSAGE")
+        return ToolMessage("Query created.", "TOOL_MESSAGE")
     except Exception as e:
-        return ToolMessage("Error getting issue.", "TOOL_MESSAGE")
+        return ToolMessage("Error creating query.", "TOOL_MESSAGE")
 
 
 CODE_TOOLS = set([code_tool.name, writer_tool.name, reader_tool.name])
@@ -245,7 +281,7 @@ def code_runner(history, max_iterations=3) -> Generator[str, None, None]:
                 "Build failed" + ("retrying" if i < max_iterations - 1 else ""),
                 "TOOL_MESSAGE",
             )
-            yield get_issue(history)
+            yield create_query_and_search(history)
         else:
             yield ToolMessage("Build succeeded", "TOOL_MESSAGE")
             break
