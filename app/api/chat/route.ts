@@ -12,6 +12,7 @@ import {
   ChatCompletion,
   ChatCompletionMessage,
   ChatCompletionMessageParam,
+  ChatCompletionAssistantMessageParam,
   ChatCompletionMessageToolCall,
   ChatCompletionToolMessageParam
 } from 'openai/resources'
@@ -45,6 +46,8 @@ const addToKV = async (
     score: createdAt,
     member: `chat:${id}`
   })
+
+  return true
 }
 
 export async function POST(req: Request) {
@@ -158,8 +161,16 @@ export async function POST(req: Request) {
     .on('finalChatCompletion', (completion: ChatCompletion) => {
       const message = completion.choices[0].message
       message.tool_calls = tool_calls
-      addToKV(json.id, messages, message, userId)
     })
+    .on('finalContent', async (contentSnapshot: string) => {
+      const message: ChatCompletionAssistantMessageParam = {
+        content: contentSnapshot,
+        role: 'assistant'
+      }
+
+      await addToKV(json.id, messages, message, userId)
+    })
+
   const stream = OpenAIStream(runner)
   return new StreamingTextResponse(stream)
 }
