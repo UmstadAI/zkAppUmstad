@@ -3,6 +3,8 @@ import { OpenAIStream, StreamingTextResponse } from 'ai'
 import { Ratelimit } from '@upstash/ratelimit'
 import OpenAI from 'openai'
 
+import { Stream } from 'stream'
+
 import { SYSTEM_PROMPT } from './prompts'
 import { validateApiKey } from '@/lib/utils'
 import { runnables } from '@/lib/tools'
@@ -46,6 +48,8 @@ const addToKV = async (
     score: createdAt,
     member: `chat:${id}`
   })
+
+  return true
 }
 
 export async function POST(req: Request) {
@@ -160,13 +164,14 @@ export async function POST(req: Request) {
       const message = completion.choices[0].message
       message.tool_calls = tool_calls
     })
+    .on('finalContent', async (contentSnapshot: string) => {
+      const message: ChatCompletionAssistantMessageParam = {
+        content: contentSnapshot,
+        role: 'assistant'
+      }
 
-  const message: ChatCompletionAssistantMessageParam = {
-    content: await runner.finalContent(),
-    role: 'assistant'
-  }
-
-  addToKV(json.id, messages, message, userId)
+      await addToKV(json.id, messages, message, userId)
+    })
 
   const stream = OpenAIStream(runner)
   return new StreamingTextResponse(stream)
