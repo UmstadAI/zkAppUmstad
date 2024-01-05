@@ -124,6 +124,7 @@ export async function POST(req: Request) {
   const tool_calls: ChatCompletionMessageToolCall[] = []
   const tool_messages: ChatCompletionToolMessageParam[] = []
 
+  let message
   const runner = openai.beta.chat.completions
     .runTools({
       stream: true,
@@ -156,9 +157,12 @@ export async function POST(req: Request) {
       tool_messages.push(message)
     })
     .on('finalChatCompletion', (completion: ChatCompletion) => {
-      const message = completion.choices[0].message
+      message = completion.choices[0].message
       message.tool_calls = tool_calls
-      addToKV(json.id, messages, message, userId)
+    })
+    .on('chatCompletion', async (completion: ChatCompletion) => {
+      message = completion.choices[0].message
+      await addToKV(json.id, messages, message, userId)
     })
   const stream = OpenAIStream(runner)
   return new StreamingTextResponse(stream)
