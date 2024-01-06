@@ -1,5 +1,6 @@
 from typing import Generator
 from json import loads
+from colorama import Fore, Style
 
 from openai import OpenAI
 from dotenv import load_dotenv, find_dotenv
@@ -167,6 +168,7 @@ def prepare_prd(history):
     """
     try:
         message = prd_tool.function(history=history)
+        print(Fore.GREEN + message + Style.RESET_ALL)
         history.append(
             {
                 "role": "assistant",
