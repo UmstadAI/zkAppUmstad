@@ -271,7 +271,31 @@ def clean_code_tools(history):
     ]
 
 
-def code_runner(history, max_iterations=3) -> Generator[str, None, None]:
+def move_ref_tool_to_end(history: list[any]):
+    """
+    Move read_reference_tool to the end of the history.
+    """
+    ref_tool = [
+        message
+        for message in history
+        if message["role"] == "function" and message["name"] == read_reference_tool.name
+    ]
+    ref_tool_call = [
+        message
+        for message in history
+        if message["role"] == "assistant"
+        and message["function_call"]
+        and message["function_call"]["name"] == read_reference_tool.name
+    ]
+    if ref_tool_call:
+        history.remove(ref_tool_call[0])
+        history.remove(ref_tool[0])
+        history.append(ref_tool_call[0])
+        history.append(ref_tool[0])
+    return history
+
+
+def code_runner(history: list[any], max_iterations=3) -> Generator[str, None, None]:
     yield fetch_code_context(history)
     yield read_references(history)
     yield prepare_prd(history)
@@ -284,6 +308,7 @@ def code_runner(history, max_iterations=3) -> Generator[str, None, None]:
                 "TOOL_MESSAGE",
             )
             yield create_query_and_search(history)
+            move_ref_tool_to_end(history)
         else:
             yield ToolMessage("Build succeeded", "TOOL_MESSAGE")
             break
