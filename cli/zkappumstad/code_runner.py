@@ -102,7 +102,7 @@ def read_references(history):
         return ToolMessage("Error reading reference codes.", "TOOL_MESSAGE")
 
 
-def write_code(history):
+def write_code_or_test(history, file_type="CONTRACT"):
     """
     Write code using the writer tool.
     """
@@ -111,6 +111,7 @@ def write_code(history):
             messages=[
                 {"role": "system", "content": SYSTEM_PROMPT},
                 *history,
+                {"role": "user", "content": "Write " + file_type.lower()},
             ],
             model="gpt-4-1106-preview",
             temperature=0.2,
@@ -300,7 +301,7 @@ def code_runner(history: list[any], max_iterations=3) -> Generator[str, None, No
     yield read_references(history)
     yield prepare_prd(history)
     for i in range(max_iterations):
-        yield write_code(history)
+        yield write_code_or_test(history, file_type="CONTRACT")
         build_success = build_code(history)
         if not build_success:
             yield ToolMessage(
@@ -311,6 +312,8 @@ def code_runner(history: list[any], max_iterations=3) -> Generator[str, None, No
             move_ref_tool_to_end(history)
         else:
             yield ToolMessage("Build succeeded", "TOOL_MESSAGE")
+            yield write_code_or_test(history, file_type="TEST")
+            yield ToolMessage("Test written", "TOOL_MESSAGE")
             break
     else:
         yield ToolMessage(
