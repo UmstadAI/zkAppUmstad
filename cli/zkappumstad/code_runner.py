@@ -169,6 +169,7 @@ def prepare_prd(history):
     """
     try:
         message = prd_tool.function(history=history)
+        writer_tool.function("", message, "README")
         print(Fore.GREEN + message + Style.RESET_ALL)
         history.append(
             {
