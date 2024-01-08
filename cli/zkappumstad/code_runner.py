@@ -185,7 +185,9 @@ def prepare_prd(history):
                 "content": message,
             }
         )
-        return ToolMessage(prd_tool.message, "TOOL_MESSAGE")
+        return ToolMessage(
+            "Prepared Requirements and Pseudocode for zkApp", "TOOL_MESSAGE"
+        )
     except Exception as e:
         return ToolMessage("Error preparing PRD.", "TOOL_MESSAGE")
 

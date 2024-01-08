@@ -20,15 +20,13 @@ function_description = {
 function_messages = "Preparing Requirements and Pseudocode for zkApp"
 
 SYSTEM_PROMPT = """
-Write Requirements and Pseudocode for zkApp. Consider User's needs. Pseudocode should be written in simple english representation, not real code.
+Write Requirements  for zkApp. Consider User's needs. 
 # Output Format
 ## Requirements
 * Requirement 1
 ...
 * Requirement n
 
-## Pseudocode
-[Pseudocode here]
 """.strip()
 
 
