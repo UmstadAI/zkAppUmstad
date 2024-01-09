@@ -48,6 +48,6 @@ sure it is a part of the proof. This final point is very important, as o1js cann
 
 ## WARNINGS
 * Forget about Solidity Smart Contracts or any other smart contract structure do not use constructor for the o1js smart contracts. If you use it in smart contract, you are son of a bitch.
-* Do not use async decorator for @method, if you use it you are son of a bitch
+* Do not use async decorator for @method, if you use async you are son of a bitch!
 
 """.strip()
