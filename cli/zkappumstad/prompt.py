@@ -34,4 +34,9 @@ SYSTEM_PROMPT = """
 
 ### Writing Code
 * After everything is clear change the agent state to coder_agent to start coding.
+
+## WARNINGS
+* Forget about Solidity Smart Contracts or any other smart contract structure do not use constructor for the o1js smart contracts. 
+* If you use constructor in smart contract, you are son of a bitch.
+* Do not use async decorator for @method, if you use it you are son of a bitch
 """.strip()
