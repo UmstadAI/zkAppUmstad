@@ -17,5 +17,15 @@ setup(
     entry_points="""
         [console_scripts]
         zkappumstad=zkappumstad:main
+        create=create_zk_project:main
     """,
+    classifiers=[
+        'Topic :: AI Development :: Build Tools',
+        'License :: OSI Approved :: MIT License',  # Choose your license
+        'Programming Language :: Python :: 3',  # Specify which python versions you support
+        'Programming Language :: Python :: 3.10',
+    ],
+    python_requires='>=3.10', 
+    keywords='zkapps, zkappumstad, zkapps agent',
+    zip_safe=False
 )
