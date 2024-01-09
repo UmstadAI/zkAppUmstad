@@ -59,18 +59,19 @@ def parse_build_message(build_message: str):
         function_call={"name": "get_build_info"},
     )
     args = chat_completion.choices[0].message.function_call.arguments
-    return loads(args)
+    return loads(args)["modules"]
 
 
 def query_modules_info(modules_info: dict, modules_to_query: list[str]):
-    return {
-        module: modules_info[module]
-        for module in modules_to_query
-        if module in modules_info
-    }
+    return "\n".join(
+        [modules_info[module] for module in modules_to_query if module in modules_info]
+    )
 
 
 def get_modules_info(build_message: str):
-    modules_info = load_modules_info()
-    modules_to_query = parse_build_message(build_message)
-    return query_modules_info(modules_info, modules_to_query)
+    try:
+        modules_info = load_modules_info()
+        modules_to_query = parse_build_message(build_message)
+        return query_modules_info(modules_info, modules_to_query)
+    except Exception as e:
+        return ""

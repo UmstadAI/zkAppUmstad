@@ -15,6 +15,8 @@ from zkappumstad.tools import (
     command_tool,
     prd_tool,
     issue_tool,
+    doc_tool,
+    get_modules_info,
 )
 from zkappumstad.prompt import SYSTEM_PROMPT
 
@@ -185,9 +187,7 @@ def prepare_prd(history):
                 "content": message,
             }
         )
-        return ToolMessage(
-            "Prepared Requirements and Pseudocode for zkApp", "TOOL_MESSAGE"
-        )
+        return ToolMessage("Prepared Requirements for zkApp", "TOOL_MESSAGE")
     except Exception as e:
         return ToolMessage("Error preparing PRD.", "TOOL_MESSAGE")
 
@@ -240,7 +240,7 @@ def create_query_and_search(history):
             response += issue_tool.function(query=issues_query)
         documentation_query = args.get("documentation_query", None)
         if documentation_query:
-            response += "\n" + reader_tool.function(query=documentation_query)
+            response += "\n" + doc_tool.function(query=documentation_query)
         if response == "":
             response = "No relevant issues on Github or documentation found."
         history.append(
@@ -252,6 +252,7 @@ def create_query_and_search(history):
         )
         return ToolMessage("Query created.", "TOOL_MESSAGE")
     except Exception as e:
+        print(e)
         return ToolMessage("Error creating query.", "TOOL_MESSAGE")
 
 
@@ -273,6 +274,45 @@ def clean_code_tools(history):
             )
         )
     ]
+
+
+def add_modules_info(history, build_message: str):
+    """
+    Add modules info to history.
+    """
+    modules_info = get_modules_info(build_message)
+    # print(modules_info)
+    history.append(
+        {
+            "role": "assistant",
+            "content": None,
+            "function_call": {"name": "get_modules_info", "arguments": "{}"},
+        }
+    )
+    history.append(
+        {
+            "role": "function",
+            "name": "get_modules_info",
+            "content": modules_info,
+        }
+    )
+
+
+def clear_modules_info(history: list[any]):
+    """
+    Clear modules info from history.
+    """
+    module_info_messages = [
+        message
+        for message in history
+        if (message["role"] == "function" and message["name"] == "get_modules_info")
+        or (
+            message["role"] == "assistant"
+            and message["function_call"]["name"] == "get_modules_info"
+        )
+    ]
+    for message in module_info_messages:
+        history.remove(message)
 
 
 def move_ref_tool_to_end(history: list[any]):
@@ -311,6 +351,8 @@ def code_runner(history: list[any], max_iterations=3) -> Generator[str, None, No
                 "Build failed" + ("retrying" if i < max_iterations - 1 else ""),
                 "TOOL_MESSAGE",
             )
+            clear_modules_info(history)
+            add_modules_info(history, build_message=history[-1]["content"])
             yield create_query_and_search(history)
             move_ref_tool_to_end(history)
         else:
