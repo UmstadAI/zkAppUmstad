@@ -13,21 +13,20 @@ client = OpenAI()
 
 function_description = {
     "name": "write_prd",
-    "description": "This tool is used to write requirements and pseudocode for the zkApp.",
+    "description": "This tool is used to write requirements for the zkApp.",
     "parameters": {},
 }
 
-function_messages = "Preparing Requirements and Pseudocode for zkApp"
+function_messages = "Preparing Requirements for zkApp"
 
 SYSTEM_PROMPT = """
+Write Requirements  for zkApp. Consider User's needs. 
 # Output Format
 ## Requirements
 * Requirement 1
 ...
 * Requirement n
 
-## Pseudocode
-[Pseudocode here]
 """.strip()
 
 

@@ -76,7 +76,9 @@ while True:
         continue
 
     completion = (
-        create_completion(history, user_message) if state == 0 else code_runner(history)
+        create_completion(history, user_message)
+        if state == 0
+        else code_runner(history, max_iterations=5)
     )
     if completion is None:
         print("[bold red]Sorry, I didn't understand that.[/bold red]")

@@ -1,6 +1,7 @@
 stateDiagram-v2
     [*] --> UserInput
     UserInput --> ChatAgent
+    
     state ChatAgent {
         [*]  -->  Runner
         state RetrievalTools {
@@ -27,13 +28,13 @@ stateDiagram-v2
             state CodeBuildTool
             [*] --> WriteCode
             WriteCode --> CodeBuildTool
-            CodeBuildTool --> WriteCode
+            CodeBuildTool --> QueryDocsIssues
+            QueryDocsIssues --> WriteCode
             CodeBuildTool --> [*]
         }
     }
     ChatAgent --> CoderAgent
-    CoderAgent --> ChatAgent
-
+    CoderAgent --> Output
     ChatAgent --> Output
     
 
