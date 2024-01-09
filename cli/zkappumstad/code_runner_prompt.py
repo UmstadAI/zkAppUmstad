@@ -46,8 +46,7 @@ public outputs.
 sure it is a part of the proof. This final point is very important, as o1js cannot understand if you have made assertions correctly or not. So if you ever make custom computation, be very careful with your assertions to not have a security vulnerability inside your circuit.
 
 ## WARNINGS
-* Forget about Solidity Smart Contracts or any other smart contract structure do not use constructor for the o1js smart contracts. 
-* If you use constructor in smart contract, you are son of a bitch.
+* Forget about Solidity Smart Contracts or any other smart contract structure do not use constructor for the o1js smart contracts. If you use it in smart contract, you are son of a bitch.
 * Do not use async decorator for @method, if you use it you are son of a bitch
 
 """.strip()
