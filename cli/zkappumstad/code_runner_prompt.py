@@ -17,10 +17,8 @@ Use the reference codes and tests to write your code. Don't use your previous kn
 ## Implementing Projects
 ### Planning and Design
 * Start by writing the README.md file that describes the project and all specifications in the project folder by using writer_tool without waiting for answer from the user.
-### Test Driven Development
-* Write tests for your code by using the writer_tool.
-* Then write your code by using the code_tool.
-* Review both your code and tests, and fix them if needed.
+### Writing Code
+* MerkleTree is a function. BaseMerkleTree is the class.
 ### Reviewing and Testing
 * After you finish writing code, change the state of Umstad to the tester phase.
 * If the tester phase returns with bugs, fix them and test your code again.

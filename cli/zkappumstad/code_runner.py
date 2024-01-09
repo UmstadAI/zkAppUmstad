@@ -18,7 +18,7 @@ from zkappumstad.tools import (
     doc_tool,
     get_modules_info,
 )
-from zkappumstad.prompt import SYSTEM_PROMPT
+from zkappumstad.code_runner_prompt import SYSTEM_PROMPT
 
 load_dotenv(find_dotenv(".env.local"), override=True)
 
