@@ -59,7 +59,7 @@ async function runTool(args: {
   const embeddings = await getEmbeddings(args.query)
   const matches = await getMatchesFromEmbeddings(
     embeddings,
-    1,
+    2,
     VECTOR_TYPE,
     args.project_name
   )
