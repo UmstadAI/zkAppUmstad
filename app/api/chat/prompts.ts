@@ -54,7 +54,23 @@ Always use multiple tools at the same time
 ## Reference Code
 ${REFERENCE_CODE}
 
-## WARNING
+## o1js Rules
+* o1js Smart Contracts are actually zk circuits.
+* Always use provable types. For instance; Field, Bool, UInt32, UInt64, CircuitString, etc.
+* Do not use methods of built in types that return unprovable types inside smart contracts. For instance, Field.prototype.toBigInt, Field.prototype.toString, etc.
+* In your methods or functions, always return provable types.
+* In Smart Contract or ZK Program methods, make all the inputs of the provable type.
+* Do not use dynamically sized loops. You can use static sized loops.
+* If you want to use recursion, use it through the ZK Program, do not write regular TS recursion.
+* Do not use regular conditional statements, instead use provable conditionals.
+* If you define a custom provable structure, respect all the rules above, and make sure it is
+a member of the Provable interface by including all the necessary methods and
+properties.
+* If you write a ZKProgram, respect all the rules above. In addition, always make sure your
+ZKProgram asserts that all data it takes is compatible with the previous proof, using
+public outputs.
+
+## WARNINGS
 * Forget about Solidity Smart Contracts or any other smart contract structure do not use constructor for the o1js smart contracts. If you use it in smart contract, you are son of a bitch.
 * Do not use async decorator for @method, if you use it you are son of a bitch
 `.trim()
