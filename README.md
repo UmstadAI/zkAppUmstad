@@ -130,11 +130,29 @@ Currently uses our own API to send queries. No need to post your OPENAI API KEY.
 - Specify your project requirements in detail and collaborate with the AI Agent.
 - In order to query about issues, errors etc. start with "I have an issue...".
 
+# Eval
+TODO
 
 # Support
 
 For any technical issues or further inquiries, please contact our support team at [berkingurcan@gmail.com](mailto:berkingurcan@gmail.com).
 
+# Side Projects & Future Applications
+
+### Helper Projects
+
+- **[Discord Scraper](https://github.com/berkingurcan/discord-qa-scrapper):** Project for scraping discord data
+- **[Vector Uploaders](https://github.com/UmstadAI/uploaders):** Data processor and uploaders
+- **[Thread Uploader](https://github.com/UmstadAI/Thread-Uploader)**: Thread Uploader for Discord Mods
+
+### Side & Future Projects
+
+- **[Umstad API](https://github.com/UmstadAI/zkAppUmstad/blob/main/app/api/embeddings/route.ts):** If you don't want to use zkappumstad applications for any reason, you can use the API for your own purposes by POSTING API KEY
+- **Discord Umstad(TODO):** Discord Bot which uses Umstad API, just uses Discord Chat Interface.
+- **Beginner Template Umstad(TODO):** Uses 20+ Perfect Smart Contract and provides them with very changes.
+- **Umstad the Teacher(TODO):** Interactive learning platform(think about cryptozombies) which utilizes Beginner Template Umstad.
+
 # Acknowledgements
 
-Special thanks to the Mina Protocol zkIgnite program for funding the project and all contributors to this project.
+Special thanks to the Mina Protocol zkIgnite program for funding the project and all contributors to this project. 
+Very special thanks to [Yunus](https://github.com/yunus433), [Ilya](https://github.com/iluxonchik/), [Filip](https://github.com/ffilipovicc98), [DFST](https://github.com/dfstio), [Santiago](https://github.com/scammi) for all feedbacks and contributions.
