@@ -57,7 +57,8 @@ def main(
     evaluate_results: bool = False,
     eval_class: str = "openai",
 ):
-    eval_output_path = f"data/eval_output_{eval_class}.csv"
+    os.makedirs("eval_output", exist_ok=True)
+    eval_output_path = f"eval_output/{eval_class}.csv"
     if save_results:
         total_rows = 0
         total_latency = 0
