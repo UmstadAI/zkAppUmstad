@@ -4,8 +4,8 @@ with open("requirements.txt") as f:
     requirements = f.read().splitlines()
 
 setup(
-    name="zkumstad",
-    version="0.1.2",
+    name="zkappumstad",
+    version="0.1.5",
     author="Berkin Gurcan, Dogukan Akar",
     author_email="berkingurcan@gmail.com, dogukanakarc@gmail.com",
     description="CLI AI Agent for zkApps Developers",
@@ -16,8 +16,8 @@ setup(
     install_requires=requirements,
     entry_points="""
         [console_scripts]
-        zkumstad-start=zkappumstad:main
-        zkumstad-create=create_zk_project:main
+        zkumstad-start=zkappumstad.__main__:main
+        zkumstad-create=zkappumstad.create:run_zk_command
     """,
     classifiers=[
         'Topic :: Software Development :: Build Tools',
