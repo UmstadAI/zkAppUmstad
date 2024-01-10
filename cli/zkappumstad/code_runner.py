@@ -342,7 +342,7 @@ def move_ref_tool_to_end(history: list[any]):
 def code_runner(history: list[any], max_iterations=3) -> Generator[str, None, None]:
     yield fetch_code_context(history)
     yield read_references(history)
-    #yield prepare_prd(history)
+    # yield prepare_prd(history)
     for i in range(max_iterations):
         yield write_code_or_test(history, file_type="CONTRACT")
         build_success = build_code(history)
