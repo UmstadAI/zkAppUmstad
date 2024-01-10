@@ -2,7 +2,7 @@
 
 ## Introduction
 
-zkApps Umstad AI Assistant, your expert guide in the world of MINA Protocol, o1js. Designed to assist developers, this chatbot provides in-depth assistance with zkApps o1js which is specifically designed to assist developers working on zkApps development powered by the GPT language model. This project includes two main application:
+zkApps Umstad AI Assistant, your expert guide in the world of MINA Protocol, o1js. This agent provides in-depth assistance with zkApps o1js which is specifically designed to assist developers working on zkApps development powered by the GPT language model. This project includes two main application:
 
 - **Web Application Chatbot:** [zkappsumstad.com](zkappsumstad.com)
 - **CLI Agent:** [zkappumstad](https://pypi.org/project/zkappumstad/)
