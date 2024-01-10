@@ -97,7 +97,7 @@ zkumstad-start
 ## Features & Architecture
 Currently uses our own API to send queries. No need to post your OPENAI API KEY. However, it will be needed to POST the query with OPENAI API KEY later on.
 
-![Architecture](diagram.png)
+![Architecture](cli/diagram.png)
 #### Retrieval Tools
 - Documentations
 - Code Snippets
