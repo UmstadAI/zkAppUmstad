@@ -3,7 +3,9 @@ from dotenv import load_dotenv
 import os
 import argparse
 from evaluables import OpenAIEvaluable, BaseEvaluable
-from evaluate_results import evaluate_results
+from evaluate_results import evaluate_results_gpt
+from datetime import datetime
+from tqdm import tqdm
 
 load_dotenv(".env.local")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
@@ -12,9 +14,40 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 def read_eval_data(eval_data_path: str):
     with open(eval_data_path, "r", encoding="utf-8") as csvfile:
         reader = csv.DictReader(csvfile)
-        print(reader.fieldnames)
         for row in reader:
             yield row
+
+
+def append_to_eval_output(
+    eval_output_path: str, question: str, answer: str, expected: str, latency: float
+):
+    if not os.path.exists(eval_output_path):
+        with open(eval_output_path, "w", encoding="utf-8") as csvfile:
+            writer = csv.DictWriter(
+                csvfile, fieldnames=["question", "answer", "expected", "latency"]
+            )
+            writer.writeheader()
+            writer.writerow(
+                {
+                    "question": question,
+                    "answer": answer,
+                    "expected": expected,
+                    "latency": latency,
+                }
+            )
+        return
+    with open(eval_output_path, "a", encoding="utf-8") as csvfile:
+        writer = csv.DictWriter(
+            csvfile, fieldnames=["question", "answer", "expected", "latency"]
+        )
+        writer.writerow(
+            {
+                "question": question,
+                "answer": answer,
+                "expected": expected,
+                "latency": latency,
+            }
+        )
 
 
 def main(
@@ -26,23 +59,33 @@ def main(
 ):
     eval_output_path = f"data/eval_output_{eval_class}.csv"
     if save_results:
-        for row in read_eval_data(eval_data_path):
-            print(row)
+        total_rows = 0
+        total_latency = 0
+        print("Fetching results from", eval_class)
+        rows = list(read_eval_data(eval_data_path))
+        for row in tqdm(rows):
             question = row["question"]
-            print("Input:", question)
-            print("Output:", evaluable(question))
-            print("Expected:", row["expected"])
-            print()
-            break
+            now = datetime.now()
+            answer = evaluable(question)
+            latency = (datetime.now() - now).microseconds
+            total_rows += 1
+            total_latency += latency
+            expected = row["expected"]
+            append_to_eval_output(eval_output_path, question, answer, expected, latency)
+        print("Average latency:", total_latency / total_rows, "microseconds")
     if evaluate_results:
-        for row in read_eval_data(eval_output_path):
+        print("Evaluating results from", eval_class)
+        total_rows = 0
+        total_score = 0
+        rows = list(read_eval_data(eval_output_path))
+        for row in tqdm(rows):
             question = row["question"]
             answer = row["answer"]
             expected = row["expected"]
-            score = evaluate_results(question, answer, expected)
-            print("Score:", score)
-            print()
-            break
+            score = evaluate_results_gpt(question, answer, expected)
+            total_rows += 1
+            total_score += score
+        print("Accuracy:", total_score / total_rows * 100, "%")
 
 
 if __name__ == "__main__":

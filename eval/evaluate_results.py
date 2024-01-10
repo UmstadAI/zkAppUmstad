@@ -8,11 +8,11 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 client = OpenAI(api_key=OPENAI_API_KEY)
 
 
-def evaluate_results(question: str, answer: str, expected: str) -> float:
+def evaluate_results_gpt(question: str, answer: str, expected: str) -> float:
     chat_completion = client.chat.completions.create(
         messages=[
             {
-                "role": "SYSTEM",
+                "role": "system",
                 "content": "Given a set of questions and answers, evaluate the answer using the expected answer as a reference.",
             },
             {

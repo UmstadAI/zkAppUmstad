@@ -12,9 +12,13 @@ class OpenAIEvaluable(BaseEvaluable):
         chat_completion = self.client.chat.completions.create(
             messages=[
                 {
+                    "role": "system",
+                    "content": "Answer questions about the Mina Protocol and o1js. Answer shortly.",
+                },
+                {
                     "role": "user",
                     "content": message,
-                }
+                },
             ],
             model=self.model,
         )
