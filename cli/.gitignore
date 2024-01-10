@@ -1,6 +1,5 @@
 venv/
 .env*
 **/__pycache__/
-*.md
 dist/
 zkappumstad.egg-info/
