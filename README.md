@@ -65,6 +65,9 @@ The Umstad AI Assistant offers a comprehensive range of features designed to sup
 
 Introducing the zkApps Umstad AI Agent, your specialized assistant in the realm of the MINA Protocol and o1js. This agent, powered by the advanced GPT language model, is tailored to support developers in creating, debugging and testing zkApps smart contracts. It offers comprehensive guidance and expertise specifically for those working on zkApps development within the MINA ecosystem.
 
+## Requirements
+- Python 10 or above
+
 ## Installation
 
 ```bash
@@ -114,6 +117,7 @@ Currently uses our own API to send queries. No need to post your OPENAI API KEY.
 #### Commands
 - ```zkumstad-start```: Runs the tool.
 - ```zkumstad-create```: Initialize zkapps project named initial_project.
+- ```zkumstad-help```: Display commands
 - You can save your conversations by writing 'save' to console as a Markdown file.
 - You can reset the conversation by writing 'reset'.
 - Write 'quit' to terminate the agent.
