@@ -2,7 +2,7 @@ import csv
 from dotenv import load_dotenv
 import os
 import argparse
-from evaluables import OpenAIEvaluable, BaseEvaluable
+from evaluables import OpenAIEvaluable, BaseEvaluable, UmstadEvaluable
 from evaluate_results import evaluate_results_gpt
 from datetime import datetime
 from tqdm import tqdm
@@ -116,7 +116,11 @@ if __name__ == "__main__":
         evaluable = OpenAIEvaluable(api_key=OPENAI_API_KEY)
     elif args.eval_class == "gpt-4":
         evaluable = OpenAIEvaluable(api_key=OPENAI_API_KEY, model="gpt-4-1106-preview")
-
+    elif args.eval_class == "umstad":
+        evaluable = UmstadEvaluable(api_key=OPENAI_API_KEY)
+    if evaluable is None:
+        print("Invalid evaluable class")
+        exit(1)
     main(
         evaluable,
         args.data_path,
