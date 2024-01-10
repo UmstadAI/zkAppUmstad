@@ -1,5 +1,4 @@
 ![zkappsumstad](umstadbanner.png)
-# zkApps Umstad AI Assistant
 
 ## Introduction
 
