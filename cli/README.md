@@ -53,6 +53,7 @@ Currently uses our own API to send queries. No need to post your OPENAI API KEY.
 #### Commands
 - ```zkumstad-start```: Runs the tool.
 - ```zkumstad-create```: Initialize zkapps project named initial_project.
+- ```zkumstad-help```: Displays commands 
 - You can save your conversations by writing 'save' to console as a Markdown file.
 - You can reset the conversation by writing 'reset'.
 - Write 'quit' to terminate the agent.
