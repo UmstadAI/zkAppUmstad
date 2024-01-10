@@ -5,7 +5,7 @@ with open("requirements.txt") as f:
 
 setup(
     name="zkappumstad",
-    version="0.1.6",
+    version="0.2.0",
     author="Berkin Gurcan, Dogukan Akar",
     author_email="berkingurcan@gmail.com, dogukanakarc@gmail.com",
     description="CLI AI Agent for zkApps Developers",
@@ -18,6 +18,7 @@ setup(
         [console_scripts]
         zkumstad-start=zkappumstad.__main__:main
         zkumstad-create=zkappumstad.create:run_zk_command
+        zkumstad-help=zkappumstad.zkappumstad:help
     """,
     classifiers=[
         'Topic :: Software Development :: Build Tools',

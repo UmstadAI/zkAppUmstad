@@ -97,5 +97,12 @@ def main():
         markdown_history.append(f"**Umstad:** {response_text} \n")
 
 
+def help():
+    print("Usage: zkumstad-[command]")
+    print("Commands:")
+    print("  start    Start the application")
+    print("  help     Display this help message")
+    print("  create   Creates zkapps project in current folder")
+
 if __name__ == "__main__":
     main()
