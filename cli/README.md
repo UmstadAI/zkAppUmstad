@@ -48,14 +48,20 @@ zkumstad-start
 - Debugs errors
 - Fix and retry code
 
-
 ## Usage
+#### Commands
+- ```zkumstad-start```: Runs the tool.
+- ```zkumstad-create```: Initialize zkapps project named initial_project.
+- You can save your conversations by writing 'save' to console as a Markdown file.
+- You can reset the conversation by writing 'reset'.
+- Write 'quit' to terminate the agent.
 
-
+#### Specifications
+- You Must Delete smart contract and test files from src folder before creating new contract in order to build.
 
 ### Best Practices for Agent
-
-TODO
+- Specify your project requirements in detail and collaborate with the AI Agent.
+- In order to query about issues, errors etc. start with "I have an issue...".
 
 
 # Support
