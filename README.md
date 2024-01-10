@@ -138,7 +138,13 @@ Currently uses our own API to send queries. No need to post your OPENAI API KEY.
 - In order to query about issues, errors etc. start with "I have an issue...".
 
 # Eval
-TODO
+Evaluation dataset is prepared for Mina Docs to evaluate the performance of the agent. It is compared against chatgpt.
+table below shows the results of the evaluation, agent, accuracy, average latency.
+
+| Agent | Accuracy | Latency |
+| --- | --- | --- |
+| chatgpt-3.5 | 67.5% | 522046.0 microseconds |
+| chatgpt 4 | 69.5% | 488430.6 microseconds |
 
 # Support
 

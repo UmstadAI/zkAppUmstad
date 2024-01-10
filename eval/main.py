@@ -92,7 +92,10 @@ def main(
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--eval_class", type=str, default="openai", help="openai or umstad"
+        "--eval_class",
+        type=str,
+        default="openai",
+        help="openai or umstad or gpt-4",
     )
     parser.add_argument("--data_path", type=str, default="data/eval_data.csv")
     parser.add_argument(
@@ -108,9 +111,16 @@ if __name__ == "__main__":
         help="Whether to evaluate results from that evaluable",
     )
     args = parser.parse_args()
+    evaluable = None
+    if args.eval_class == "openai":
+        evaluable = OpenAIEvaluable(api_key=OPENAI_API_KEY)
+    elif args.eval_class == "gpt-4":
+        evaluable = OpenAIEvaluable(api_key=OPENAI_API_KEY, model="gpt-4-1106-preview")
+
     main(
-        OpenAIEvaluable(api_key=OPENAI_API_KEY),
+        evaluable,
         args.data_path,
         save_results=args.save_results,
         evaluate_results=args.evaluate_results,
+        eval_class="gpt-4-1106-preview",
     )

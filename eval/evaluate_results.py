@@ -24,7 +24,7 @@ Expected: {expected}
 """.strip(),
             },
         ],
-        model="gpt-3.5-turbo",
+        model="gpt-4-1106-preview",
         functions=[
             {
                 "name": "report_answer",
