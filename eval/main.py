@@ -68,12 +68,12 @@ def main(
             question = row["question"]
             now = datetime.now()
             answer = evaluable(question)
-            latency = (datetime.now() - now).microseconds
+            latency = (datetime.now() - now).total_seconds()
             total_rows += 1
             total_latency += latency
             expected = row["expected"]
             append_to_eval_output(eval_output_path, question, answer, expected, latency)
-        print("Average latency:", total_latency / total_rows, "microseconds")
+        print("Average latency:", total_latency / total_rows, "seconds")
     if evaluate_results:
         print("Evaluating results from", eval_class)
         total_rows = 0

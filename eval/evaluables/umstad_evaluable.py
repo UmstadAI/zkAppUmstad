@@ -25,12 +25,9 @@ class UmstadEvaluable(BaseEvaluable):
             json=data,
             stream=True,
         )
-        # aggregate response from stream
         response_text = ""
         for chunk in response.iter_content(chunk_size=None):
-            print(chunk)
             response_text += chunk.decode("utf-8")
-            break
         return response_text
 
     def evaluate(self, message) -> str:
