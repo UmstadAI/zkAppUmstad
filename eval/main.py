@@ -126,5 +126,5 @@ if __name__ == "__main__":
         args.data_path,
         save_results=args.save_results,
         evaluate_results=args.evaluate_results,
-        eval_class="gpt-4-1106-preview",
+        eval_class=args.eval_class,
     )

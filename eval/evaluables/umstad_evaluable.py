@@ -11,21 +11,28 @@ class UmstadEvaluable(BaseEvaluable):
         self.api_key = api_key
         self.session = session()
 
-    def make_request(self, message: str) -> dict:
+    def make_request(self, message: str) -> str:
         data = {
             "previewToken": self.api_key,
             "message": message,
         }
         response = self.session.post(
-            f"https://zkappsumstad.com/api/evalapi",
+            "https://zkappsumstad.com/api/evalapi",
             headers={
                 "Authorization": f"Bearer {self.api_key}",
                 "Content-Type": "application/json",
             },
             json=data,
+            stream=True,
         )
-        return response.json()
+        # aggregate response from stream
+        response_text = ""
+        for chunk in response.iter_content(chunk_size=None):
+            print(chunk)
+            response_text += chunk.decode("utf-8")
+            break
+        return response_text
 
     def evaluate(self, message) -> str:
         response = self.make_request(message)
-        return response["response"]
+        return response
