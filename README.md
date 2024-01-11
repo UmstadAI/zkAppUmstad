@@ -143,8 +143,9 @@ table below shows the results of the evaluation, agent, accuracy, average latenc
 
 | Agent | Accuracy | Latency |
 | --- | --- | --- |
-| chatgpt-3.5 | 67.5% | 522046.0 microseconds |
-| chatgpt 4 | 69.5% | 488430.6 microseconds |
+| chatgpt-3.5 | 51.5% | 1.969 seconds |
+| chatgpt 4 | 69.5% | 10.594 seconds |
+| umstad | 79.75% | 27.796 seconds |
 
 # Support
 
