@@ -172,4 +172,5 @@ For any technical issues or further inquiries, please contact our support team a
 # Acknowledgements
 
 Special thanks to the Mina Protocol zkIgnite program for funding the project and all contributors to this project. 
+
 Very special thanks to [Yunus](https://github.com/yunus433), [Ilya](https://github.com/iluxonchik/), [Filip](https://github.com/ffilipovicc98), [DFST](https://github.com/dfstio), [Santiago](https://github.com/scammi) for all feedbacks and contributions.
