@@ -167,6 +167,7 @@ For any technical issues or further inquiries, please contact our support team a
 - **Discord Umstad(TODO):** Discord Bot which uses Umstad API, just uses Discord Chat Interface.
 - **Beginner Template Umstad(TODO):** Uses 20+ Perfect Smart Contract and provides them with very changes.
 - **Umstad the Teacher(TODO):** Interactive learning platform(think about cryptozombies) which utilizes Beginner Template Umstad.
+- **GPT Store Umstad(TODO):** Umstad in the GPT Store
 
 # Acknowledgements
 
