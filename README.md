@@ -144,8 +144,10 @@ table below shows the results of the evaluation, agent, accuracy, average latenc
 | Agent | Accuracy | Latency |
 | --- | --- | --- |
 | chatgpt-3.5 | 51.5% | 1.969 seconds |
-|chatgpt-4 | 69.5% | 10.594 seconds |
+| chatgpt-4 | 69.5% | 10.594 seconds |
 | umstad | 79.75% | 27.796 seconds |
+
+Here we saw that our agent is more accurate than chatgpt-4 but slower. Because it is using chatgpt-4 and some additional tools to get more accurate results. Chatgpt-3.5 is the fastest but least accurate. We are planning to improve the speed of the agent.
 
 # Support
 
