@@ -140,8 +140,11 @@ Currently uses our own API to send queries. No need to post your OPENAI API KEY.
 # Umstad API
 If you don't want to use our applications for any reason, you can use the API with your API Key to use Umstad. Or you can use the api for your applications :)
 
+## Endpoint
+```http://zkappsumstad.com/api/evalapi```
+
 ## HTTP Method
-`POST`
+`POST`: ```http://zkappsumstad.com/api/evalapi```
 ## Parameters
 - `message` (string) - Your message, question etc. to Umstad. (Required)
 - `previewToken` (string) - OPENAI API KEY which has access to gpt-4 for more information please visit the [openai website](https://platform.openai.com/docs/models/gpt-4-and-gpt-4-turbo). (Required)
