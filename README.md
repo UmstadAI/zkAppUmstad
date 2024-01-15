@@ -137,6 +137,27 @@ Currently uses our own API to send queries. No need to post your OPENAI API KEY.
 - Specify your project requirements in detail and collaborate with the AI Agent.
 - In order to query about issues, errors etc. start with "I have an issue...".
 
+# Umstad API
+If you don't want to use our applications for any reason, you can use the API with your API Key to use Umstad. Or you can use the api for your applications :)
+
+## HTTP Method
+`POST`
+## Parameters
+- `message` (string) - Your message, question etc. to Umstad. (Required)
+- `previewToken` (string) - OPENAI API KEY which has access to gpt-4 for more information please visit the [openai website](https://platform.openai.com/docs/models/gpt-4-and-gpt-4-turbo). (Required)
+## Request Body
+Json Request
+
+```json
+{
+  "message": "Hello, I have an issue about zk programs, can you write example zk program and explain it?",
+  "previewToken": "sk-YOUR-OPENAI-API-KEY"
+}
+```
+
+## Response Format
+String Answer
+
 # Eval
 Evaluation dataset is prepared for Mina Docs to evaluate the performance of the agent. It is compared against chatgpt.
 table below shows the results of the evaluation, agent, accuracy, average latency.
