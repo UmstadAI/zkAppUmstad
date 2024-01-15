@@ -67,6 +67,7 @@ Introducing the zkApps Umstad AI Agent, your specialized assistant in the realm 
 
 ## Requirements
 - Python 10 or above
+- Installed ```zkapp-cli```
 
 ## Installation
 
