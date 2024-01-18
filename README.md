@@ -164,7 +164,8 @@ String Answer
 
 # Eval
 Evaluation dataset is prepared for Mina Docs to evaluate the performance of the agent. It is compared against chatgpt.
-table below shows the results of the evaluation, agent, accuracy, average latency.
+table below shows the results of the evaluation, agent, accuracy, average latency. Reference the paper: [Evaluating Large Language Models Trained on
+Code](https://arxiv.org/abs/2107.03374) and the [repo](https://github.com/openai/evals).
 
 | Agent | Accuracy | Latency |
 | --- | --- | --- |
