@@ -270,6 +270,7 @@ def clean_code_tools(history):
             (message["role"] == "function" and message["name"] in CODE_TOOLS)
             or (
                 message["role"] == "assistant"
+                and "function_call" in message
                 and message["function_call"]["name"] in CODE_TOOLS
             )
         )
