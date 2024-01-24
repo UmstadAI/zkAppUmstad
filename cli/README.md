@@ -65,6 +65,11 @@ Currently uses our own API to send queries. No need to post your OPENAI API KEY.
 - Specify your project requirements in detail and collaborate with the AI Agent.
 - In order to query about issues, errors etc. start with "I have an issue...".
 
+### Run Tests
+
+```bash
+pytest
+```
 
 # Support
 
