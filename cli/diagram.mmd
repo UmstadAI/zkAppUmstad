@@ -19,8 +19,7 @@ stateDiagram-v2
     }
 
     state CoderAgent {
-        [*] --> CodeRunner
-        CodeRunner --> SearchCodeExamples
+        [*] -->  SearchCodeExamples
         SearchCodeExamples --> ReadReferences
         ReadReferences --> BuildLoop
         state BuildLoop {
@@ -28,11 +27,14 @@ stateDiagram-v2
             state CodeBuildTool
             [*] --> WriteCode
             WriteCode --> CodeBuildTool
-            CodeBuildTool --> QueryDocsIssues
-            QueryDocsIssues --> WriteCode
+            CodeBuildTool --> DocsAndIssues
+            DocsAndIssues --> DocumentationsAndRefs
+            DocumentationsAndRefs --> WriteCode
             CodeBuildTool --> [*]
         }
+        BuildLoop --> WriteTests
     }
+    
     ChatAgent --> CoderAgent
     CoderAgent --> Output
     ChatAgent --> Output
