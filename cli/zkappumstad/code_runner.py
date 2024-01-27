@@ -77,11 +77,11 @@ def read_references(history):
     """
     try:
         if any(
-            [
+            (
                 message["role"] == "function"
                 and message["name"] == read_reference_tool.name
                 for message in history
-            ]
+            )
         ):
             return
         reference = read_reference_tool.function()
@@ -329,6 +329,7 @@ def move_ref_tool_to_end(history: list[any]):
         message
         for message in history
         if message["role"] == "assistant"
+        and "function_call" in message
         and message["function_call"]
         and message["function_call"]["name"] == read_reference_tool.name
     ]
