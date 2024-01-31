@@ -5,7 +5,7 @@ from colorama import Fore, Style
 from openai import OpenAI
 from dotenv import load_dotenv, find_dotenv
 from zkappumstad.runners import ToolMessage, StateChange
-
+import os
 from zkappumstad.tools import (
     Tool,
     writer_tool,
@@ -22,7 +22,11 @@ from zkappumstad.code_runner_prompt import SYSTEM_PROMPT
 
 load_dotenv(find_dotenv(".env.local"), override=True)
 
-client = OpenAI()
+if os.getenv("OPENAI_API_KEY"):
+    client = OpenAI()
+else:
+    client = None
+
 tools: dict[str, Tool] = {
     tool.name: tool
     for tool in [

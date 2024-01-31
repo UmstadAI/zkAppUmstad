@@ -1,10 +1,14 @@
 from openai import OpenAI
 from dotenv import load_dotenv, find_dotenv
 from json import loads
+import os
 
 load_dotenv(find_dotenv(".env.local"), override=True)
 
-client = OpenAI()
+if os.getenv("OPENAI_API_KEY"):
+    client = OpenAI()
+else:
+    client = None
 
 SYSTEM_MESSAGE = """
 You are a debugger in a o1js project. Your task is to parse any build errors to find the root cause of the error.

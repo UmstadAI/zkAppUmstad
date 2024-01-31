@@ -1,3 +1,4 @@
+import os
 from typing import Generator
 from json import loads
 
@@ -19,7 +20,11 @@ from zkappumstad.prompt import SYSTEM_PROMPT
 
 load_dotenv(find_dotenv(".env.local"), override=True)
 
-client = OpenAI()
+if os.getenv("OPENAI_API_KEY"):
+    client = OpenAI()
+else:
+    client = None
+
 tools: dict[str, Tool] = {
     tool.name: tool
     for tool in [doc_tool, code_tool, project_tool, issue_tool, state_change_tool]
