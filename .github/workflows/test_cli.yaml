@@ -1,0 +1,35 @@
+name: Python application test
+
+on:
+  push:
+    branches: 
+      - main
+  pull_request:
+    branches: 
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        cd cli
+        pip install -r requirements.txt
+
+    - name: Test with pytest
+      run: |
+        cd cli
+        export PYTHONPATH=$PWD
+        # For debugging
+        echo "Current directory: $PWD"
+        echo "Python path: $PYTHONPATH"
+        pytest

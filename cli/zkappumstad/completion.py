@@ -1,11 +1,15 @@
 from openai import OpenAI
 from zkappumstad.prompt import SYSTEM_PROMPT
 from dotenv import load_dotenv, find_dotenv
-
+import os
 
 print(find_dotenv(".env.local"))
 load_dotenv(find_dotenv(".env.local"))
-client = OpenAI()
+
+if os.getenv("OPENAI_API_KEY"):
+    client = OpenAI()
+else:
+    client = None
 
 
 def create_completion(history, message):

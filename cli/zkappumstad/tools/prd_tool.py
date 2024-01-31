@@ -5,11 +5,14 @@ from .tool import Tool
 from openai import OpenAI
 from openai.types.chat import ChatCompletion
 from dotenv import load_dotenv, find_dotenv
+import os
 
 load_dotenv(find_dotenv(".env.local"))
 
-
-client = OpenAI()
+if os.getenv("OPENAI_API_KEY"):
+    client = OpenAI()
+else:
+    client = None
 
 function_description = {
     "name": "write_prd",
