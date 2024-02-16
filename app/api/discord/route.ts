@@ -11,6 +11,7 @@ import { runnables } from '@/lib/tools'
 export const runtime = 'edge'
 
 const discordToken = process.env.DISCORD_API_TOKEN as string
+
 async function authorization(token: string) {
   const validTokens = [discordToken];
 
