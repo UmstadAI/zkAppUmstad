@@ -10,9 +10,10 @@ import { runnables } from '@/lib/tools'
 
 export const runtime = 'edge'
 
+const discordToken = process.env.DISCORD_API_TOKEN as string
 async function authorization(token: string) {
-  const validTokens = ['YOUR_SECRET_TOKEN']; // Replace with your token validation logic
-  
+  const validTokens = [discordToken];
+
   if (!validTokens.includes(token)) {
     throw new Error('Unauthorized');
   }
