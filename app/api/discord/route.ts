@@ -11,7 +11,11 @@ import { runnables } from '@/lib/tools'
 export const runtime = 'edge'
 
 async function authorization(token: string) {
-    // TODO!
+  const validTokens = ['YOUR_SECRET_TOKEN']; // Replace with your token validation logic
+  
+  if (!validTokens.includes(token)) {
+    throw new Error('Unauthorized');
+  }
 }
 
 export async function POST(req: Request) {
