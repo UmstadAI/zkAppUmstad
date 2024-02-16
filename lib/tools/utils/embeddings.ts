@@ -1,8 +1,9 @@
 import { OpenAI } from 'openai'
 
 const config = {
-  apiKey: process.env.OPENAI_API_KEY
+  apiKey: process.env.OPENAI_API_KEY_EMBEDDING
 }
+
 
 const openai = new OpenAI(config)
 
