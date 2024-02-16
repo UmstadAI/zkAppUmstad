@@ -27,9 +27,12 @@ export async function POST(req: Request) {
   let model
 
   try {
-    authorization(authToken)
+    await authorization(authToken)
   } catch (error) {
-    return(error)
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+      status: 401,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 
   const ip = req.headers.get('x-forwarded-for')
