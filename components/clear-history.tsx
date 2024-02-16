@@ -57,12 +57,11 @@ export function ClearHistory({ clearChats }: ClearHistoryProps) {
                   toast.error(result.error)
                   return
                 }
-
-                setOpen(false)
-                router.push('/')
               } catch (error) {
                 console.error('Error during clear history:', error)
               }
+              setOpen(false)
+              router.push('/')
             }}
           >
             {isPending && <IconSpinner className="mr-2 animate-spin" />}
