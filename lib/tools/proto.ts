@@ -36,7 +36,7 @@ async function formatResults(matches: ScoredPineconeRecord[]) {
   const results = []
   for (let i = 0; i < matches.length; i++) {
     const match = matches[i]
-    if ((match.score || 1) > 0.75) {
+    if ((match.score || 1) > 0.55) {
       const metadata = match.metadata as Metadata
       const title = metadata.text
       const text = metadata.text
@@ -50,7 +50,7 @@ async function formatResults(matches: ScoredPineconeRecord[]) {
 async function runTool(args: { query: string }): Promise<string> {
   try {
     const embeddings = await getEmbeddings(args.query)
-    const matches = await getMatchesFromEmbeddings(embeddings, 7, VECTOR_TYPE)
+    const matches = await getMatchesFromEmbeddings(embeddings, 5, VECTOR_TYPE)
 
     return formatResults(matches)
   } catch (e) {
