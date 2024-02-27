@@ -4,7 +4,7 @@ import { Ratelimit } from '@upstash/ratelimit'
 import OpenAI from 'openai'
 import { NextResponse } from 'next/server'
 
-import { SYSTEM_PROMPT } from '../chat/prompts'
+import { DISCORD_PROMPT } from './prompts'
 import { validateApiKey } from '@/lib/utils'
 import { runnables } from '@/lib/tools'
 
@@ -73,7 +73,7 @@ export async function POST(req: Request) {
       messages: [
         {
           role: 'system',
-          content: SYSTEM_PROMPT
+          content: DISCORD_PROMPT
         },
         {
           role: 'user',
