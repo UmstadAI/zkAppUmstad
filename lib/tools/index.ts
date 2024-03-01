@@ -24,6 +24,9 @@ export const tools: Tool[] = [
   issueTool,
   explorerTool,
   checkDeprecatedTool,
+]
+
+export const searcherTool: Tool[] = [
   searchTool
 ]
 export const toolMap = tools.reduce((acc: ToolMap, tool: Tool) => {
