@@ -1,4 +1,3 @@
-import { PromptTemplate } from 'langchain/prompts'
 import { REFERENCE_CODE } from './utils/refCode'
 
 export const DISCORD_PROMPT = `
