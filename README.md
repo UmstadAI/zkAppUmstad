@@ -82,9 +82,9 @@ mkdir new_folder
 cd new_folder
 ```
 
-Create .env.local file and add your api key like this:
+After activating conda and py10 or environment that you use. Set API Key like this:
 ```bash
-OPENAI_API_KEY=XXXXXXXX
+export OPENAI_API_KEY=XXXXXXXX
 ```
 You must first activate a Billing Account here: https://platform.openai.com/account/billing/overview
 Then get your OpenAI API Key here: https://platform.openai.com/account/api-keys
