@@ -34,18 +34,15 @@ class ChatDB:
         with shelve.open(self.index_file) as index_db:
             return index_db.get(chat_id, [])
 
-    def update_chat(self, chat_id: str, new_message: Dict):
+    def update_chat(self, chat_id: str, new_state: List[Dict]):
         """
-        Updates a chat history by adding a new message to it.
+        Updates an existing chat history in the database.
 
-        :param chat_id: The unique identifier for the chat session.
-        :param new_message: A dictionary representing the new message to be added.
+        :param chat_id: The unique identifier for the chat session to be updated.
+        :param new_state: A list of dictionaries representing the new chat history.
         """
         with shelve.open(self.index_file, writeback=True) as index_db:
-            if chat_id in index_db:
-                index_db[chat_id].append(new_message)
-            else:
-                index_db[chat_id] = [new_message]
+            index_db[chat_id] = new_state
 
     def delete_chat(self, chat_id: str):
         """
