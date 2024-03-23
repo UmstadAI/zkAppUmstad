@@ -3,20 +3,20 @@ import React, { useState, useEffect } from 'react';
 import { getChats, removeChat, shareChat } from '@/app/actions';
 import { SidebarActions } from '@/components/sidebar-actions';
 import { SidebarItem } from '@/components/sidebar-item';
-import { type Chat } from '@/lib/types';
+import useChatStore from '@/lib/store';
 
 interface SidebarListProps {
   userId?: string;
 }
 
 export default function SidebarList({ userId }: SidebarListProps) {
-  const [chats, setChats] = useState<Chat[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<Error | null>(null);
+  const { chats, isLoading, error, setChats, setIsLoading, setError } = useChatStore();
 
   useEffect(() => {
     const fetchChats = async () => {
-      setIsLoading(true);
+      if (chats.length === 0) {
+        setIsLoading(true);
+      }
       try {
         const fetchedChats = await getChats(userId);
         setChats(fetchedChats);
@@ -31,9 +31,9 @@ export default function SidebarList({ userId }: SidebarListProps) {
     if (userId) {
       fetchChats();
     }
-  }, [userId]);
+  }, [chats.length, setChats, setError, setIsLoading, userId]);
 
-  if (isLoading) {
+  if (isLoading && chats.length === 0) {
     return <div>Loading chats...</div>;
   }
 
@@ -49,7 +49,7 @@ export default function SidebarList({ userId }: SidebarListProps) {
             <SidebarItem key={chat.id} chat={chat}>
               <SidebarActions
                 chat={chat}
-                removeChat={() => removeChat({ id: chat.id, path: '/path' })} // Ensure you handle these functions correctly
+                removeChat={() => removeChat({ id: chat.id, path: '/path' })}
                 shareChat={() => shareChat(chat)}
               />
             </SidebarItem>
@@ -63,4 +63,3 @@ export default function SidebarList({ userId }: SidebarListProps) {
     </div>
   );
 };
-
