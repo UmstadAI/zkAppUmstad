@@ -81,14 +81,21 @@ export async function POST(req: Request) {
     )
 
     if (!success) {
-      return new Response('You have reached your request limit for the day.', {
+      return new Response(JSON.stringify({
+        error: "You have reached your request limit for the day.",
+        rateLimitReached: true,
+        limit,
+        remaining,
+        reset
+      }), {
         status: 429,
         headers: {
+          'Content-Type': 'application/json',
           'X-RateLimit-Limit': limit.toString(),
           'X-RateLimit-Remaining': remaining.toString(),
           'X-RateLimit-Reset': reset.toString()
         }
-      })
+      });
     }
 
     model = 'gpt-4-1106-preview'
@@ -99,23 +106,29 @@ export async function POST(req: Request) {
 
     const ratelimit = new Ratelimit({
       redis: kv,
-      limiter: Ratelimit.slidingWindow(20, '1d')
+      limiter: Ratelimit.slidingWindow(15, '1d')
     })
 
     const { success, limit, reset, remaining } = await ratelimit.limit(
       `ratelimit_${ip}`
     )
 
-    // TODO: Add Pop Up for Rate Limit
     if (!success) {
-      return new Response('You have reached your request limit for the day.', {
+      return new Response(JSON.stringify({
+        error: "You have reached your request limit for the day.",
+        rateLimitReached: true,
+        limit,
+        remaining,
+        reset
+      }), {
         status: 429,
         headers: {
+          'Content-Type': 'application/json',
           'X-RateLimit-Limit': limit.toString(),
           'X-RateLimit-Remaining': remaining.toString(),
           'X-RateLimit-Reset': reset.toString()
         }
-      })
+      });
     }
 
     model = 'gpt-4-1106-preview'

@@ -8,6 +8,7 @@ import { ChatPanel } from '@/components/chat-panel'
 import { EmptyScreen } from '@/components/empty-screen'
 import { ChatScrollAnchor } from '@/components/chat-scroll-anchor'
 import { toast } from 'react-hot-toast'
+import Swal from 'sweetalert2'
 
 export interface ChatProps extends React.ComponentProps<'div'> {
   initialMessages?: Message[]
@@ -33,7 +34,13 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
       },
       onResponse(response) {
         if (response.status === 401) {
-          toast.error(response.statusText)
+          toast.error(response.statusText);
+        } else if (response.status === 429) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Rate Limit Exceeded',
+            text: 'You have exceed daily rate limit. In order to continue please use your own OPEN AI API KEY from Settings(add link of settings page) or wait 1 day'
+          });
         }
       }
     })
