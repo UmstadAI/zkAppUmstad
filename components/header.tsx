@@ -15,6 +15,7 @@ import { ThemeToggle } from '@/components/theme-toggle'
 import { ClearHistory } from '@/components/clear-history'
 import { UserMenu } from '@/components/user-menu'
 import Logo from '@/assets/logo/logo.svg'
+import Bug from '@/assets/logo/bug.svg'
 import dynamic from 'next/dynamic'
 
 const zen_tokyo_zoo = Nunito({
@@ -90,6 +91,13 @@ export async function Header() {
           target="_blank"
           className={cn(buttonVariants())}
         >
+          <Image 
+          src={Bug} 
+          alt="Report a Bug" 
+          width={20} 
+          height={20} 
+          className="sm:hidden" 
+        />
           <span className="hidden sm:block">Report a Bug</span>
         </a>
       </div>
