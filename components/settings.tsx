@@ -37,9 +37,11 @@ export function Settings() {
         use.
       </p>
       <ApiKeyInput className="my-4" onChange={e => setApiKey(e.target.value)} />
-      <ApiKeyButton className="mx-auto mb-4 items-center" apiKey={apiKey} />
-      <DeleteApiKeyButton className="mx-auto mb-4 items-center" />
-      <ReturnChatButton className="mx-auto mb-4 items-center" />
+      <div className="mb-4 flex w-full flex-col justify-center gap-4 sm:flex-row">
+        <ApiKeyButton className="w-full sm:w-auto" apiKey={apiKey} />
+        <DeleteApiKeyButton className="w-full sm:w-auto" />
+        <ReturnChatButton className="w-full sm:w-auto" />
+      </div>
     </div>
   )
 }

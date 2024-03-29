@@ -13,7 +13,7 @@ interface ReturnChatButtonProps extends ButtonProps {
 }
 
 export function ReturnChatButton({
-  text = 'RETURN BACK TO CHAT',
+  text = 'RETURN TO CHAT',
   className,
   ...props
 }: ReturnChatButtonProps) {

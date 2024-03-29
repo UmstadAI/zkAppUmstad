@@ -12,7 +12,7 @@ interface DeleteApiKeyButtonProps extends ButtonProps {
 }
 
 export function DeleteApiKeyButton({
-  text = 'DELETE OPEN AI API KEY',
+  text = 'DELETE KEY',
   className,
   ...props
 }: DeleteApiKeyButtonProps) {
