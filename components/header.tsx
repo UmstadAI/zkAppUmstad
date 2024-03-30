@@ -9,13 +9,12 @@ import { auth } from '@/auth'
 import { clearChats } from '@/app/actions'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Sidebar } from '@/components/sidebar'
-import { IconGitHub, IconSeparator } from '@/components/ui/icons'
+import { IconBug, IconGitHub, IconSeparator } from '@/components/ui/icons'
 import { SidebarFooter } from '@/components/sidebar-footer'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { ClearHistory } from '@/components/clear-history'
 import { UserMenu } from '@/components/user-menu'
 import Logo from '@/assets/logo/logo.svg'
-import Bug from '@/assets/logo/bug.svg'
 import dynamic from 'next/dynamic'
 
 const zen_tokyo_zoo = Nunito({
@@ -62,7 +61,7 @@ export async function Header() {
       <div>
         {session?.user ? (
           <div className="hidden items-center justify-center space-x-2 sm:flex">
-            <Link href="/" rel="nofollow" className="flex">
+            <Link href="/" target="_blank" rel="nofollow" className="flex">
               <Image src={Logo} alt="zkApp Umstad" className="h-16 w-16" />
               <div className={zen_tokyo_zoo.className}>
                 <h5 className="mt-5 hidden text-xl text-[#655bf7] dark:text-[#ffffff] md:flex">
@@ -87,19 +86,13 @@ export async function Header() {
           <span className="ml-2 hidden md:flex">GitHub</span>
         </a>
         <a
-          href="https://github.com/UmstadAI/zkAppUmstad/issues"
-          target="_blank"
-          className={cn(buttonVariants())}
-        >
-          <Image 
-          src={Bug} 
-          alt="Report a Bug" 
-          width={20} 
-          height={20} 
-          className="sm:hidden" 
-        />
-          <span className="hidden sm:block">Report a Bug</span>
-        </a>
+        href="https://github.com/UmstadAI/zkAppUmstad/issues"
+        target="_blank"
+        className={cn(buttonVariants())}
+      >
+        <IconBug className="h-5 w-5 sm:hidden" />
+        <span className="hidden sm:block">Report a Bug</span>
+      </a>
       </div>
     </header>
   )
