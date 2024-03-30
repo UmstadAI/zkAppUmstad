@@ -31,6 +31,7 @@ export function Sidebar({ children }: SidebarProps) {
             onClick={e => {
               e.preventDefault()
               router.push('/')
+              window.location.reload();
             }}
             className={cn(
               buttonVariants({ size: 'sm', variant: 'outline' }),
