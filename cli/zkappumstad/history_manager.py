@@ -5,6 +5,19 @@ Module for managing chat history in local file system based database.
 import shelve
 import os
 from typing import List, Dict
+import inquirer
+
+
+def select(histories: List[str]) -> str:
+    questions = [
+        inquirer.List(
+            "chat",
+            message="Choose a chat to load using enter",
+            choices=histories,
+        ),
+    ]
+    answers = inquirer.prompt(questions)
+    return answers["chat"]
 
 
 class ChatDB:
@@ -75,3 +88,22 @@ class ChatDB:
                 index_db[chat_id].append(message)
             else:
                 index_db[chat_id] = [message]
+
+    def load_chat(self) -> List[Dict]:
+        """
+        Loads a chat history from the database, let the user select which chat to load.
+
+        :return: A list of dictionaries representing the chat history.
+        """
+        with shelve.open(self.index_file) as index_db:
+            chat_ids = list(index_db.keys())
+            if not chat_ids or len(chat_ids) == 0:
+                return [], ""
+            chat_id = select(chat_ids)
+            return index_db.get(chat_id, []), chat_id
+
+
+if __name__ == "__main__":
+    mock_histories = ["chat1", "chat2", "chat3"]
+    selected_chat_id = select(mock_histories)
+    print(selected_chat_id)

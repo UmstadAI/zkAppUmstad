@@ -55,15 +55,17 @@ def save_conversation_to_markdown(markdown_history: list):
 
 
 def save_conversation_history(history: list):
-    chat_id = str("0")
+    chat_id = input("Enter the chat name:")
     chat_db.add_chat(chat_id, history)
     print(Fore.GREEN + "Conversation saved with ID: " + chat_id + Style.RESET_ALL)
 
 
 def load_conversation_history():
-    chat_id = str("0")
-    history = chat_db.get_chat(chat_id)
-    print(Fore.GREEN + "Conversation loaded with ID: " + chat_id + Style.RESET_ALL)
+    history, chat_name = chat_db.load_chat()
+    if chat_name == "":
+        print(Fore.RED + "No conversation found." + Style.RESET_ALL)
+        return history
+    print(Fore.GREEN + "Conversation loaded with ID: " + chat_name + Style.RESET_ALL)
     return history
 
 
@@ -83,14 +85,14 @@ def main():
 
         if user_message.lower() == "quit":
             break
-        elif user_message.lower() == "load":
+        if user_message.lower() == "load":
             history = load_conversation_history()
             continue
-        elif user_message.lower() == "save":
+        if user_message.lower() == "save":
             save_conversation_to_markdown(markdown_history)
             save_conversation_history(history)
             continue
-        elif user_message.lower() == "reset":
+        if user_message.lower() == "reset":
             history.clear()
             markdown_history.clear()
             clear_screen()
