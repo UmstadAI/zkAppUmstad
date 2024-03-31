@@ -8,50 +8,73 @@ from zkappumstad.utils import fade_in_text
 from zkappumstad.runner import create_completion
 from zkappumstad.code_runner import code_runner, clean_code_tools
 from zkappumstad.runners import StreamMessage, ToolMessage, StateChange
+from zkappumstad.history_manager import ChatDB
+
+chat_db = ChatDB("chat_db")
 
 console = Console()
 
 
-def main():
-    def startup():
-        print(
-            Fore.GREEN
-            + """
-        __   ___                        __  __               __            __
- ____  / /__/   |  ____  ____  _____   / / / /___ ___  _____/ /_____ _____/ /
-/_  / / //_/ /| | / __ \\/ __ \\/ ___/  / / / / __ `__ \\/ ___/ __/ __ `/ __  / 
- / /_/ ,< / ___ |/ /_/ / /_/ (__  )  / /_/ / / / / / (__  ) /_/ /_/ / /_/ /  
-/___/_/|_/_/  |_/ .___/ .___/____/   \\____/_/ /_/ /_/____/\\__/\\__,_/\\__,_/   
-               /_/   /_/                                                                                                                                                                                                                   
-            """
-            + Style.RESET_ALL
-        )
+def startup():
+    print(
+        Fore.GREEN
+        + """
+    __   ___                        __  __               __            __
+____  / /__/   |  ____  ____  _____   / / / /___ ___  _____/ /_____ _____/ /
+/_  / / //_/ /| | / __ \/ __ \/ ___/  / / / / __ `__ \/ ___/ __/ __ `/ __  / 
+/ /_/ ,< / ___ |/ /_/ / /_/ (__  )  / /_/ / / / / / (__  ) /_/ /_/ / /_/ /  
+/___/_/|_/_/  |_/ .___/ .___/____/   \____/_/ /_/ /_/____/\__/\__,_/\__,_/   
+            /_/   /_/                                                                                                                                                                                                                   
+        """
+        + Style.RESET_ALL
+    )
 
-        fade_in_text("Welcome to zkApp Umstad!", "bold green")
-        fade_in_text(
-            "This is an AI assistant that helps you with Mina zkApps development.",
-            "bold green",
-        )
-        fade_in_text("Type 'save' to save your conversation", "bold blue")
-        fade_in_text("Type 'reset' to reset conversation", "bold blue")
-        fade_in_text("Type 'quit' to exit.", "bold red")
+    fade_in_text("Welcome to zkApp Umstad!", "bold green")
+    fade_in_text(
+        "This is an AI assistant that helps you with Mina zkApps development.",
+        "bold green",
+    )
+    fade_in_text("Type 'load' to load a previous conversation", "bold blue")
+    fade_in_text("Type 'save' to save your conversation", "bold blue")
+    fade_in_text("Type 'reset' to reset conversation", "bold blue")
+    fade_in_text("Type 'quit' to exit.", "bold red")
+
+
+def clear_screen():
+    command = "cls" if platform.system().lower() == "windows" else "clear"
+    os.system(command)
+
+
+def save_conversation_to_markdown(markdown_history: list):
+    filename = f"conversation_{uuid.uuid4()}.md"
+
+    with open(filename, "w") as file:
+        for line in markdown_history:
+            file.write(line + "\n")
+    print(Fore.GREEN + "Conversation saved to " + filename + Style.RESET_ALL)
+
+
+def save_conversation_history(history: list):
+    chat_id = input("Enter the chat name:")
+    chat_db.add_chat(chat_id, history)
+    print(Fore.GREEN + "Conversation saved with ID: " + chat_id + Style.RESET_ALL)
+
+
+def load_conversation_history():
+    history, chat_name = chat_db.load_chat()
+    if chat_name == "":
+        print(Fore.RED + "No conversation found." + Style.RESET_ALL)
+        return history
+    print(Fore.GREEN + "Conversation loaded with ID: " + chat_name + Style.RESET_ALL)
+    return history
+
+
+def main():
 
     startup()
 
     history = []
     markdown_history = []
-
-    def clear_screen():
-        command = "cls" if platform.system().lower() == "windows" else "clear"
-        os.system(command)
-
-    def save_conversation_to_markdown():
-        filename = f"conversation_{uuid.uuid4()}.md"
-
-        with open(filename, "w") as file:
-            for line in markdown_history:
-                file.write(line + "\n")
-        print(Fore.GREEN + "Conversation saved to " + filename + Style.RESET_ALL)
 
     state: int = 0
     user_message: str = ""
@@ -62,10 +85,14 @@ def main():
 
         if user_message.lower() == "quit":
             break
-        elif user_message.lower() == "save":
-            save_conversation_to_markdown()
+        if user_message.lower() == "load":
+            history = load_conversation_history()
             continue
-        elif user_message.lower() == "reset":
+        if user_message.lower() == "save":
+            save_conversation_to_markdown(markdown_history)
+            save_conversation_history(history)
+            continue
+        if user_message.lower() == "reset":
             history.clear()
             markdown_history.clear()
             clear_screen()
@@ -95,6 +122,14 @@ def main():
 
         print()
         markdown_history.append(f"**Umstad:** {response_text} \n")
+
+
+def help():
+    print("Usage: zkumstad-[command]")
+    print("Commands:")
+    print("  start    Start the application")
+    print("  help     Display this help message")
+    print("  create   Creates zkapps project in current folder")
 
 
 if __name__ == "__main__":

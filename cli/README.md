@@ -56,6 +56,11 @@ Currently uses our own API to send queries. No need to post your OPENAI API KEY.
 - Debugs errors
 - Fix and retry code
 
+### Local History Database
+
+- Saves the conversation histories as a python dict of lists.
+- Uses shelve module to store the data.
+
 ## Usage
 
 ### Commands
