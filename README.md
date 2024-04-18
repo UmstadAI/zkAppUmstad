@@ -190,7 +190,7 @@ For any technical issues or further inquiries, please contact our support team a
 ### Side & Future Projects
 
 - **[Umstad API](https://github.com/UmstadAI/zkAppUmstad/blob/main/app/api/embeddings/route.ts):** If you don't want to use zkappumstad applications for any reason, you can use the API for your own purposes by POSTING API KEY
-- **Discord Umstad(TODO):** Discord Bot which uses Umstad API, just uses Discord Chat Interface for now. Can be developed for using it with commands in channels. [Repository Link](https://github.com/UmstadAI/discord-umstad)
+- **[Discord Umstad](https://github.com/UmstadAI/discord-umstad):** Discord Bot which uses Umstad API, just uses Discord Chat Interface for now. Can be developed for using it with commands in channels.
 - **Beginner Template Umstad(TODO):** Uses 20+ Perfect Smart Contract and provides them with very changes.
 - **Umstad the Teacher(TODO):** Interactive learning platform(think about cryptozombies) which utilizes Beginner Template Umstad.
 - **GPT Store Umstad(TODO):** Umstad in the GPT Store
