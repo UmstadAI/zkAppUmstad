@@ -10,7 +10,7 @@ export type Metadata = {
   hash: string
 }
 
-type VectorType = 'docs' | 'code' | 'project' | 'issue'
+type VectorType = 'docs' | 'code' | 'project' | 'issue' | 'search'
 
 function getVectorType(vector_type: string): string | undefined {
   if (!isVectorType(vector_type)) {
@@ -20,14 +20,15 @@ function getVectorType(vector_type: string): string | undefined {
     docs: process.env.DOCS_VECTOR_TYPE,
     code: process.env.CODE_VECTOR_TYPE,
     project: process.env.PROJECT_VECTOR_TYPE,
-    issue: process.env.ISSUE_VECTOR_TYPE
+    issue: process.env.ISSUE_VECTOR_TYPE,
+    search: process.env.SEARCH_VECTOR_TYPE
   }
 
   return vectorTypeMap[vector_type]
 }
 
 function isVectorType(type: string): type is VectorType {
-  return ['docs', 'code', 'project', 'issue'].includes(type)
+  return ['docs', 'code', 'project', 'issue', 'search'].includes(type)
 }
 
 const getMatchesFromEmbeddings = async (
