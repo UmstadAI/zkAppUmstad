@@ -5,8 +5,8 @@ import { ScoredPineconeRecord } from '@pinecone-database/pinecone'
 import { RunnableToolFunction } from 'openai/lib/RunnableFunction'
 
 export type Metadata = {
-  guild_id: number;
-  thread_id: number;
+  guild_id: string;
+  thread_id: string;
   title: string;
   message?: string | null;
   messages?: string | null;
@@ -46,8 +46,8 @@ async function formatResults(matches: ScoredPineconeRecord[]) {
     if ((match.score || 1) > 0.35) {
       const metadata = match.metadata as Metadata
 
-      const guildId = BigInt(metadata.guild_id.toString().split('e')[0].replace('.', ''));
-      const threadId = BigInt(metadata.thread_id.toString().split('e')[0].replace('.', ''));
+      const guildId = metadata.guild_id;
+      const threadId = metadata.thread_id;
       const title = metadata.title;
       const message = metadata.message;
       const messages = metadata.messages;
@@ -59,8 +59,8 @@ async function formatResults(matches: ScoredPineconeRecord[]) {
 
       // TODO!: Excluded messageLink here but later add on depends on the format if bigint or number
       const formattedMetadata = `
-        Guild ID: ${guildId.toString()}
-        Thread ID: ${threadId.toString()}
+        Guild ID: ${guildId}
+        Thread ID: ${threadId}
         Title: ${title}
         Message: ${message || 'None'}
         Messages: ${messages || 'None'}
