@@ -52,7 +52,7 @@ async function formatResults(matches: ScoredPineconeRecord[]) {
       const message = metadata.message;
       const messages = metadata.messages;
       const messageId = metadata.message_id;
-      const createdAt = metadata.created_at;
+      const createdAt = metadata.created_at.toString();
       const ownerId = metadata.owner_id;
       const threadLink = metadata.thread_link;
       const messageLink = metadata.message_link;
