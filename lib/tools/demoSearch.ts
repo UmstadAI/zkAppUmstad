@@ -5,11 +5,16 @@ import { ScoredPineconeRecord } from '@pinecone-database/pinecone'
 import { RunnableToolFunction } from 'openai/lib/RunnableFunction'
 
 export type Metadata = {
-  url: string
-  text: string
-  chunk: string
-  hash: string
-}
+  guild_id: number;
+  thread_id: number;
+  title: string;
+  message?: string | null;
+  messages?: string | null;
+  message_id?: string | null;
+  created_at: string;
+  owner_id: string;
+};
+
 
 const VECTOR_TYPE = 'demoSearch'
 
@@ -38,10 +43,28 @@ async function formatResults(matches: ScoredPineconeRecord[]) {
     const match = matches[i]
     if ((match.score || 1) > 0.25) {
       const metadata = match.metadata as Metadata
-      const title = metadata.text
-      const text = metadata.text
-      const formatted_result = `## Result ${i + 1}:\n${title}\n${text}`
-      results.push(formatted_result)
+
+      const guildId = metadata.guild_id;
+      const threadId = metadata.thread_id;
+      const title = metadata.title;
+      const message = metadata.message;
+      const messages = metadata.messages;
+      const messageId = metadata.message_id;
+      const createdAt = metadata.created_at;
+      const ownerId = metadata.owner_id;
+
+      const formattedMetadata = `
+        Guild ID: ${metadata.guild_id}
+        Thread ID: ${metadata.thread_id}
+        Title: ${metadata.title}
+        Message: ${metadata.message || 'None'}
+        Messages: ${metadata.messages || 'None'}
+        Message ID: ${metadata.message_id || 'None'}
+        Created At: ${metadata.created_at}
+        Owner ID: ${metadata.owner_id}
+      `.trim();
+
+      results.push(formattedMetadata)
     }
   }
   return results.join('\n')
