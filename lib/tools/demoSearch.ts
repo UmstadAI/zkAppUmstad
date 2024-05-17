@@ -14,7 +14,7 @@ export type Metadata = {
   created_at: string;
   owner_id: string;
   thread_link: string,
-  message_link?: string,
+  message_link?: string | null,
 };
 
 
@@ -57,7 +57,7 @@ async function formatResults(matches: ScoredPineconeRecord[]) {
       const threadLink = metadata.thread_link;
       const messageLink = metadata.message_link;
 
-      // TODO!: Excluded messageLink here but later add on depends on the format if bigint or number
+      // TODO!: Excluded message id here but later add on depends on the format if bigint or number it comes from forum listener
       const formattedMetadata = `
         Guild ID: ${guildId}
         Thread ID: ${threadId}
