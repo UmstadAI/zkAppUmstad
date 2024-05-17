@@ -65,7 +65,7 @@ async function formatResults(matches: ScoredPineconeRecord[]) {
         Message: ${message || 'None'}
         Messages: ${messages || 'None'}
         Thread Link: ${threadLink}
-        Message Link: ${messageLink}
+        Message Link: ${messageLink || 'None'}
         Created At: ${createdAt}
         Owner ID: ${ownerId}
       `.trim();
