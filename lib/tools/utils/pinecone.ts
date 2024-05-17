@@ -22,7 +22,7 @@ function getVectorType(vector_type: string): string | undefined {
     project: process.env.PROJECT_VECTOR_TYPE,
     issue: process.env.ISSUE_VECTOR_TYPE,
     search: process.env.SEARCH_VECTOR_TYPE,
-    demoSearch: process.env.DEMO_SEARCH_TYPE
+    demoSearch: process.env.DEMO_SEARCH_VECTOR_TYPE
   }
 
   return vectorTypeMap[vector_type]
