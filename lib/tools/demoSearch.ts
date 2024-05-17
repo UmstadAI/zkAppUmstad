@@ -13,6 +13,8 @@ export type Metadata = {
   message_id?: string | null;
   created_at: string;
   owner_id: string;
+  thread_link: string,
+  message_link?: string,
 };
 
 
@@ -35,33 +37,37 @@ const functionDescription: ChatCompletionCreateParams.Function = {
   }
 }
 
-const functionMessage = 'Fetching context about mina docs...\n'
+const functionMessage = 'Fetching context about search results...\n'
 
 async function formatResults(matches: ScoredPineconeRecord[]) {
   const results = []
   for (let i = 0; i < matches.length; i++) {
     const match = matches[i]
-    if ((match.score || 1) > 0.25) {
+    if ((match.score || 1) > 0.35) {
       const metadata = match.metadata as Metadata
 
-      const guildId = metadata.guild_id;
-      const threadId = metadata.thread_id;
+      const guildId = BigInt(metadata.guild_id.toString().split('e')[0].replace('.', ''));
+      const threadId = BigInt(metadata.thread_id.toString().split('e')[0].replace('.', ''));
       const title = metadata.title;
       const message = metadata.message;
       const messages = metadata.messages;
       const messageId = metadata.message_id;
       const createdAt = metadata.created_at;
       const ownerId = metadata.owner_id;
+      const threadLink = metadata.thread_link;
+      const messageLink = metadata.message_link;
 
+      // TODO!: Excluded messageLink here but later add on depends on the format if bigint or number
       const formattedMetadata = `
-        Guild ID: ${metadata.guild_id}
-        Thread ID: ${metadata.thread_id}
-        Title: ${metadata.title}
-        Message: ${metadata.message || 'None'}
-        Messages: ${metadata.messages || 'None'}
-        Message ID: ${metadata.message_id || 'None'}
-        Created At: ${metadata.created_at}
-        Owner ID: ${metadata.owner_id}
+        Guild ID: ${guildId.toString()}
+        Thread ID: ${threadId.toString()}
+        Title: ${title}
+        Message: ${message || 'None'}
+        Messages: ${messages || 'None'}
+        Thread Link: ${threadLink}
+        Message Link: ${messageLink}
+        Created At: ${createdAt}
+        Owner ID: ${ownerId}
       `.trim();
 
       results.push(formattedMetadata)
