@@ -6,7 +6,7 @@ import { NextResponse } from 'next/server'
 
 import { SEARCHER_PROMPT } from './prompt'
 import { validateApiKey } from '@/lib/utils'
-import { searchRunnable } from '@/lib/tools'
+import { demoSearchRunnable } from '@/lib/tools'
 
 export const runtime = 'edge'
 
@@ -80,7 +80,7 @@ export async function POST(req: Request) {
           content: message
         }
       ],
-      tools: searchRunnable
+      tools: demoSearchRunnable
     })
 
     const stream = OpenAIStream(runner)

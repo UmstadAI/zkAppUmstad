@@ -11,6 +11,7 @@ import {
 } from './checkDeprecated'
 import { Tool } from './tool'
 import { searchTool, searchToolRunnable } from './search'
+import { demoSearchTool, demoSearchToolRunnable } from './demoSearch'
 
 type ToolMap = {
   [key: string]: Tool
@@ -29,6 +30,10 @@ export const tools: Tool[] = [
 export const searcherTool: Tool[] = [
   searchTool
 ]
+
+export const demoSearcherTool: Tool[] = [
+  demoSearchTool
+]
 export const toolMap = tools.reduce((acc: ToolMap, tool: Tool) => {
   acc[tool.name] = tool
   return acc
@@ -46,4 +51,8 @@ export const runnables: RunnableToolFunction<any>[] = [
 
 export const searchRunnable: RunnableToolFunction<any>[] = [
   searchToolRunnable
+]
+
+export const demoSearchRunnable: RunnableToolFunction<any>[] = [
+  demoSearchToolRunnable
 ]
