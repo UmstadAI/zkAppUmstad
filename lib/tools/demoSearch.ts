@@ -43,7 +43,7 @@ async function formatResults(matches: ScoredPineconeRecord[]) {
   const results = []
   for (let i = 0; i < matches.length; i++) {
     const match = matches[i]
-    if ((match.score || 1) > 0.10) {
+    if ((match.score || 1) > 0.25) {
       const metadata = match.metadata as Metadata
 
       const guildId = metadata.guild_id;
@@ -63,6 +63,7 @@ async function formatResults(matches: ScoredPineconeRecord[]) {
         Thread ID: ${threadId}
         Title: ${title}
         Message: ${message || 'None'}
+        Message ID: ${messageId || 'None'}
         Messages: ${messages || 'None'}
         Thread Link: ${threadLink}
         Message Link: ${messageLink || 'None'}
