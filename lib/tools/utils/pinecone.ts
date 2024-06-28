@@ -36,8 +36,8 @@ const getMatchesFromEmbeddings = async (
   embeddings: number[],
   topK: number,
   vector_type: string,
+  project_name?: string,
   isDiscord: boolean = false,
-  project_name?: string
 ): Promise<ScoredPineconeRecord<Metadata>[]> => {
   const pinecone = new Pinecone({
     environment: process.env.PINECONE_ENVIRONMENT as string,
