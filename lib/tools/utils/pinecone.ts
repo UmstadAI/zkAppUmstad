@@ -36,6 +36,7 @@ const getMatchesFromEmbeddings = async (
   embeddings: number[],
   topK: number,
   vector_type: string,
+  isDiscord: boolean = false,
   project_name?: string
 ): Promise<ScoredPineconeRecord<Metadata>[]> => {
   const pinecone = new Pinecone({
@@ -45,10 +46,14 @@ const getMatchesFromEmbeddings = async (
 
   const vectorType = getVectorType(vector_type)
 
-  const indexName: string = process.env.PINECONE_INDEX || ''
-  if (indexName === '') {
-    throw new Error('PINECONE_INDEX environment variable not set')
+  const indexName: string = isDiscord 
+    ? 'discord-umstad' 
+    : (process.env.PINECONE_INDEX || '');
+
+  if (!isDiscord && indexName === '') {
+    throw new Error('PINECONE_INDEX environment variable not set');
   }
+  
 
   const indexes = await pinecone.listIndexes()
   if (indexes.filter(i => i.name === indexName).length !== 1) {

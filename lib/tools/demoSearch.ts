@@ -80,7 +80,7 @@ async function formatResults(matches: ScoredPineconeRecord[]) {
 async function runTool(args: { query: string }): Promise<string> {
   try {
     const embeddings = await getEmbeddings(args.query)
-    const matches = await getMatchesFromEmbeddings(embeddings, 15, VECTOR_TYPE)
+    const matches = await getMatchesFromEmbeddings(embeddings, 15, VECTOR_TYPE, true)
 
     return formatResults(matches)
   } catch (e) {
