@@ -23,14 +23,14 @@ const VECTOR_TYPE = 'demoSearch'
 const functionDescription: ChatCompletionCreateParams.Function = {
   name: 'demo_search_for_thread',
   description:
-  'Search for context about discord threads',
+  'Search for context in discord threads',
   parameters: {
     type: 'object',
     properties: {
       query: {
         type: 'string',
         description:
-          'The query to search for. 1-3 sentences are enough. English only.'
+          'The query to search for. 1-3 sentences or words are enough. English only.'
       }
     },
     required: ['query']
@@ -103,14 +103,14 @@ export const demoSearchToolRunnable: RunnableToolFunction<{ query: string }> = {
     function: runTool,
     parse: JSON.parse,
     description:
-      'Search for context about discord threads',
+      'Search for context in discord threads',
     parameters: {
       type: 'object',
       properties: {
         query: {
           type: 'string',
           description:
-            'The query to search for. 1-3 sentences are enough. English only.'
+            'The query to search for. 1-3 sentences or words are enough. English only.'
         }
       }
     }
