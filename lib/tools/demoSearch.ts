@@ -26,14 +26,7 @@ const functionDescription: ChatCompletionCreateParams.Function = {
   'Search for context in discord threads',
   parameters: {
     type: 'object',
-    properties: {
-      query: {
-        type: 'string',
-        description:
-          'The query to search for. 1-3 sentences or words are enough. English only.'
-      }
-    },
-    required: ['query']
+    properties: {}
   }
 }
 
@@ -96,7 +89,7 @@ export const demoSearchTool: Tool = {
   callable: runTool
 }
 
-export const demoSearchToolRunnable =(message: string): RunnableToolFunction<{ query: string }> => ({
+export const demoSearchToolRunnable = (message: string): RunnableToolFunction<{ query: string }> => ({
   type: 'function',
   function: {
     name: functionDescription.name,
@@ -106,8 +99,7 @@ export const demoSearchToolRunnable =(message: string): RunnableToolFunction<{ q
       'Search for context in discord threads',
     parameters: {
       type: 'object',
-      properties: {
-      }
+      properties: {}
     }
   }
 })
