@@ -69,11 +69,11 @@ async function formatResults(matches: ScoredPineconeRecord[]) {
   return results.join('\n')
 }
 
-const runTool = (message_content:string) => async (args: { }): Promise<string>=> {
+const runTool = (message_content: string) => async (args: { query: string }): Promise<string> => {
   try {
     const embeddings = await getEmbeddings(message_content)
     const matches = await getMatchesFromEmbeddings(embeddings, 15, VECTOR_TYPE)
-
+    
     return formatResults(matches)
   } catch (e) {
     console.log('Error fetching docs: ', e)
