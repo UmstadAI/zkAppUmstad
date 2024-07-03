@@ -54,5 +54,5 @@ export const searchRunnable: RunnableToolFunction<any>[] = [
 ]
 
 export const demoSearchRunnable:  RunnableToolFunction<any>[] = [
-  demoSearchToolRunnable("")
+  demoSearchToolRunnable(message)
 ]
