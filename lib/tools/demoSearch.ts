@@ -77,9 +77,9 @@ async function formatResults(matches: ScoredPineconeRecord[]) {
   return results.join('\n')
 }
 
-async function runTool(args: { query: string }): Promise<string> {
+const runTool = (message_content:string) => async (args: { }): Promise<string>=> {
   try {
-    const embeddings = await getEmbeddings(args.query)
+    const embeddings = await getEmbeddings(message_content)
     const matches = await getMatchesFromEmbeddings(embeddings, 15, VECTOR_TYPE)
 
     return formatResults(matches)
@@ -96,23 +96,18 @@ export const demoSearchTool: Tool = {
   callable: runTool
 }
 
-export const demoSearchToolRunnable: RunnableToolFunction<{ query: string }> = {
+export const demoSearchToolRunnable =(message: string): RunnableToolFunction<{ query: string }> => ({
   type: 'function',
   function: {
     name: functionDescription.name,
-    function: runTool,
+    function: runTool(message),
     parse: JSON.parse,
     description:
       'Search for context in discord threads',
     parameters: {
       type: 'object',
       properties: {
-        query: {
-          type: 'string',
-          description:
-            'The query to search for. 1-3 sentences or words are enough. English only.'
-        }
       }
     }
   }
-}
+})
