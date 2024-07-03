@@ -17,7 +17,6 @@ export type Metadata = {
   message_link?: string | null,
 };
 
-
 const VECTOR_TYPE = 'demoSearch'
 
 const functionDescription: ChatCompletionCreateParams.Function = {
