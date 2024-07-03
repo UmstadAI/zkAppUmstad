@@ -53,6 +53,6 @@ export const searchRunnable: RunnableToolFunction<any>[] = [
   searchToolRunnable
 ]
 
-export const demoSearchRunnable: RunnableToolFunction<any>[] = [
-  demoSearchToolRunnable
+export const demoSearchRunnable:  RunnableToolFunction<any>[] = [
+  demoSearchToolRunnable("")
 ]
