@@ -35,7 +35,7 @@ async function formatResults(matches: ScoredPineconeRecord[]) {
   const results = []
   for (let i = 0; i < matches.length; i++) {
     const match = matches[i]
-    if ((match.score || 1) > 0.375) {
+    if ((match.score || 1) > 0.7) {
       const metadata = match.metadata as Metadata
 
       const guildId = metadata.guild_id;
