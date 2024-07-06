@@ -7,7 +7,6 @@ import { NextResponse } from 'next/server'
 import { SEARCHER_PROMPT } from './prompt'
 import { validateApiKey } from '@/lib/utils'
 import { demoSearchRunnable } from '@/lib/tools'
-import { demoSearchToolRunnable } from '@/lib/tools/demoSearch'
 
 export const runtime = 'edge'
 
@@ -64,7 +63,7 @@ export async function POST(req: Request) {
       })
     }
 
-    model = 'gpt-4o'
+    model = 'gpt-4-turbo'
     const openai = new OpenAI(configuration)
 
     const runner = openai.beta.chat.completions.runTools({
@@ -81,7 +80,7 @@ export async function POST(req: Request) {
           content: message
         }
       ],
-      tools: [demoSearchToolRunnable(message)]
+      tools: demoSearchRunnable
     })
 
     const stream = OpenAIStream(runner)
