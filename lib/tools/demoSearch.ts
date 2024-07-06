@@ -17,6 +17,7 @@ export type Metadata = {
   message_link?: string | null,
 };
 
+
 const VECTOR_TYPE = 'demoSearch'
 
 const functionDescription: ChatCompletionCreateParams.Function = {
@@ -25,7 +26,14 @@ const functionDescription: ChatCompletionCreateParams.Function = {
   'Search for context in discord threads',
   parameters: {
     type: 'object',
-    properties: {}
+    properties: {
+      query: {
+        type: 'string',
+        description:
+          'The query to search for. 1-3 sentences or words are enough. English only.'
+      }
+    },
+    required: ['query']
   }
 }
 
@@ -35,7 +43,7 @@ async function formatResults(matches: ScoredPineconeRecord[]) {
   const results = []
   for (let i = 0; i < matches.length; i++) {
     const match = matches[i]
-    if ((match.score || 1) > 0.255) {
+    if ((match.score || 1) > 0.25) {
       const metadata = match.metadata as Metadata
 
       const guildId = metadata.guild_id;
@@ -69,11 +77,11 @@ async function formatResults(matches: ScoredPineconeRecord[]) {
   return results.join('\n')
 }
 
-export const runTool = (message_content: string) => async (args: {}): Promise<string> => {
+async function runTool(args: { query: string }): Promise<string> {
   try {
-    const embeddings = await getEmbeddings(message_content)
-    const matches = await getMatchesFromEmbeddings(embeddings, 20, VECTOR_TYPE)
-    
+    const embeddings = await getEmbeddings(args.query)
+    const matches = await getMatchesFromEmbeddings(embeddings, 15, VECTOR_TYPE)
+
     return formatResults(matches)
   } catch (e) {
     console.log('Error fetching docs: ', e)
@@ -88,17 +96,23 @@ export const demoSearchTool: Tool = {
   callable: runTool
 }
 
-export const demoSearchToolRunnable = (message: string): RunnableToolFunction<{ query: string }> => ({
+export const demoSearchToolRunnable: RunnableToolFunction<{ query: string }> = {
   type: 'function',
   function: {
     name: functionDescription.name,
-    function: runTool(message),
+    function: runTool,
     parse: JSON.parse,
     description:
       'Search for context in discord threads',
     parameters: {
       type: 'object',
-      properties: {}
+      properties: {
+        query: {
+          type: 'string',
+          description:
+            'The query to search for. 1-3 sentences or words are enough. English only.'
+        }
+      }
     }
   }
-})
+}
