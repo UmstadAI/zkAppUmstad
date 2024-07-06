@@ -30,7 +30,7 @@ const functionDescription: ChatCompletionCreateParams.Function = {
       query: {
         type: 'string',
         description:
-          'The query to search for. 1-3 sentences or words are enough. English only.'
+        'The query to search for input from the user in the Discord messages database. 1-5 sentences are enough. English only.'
       }
     },
     required: ['query']
@@ -110,7 +110,7 @@ export const demoSearchToolRunnable: RunnableToolFunction<{ query: string }> = {
         query: {
           type: 'string',
           description:
-            'The query to search for. 1-3 sentences or words are enough. English only.'
+            'The query to search for input from the user in the Discord messages database. 1-5 sentences are enough. English only.'
         }
       }
     }
