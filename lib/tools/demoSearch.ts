@@ -110,7 +110,7 @@ export const demoSearchToolRunnable: RunnableToolFunction<{ query: string }> = {
         query: {
           type: 'string',
           description:
-            'The query to search for input from the user in the Discord messages database. 1-5 sentences are enough. English only.'
+            'The query to search for input from the user in the Discord messages database. 1-5 sentences are enough. English only. If user search code snippet, include code in the query'
         }
       }
     }
