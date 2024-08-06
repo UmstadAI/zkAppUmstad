@@ -75,12 +75,11 @@ export async function POST(req: Request) {
     const response = await openai.chat.completions.create({
         model: model,
         messages,
-        functions: [demoSearchToolRunnable.function],
-        function_call: { name: 'demo_search_for_thread' },
+        tools: [demoSearchToolRunnable.function],
+        tool_choice: {"type": "function", "function": {"name": demoSearchToolRunnable.function.name}},
     });
 
-    const functionOutput = response.data.choices[0].message?.function_call?.arguments;
-    return functionOutput ? JSON.parse(functionOutput) : 'No results found';
+    return response
   } else {
     return NextResponse.json(
       { error: 'OPENAI API KEY NOT FOUND' },
