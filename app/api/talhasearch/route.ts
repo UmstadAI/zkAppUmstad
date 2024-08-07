@@ -7,6 +7,7 @@ import { NextResponse } from 'next/server'
 import { validateApiKey } from '@/lib/utils'
 import { demoSearcherTool, demoSearchRunnable } from '@/lib/tools'
 import { demoSearchToolRunnable } from '@/lib/tools/demoSearch'
+import { ChatCompletionMessageParam } from 'openai/resources/chat/completions'
 
 export const runtime = 'edge'
 
@@ -67,14 +68,14 @@ export async function POST(req: Request) {
     model = 'gpt-4o-mini'
     const openai = new OpenAI(configuration)
 
-    const messages = [
-        { role: "user", content: message },
+    const messages: ChatCompletionMessageParam[] = [
+        { role: "user", content: message }
     ];
 
     
     const response = await openai.chat.completions.create({
         model: model,
-        messages,
+        messages: messages,
         tools: [demoSearchToolRunnable.function],
         tool_choice: {"type": "function", "function": {"name": demoSearchToolRunnable.function.name}},
     });
