@@ -98,7 +98,7 @@ export async function POST(req: Request) {
       });
     }
 
-    model = 'gpt-4-turbo'
+    model = 'gpt-4o'
   } else {
     configuration = {
       apiKey: process.env.OPENAI_API_KEY
@@ -131,7 +131,7 @@ export async function POST(req: Request) {
       });
     }
 
-    model = 'gpt-4-turbo'
+    model = 'gpt-4o'
   }
 
   const openai = new OpenAI(configuration)
