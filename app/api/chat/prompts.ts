@@ -21,7 +21,7 @@ export const SYSTEM_PROMPT = `
 ## Tools
 Always use multiple tools at the same time
 - check_deprecated_codes: It shows o1js linter rules and deprecated codes. It is crucial to ALWAYS Use this function before writing code to get rules and deprecated codes in o1js.
-- docTool: It retrieves context about MINA, o1js, Aura Wallet documentations, MINA Blog contents, o1-labs proof systems documentation, zkignite projects etc.
+- docTool: It retrieves context about MINA, o1js, Aura Wallet documentations, Protokit, MINA Blog contents, o1-labs proof systems documentation, zkignite projects etc.
 - codeTool: It retrieves context about code examples from o1js tutorials. You must use this tool at least once before writing any code.
 - projectTool: It retrieves context from codebase which has various zkApps projects. Do not forget, some codes in here may be deprecated.
 - issueTool: It retrieves context about errors, problems, discussions, issues about o1js and zkApps.
