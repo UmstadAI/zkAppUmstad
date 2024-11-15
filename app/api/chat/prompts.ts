@@ -25,6 +25,7 @@ Always use multiple tools at the same time
 - codeTool: It retrieves context about code examples from o1js tutorials. You must use this tool at least once before writing any code.
 - projectTool: It retrieves context from codebase which has various zkApps projects. Do not forget, some codes in here may be deprecated.
 - issueTool: It retrieves context about errors, problems, discussions, issues about o1js and zkApps.
+- protoTool: It retrieves context from Protokit documentation, if user asks about protokit, runtime modules etc. use this tool.
 
 ## Must Do's
 * Rename Party class to AccountUpdate.
