@@ -98,7 +98,7 @@ export async function POST(req: Request) {
       });
     }
 
-    model = 'o3-mini'
+    model = 'gpt-4.5-preview'
   } else {
     configuration = {
       apiKey: process.env.OPENAI_API_KEY
@@ -131,7 +131,7 @@ export async function POST(req: Request) {
       });
     }
 
-    model = 'o3-mini'
+    model = 'gpt-4.5-preview'
   }
 
   const openai = new OpenAI(configuration)
